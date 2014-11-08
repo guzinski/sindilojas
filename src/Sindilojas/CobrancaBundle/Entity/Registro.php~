@@ -1,0 +1,49 @@
+<?php
+
+namespace Sindilojas\CobrancaBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Registro
+ *
+ * @ORM\Table(name="registro", indexes={@ORM\Index(name="FK_registro_cliente", columns={"id_cliente"})})
+ * @ORM\Entity
+ */
+class Registro
+{
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="data", type="date", nullable=false)
+     */
+    private $data;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="texto", type="text", nullable=false)
+     */
+    private $texto;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var \Sindilojas\CobrancaBundle\Entity\Cliente
+     *
+     * @ORM\ManyToOne(targetEntity="Sindilojas\CobrancaBundle\Entity\Cliente")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_cliente", referencedColumnName="id")
+     * })
+     */
+    private $idCliente;
+
+
+}

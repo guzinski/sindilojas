@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Sindilojas\CobrancaBundle\Entity\Registro" table="registro">
+    <indexes>
+      <index name="FK_registro_cliente" columns="id_cliente"/>
+    </indexes>
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="data" type="date" column="data" nullable="false"/>
+    <field name="texto" type="text" column="texto" nullable="false"/>
+    <many-to-one field="idCliente" target-entity="Cliente">
+      <join-columns>
+        <join-column name="id_cliente" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

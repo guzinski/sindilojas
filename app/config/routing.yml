@@ -1,0 +1,4 @@
+sindilojas_cobranca:
+    resource: "@SindilojasCobrancaBundle/Resources/config/routing.yml"
+    prefix:   /
+

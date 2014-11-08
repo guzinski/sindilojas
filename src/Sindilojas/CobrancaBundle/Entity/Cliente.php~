@@ -1,0 +1,116 @@
+<?php
+
+namespace Sindilojas\CobrancaBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Cliente
+ *
+ * @ORM\Table(name="cliente")
+ * @ORM\Entity
+ */
+class Cliente
+{
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nome", type="string", length=50, nullable=false)
+     */
+    private $nome;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cpf", type="string", length=11, nullable=false)
+     */
+    private $cpf;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="rg", type="string", length=12, nullable=false)
+     */
+    private $rg;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cep", type="string", length=10, nullable=false)
+     */
+    private $cep;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="uf", type="string", length=2, nullable=false)
+     */
+    private $uf;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cidade", type="string", length=100, nullable=false)
+     */
+    private $cidade;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="bairro", type="string", length=50, nullable=false)
+     */
+    private $bairro;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="rua", type="string", length=150, nullable=false)
+     */
+    private $rua;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="numero", type="string", length=30, nullable=false)
+     */
+    private $numero;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="complemento", type="string", length=30, nullable=true)
+     */
+    private $complemento;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="email", type="string", length=150, nullable=false)
+     */
+    private $email;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="telefone", type="string", length=20, nullable=false)
+     */
+    private $telefone;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="nascimento", type="date", nullable=false)
+     */
+    private $nascimento;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+
+}

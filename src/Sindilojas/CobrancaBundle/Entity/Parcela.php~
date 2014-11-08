@@ -1,0 +1,70 @@
+<?php
+
+namespace Sindilojas\CobrancaBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Parcela
+ *
+ * @ORM\Table(name="parcela", indexes={@ORM\Index(name="FK_parcela_negociacao", columns={"id_negociacao"})})
+ * @ORM\Entity
+ */
+class Parcela
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="numero", type="integer", nullable=true)
+     */
+    private $numero;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="valor", type="float", precision=10, scale=0, nullable=false)
+     */
+    private $valor;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="vencimento", type="date", nullable=false)
+     */
+    private $vencimento;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="pago", type="boolean", nullable=false)
+     */
+    private $pago;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="entrada", type="boolean", nullable=false)
+     */
+    private $entrada;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var \Sindilojas\CobrancaBundle\Entity\Negociacao
+     *
+     * @ORM\ManyToOne(targetEntity="Sindilojas\CobrancaBundle\Entity\Negociacao")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_negociacao", referencedColumnName="id")
+     * })
+     */
+    private $idNegociacao;
+
+
+}

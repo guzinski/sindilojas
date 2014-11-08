@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Sindilojas\CobrancaBundle\Entity\Divida" table="divida">
+    <indexes>
+      <index name="FK_divida_cliente" columns="id_cliente"/>
+      <index name="FK_divida_loja" columns="id_loja"/>
+    </indexes>
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="vecimento" type="date" column="vecimento" nullable="false"/>
+    <field name="valor" type="float" column="valor" precision="10" scale="0" nullable="false"/>
+    <many-to-one field="idLoja" target-entity="Loja">
+      <join-columns>
+        <join-column name="id_loja" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="idCliente" target-entity="Cliente">
+      <join-columns>
+        <join-column name="id_cliente" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>
