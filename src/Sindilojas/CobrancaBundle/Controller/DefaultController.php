@@ -10,8 +10,10 @@ class DefaultController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         
-        $clientex = $em->getRepository("SindilojasCobrancaBundle:Divida")->findAll();
-        
+        $clientes = $em->getRepository("SindilojasCobrancaBundle:Cliente")->findAll();
+        $lojas = $em->getRepository("SindilojasCobrancaBundle:Loja")->findAll();
+        $dividas = $em->getRepository("SindilojasCobrancaBundle:Divida")->findAll();
+
         return $this->render('SindilojasCobrancaBundle:Default:index.html.twig', array('name' => $name));
     }
 }

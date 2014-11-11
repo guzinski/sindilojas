@@ -2,14 +2,13 @@
 
 namespace Sindilojas\CobrancaBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Cliente
  *
  * @ORM\Table(name="cliente")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Sindilojas\ConbrancaBundle\Entity\Repository\EstDadosRepository")
  */
 class Cliente
 {
@@ -113,58 +112,7 @@ class Cliente
      */
     private $id;
 
-    /**
-     * @OneToMany(targetEntity="Divida", mappedBy="cliente")
-     **/
-    private $dividas;
-        
-    /**
-     * @OneToMany(targetEntity="Registro", mappedBy="cliente")
-     **/
-    private $registros;
 
-
-    public function __construct()
-    {
-        $this->setDividas(new ArrayCollection());
-        $this->setRegistros(new ArrayCollection());
-    }
-
-    /**
-     * 
-     * @return ArrayCollection
-     */
-    function getRegistros()
-    {
-        return $this->registros;
-    }
-
-    /**
-     * 
-     * @param ArrayCollection $registros
-     */
-    function setRegistros(ArrayCollection $registros)
-    {
-        $this->registros = $registros;
-    }
-
-    /**
-     * 
-     * @return ArrayCollection
-     */
-    function getDividas()
-    {
-        return $this->dividas;
-    }
-
-    /**
-     * 
-     * @param ArrayCollection $dividas
-     */
-    function setDividas(ArrayCollection $dividas)
-    {
-        $this->dividas = $dividas;
-    }
 
     /**
      * Set nome

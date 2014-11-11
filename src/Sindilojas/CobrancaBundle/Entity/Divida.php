@@ -15,9 +15,9 @@ class Divida
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="vecimento", type="date", nullable=false)
+     * @ORM\Column(name="vencimento", type="date", nullable=false)
      */
-    private $vecimento;
+    private $vencimento;
 
     /**
      * @var float
@@ -43,7 +43,7 @@ class Divida
      *   @ORM\JoinColumn(name="id_loja", referencedColumnName="id")
      * })
      */
-    private $idLoja;
+    private $loja;
 
     /**
      * @var \Sindilojas\CobrancaBundle\Entity\Cliente
@@ -58,26 +58,26 @@ class Divida
 
 
     /**
-     * Set vecimento
+     * Set vencimento
      *
-     * @param \DateTime $vecimento
+     * @param \DateTime $vencimento
      * @return Divida
      */
-    public function setVecimento($vecimento)
+    public function setVencimento($vencimento)
     {
-        $this->vecimento = $vecimento;
+        $this->vencimento = $vencimento;
 
         return $this;
     }
 
     /**
-     * Get vecimento
+     * Get vencimento
      *
      * @return \DateTime 
      */
-    public function getVecimento()
+    public function getVencimento()
     {
-        return $this->vecimento;
+        return $this->vencimento;
     }
 
     /**
@@ -114,9 +114,9 @@ class Divida
     }
 
     /**
-     * Set idLoja
+     * Set loja
      *
-     * @param \Sindilojas\CobrancaBundle\Entity\Loja $idLoja
+     * @param \Sindilojas\CobrancaBundle\Entity\Loja $loja
      * @return Divida
      */
     public function setLoja(\Sindilojas\CobrancaBundle\Entity\Loja $loja = null)

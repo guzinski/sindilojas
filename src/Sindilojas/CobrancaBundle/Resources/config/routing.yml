@@ -1,3 +1,7 @@
 sindilojas_cobranca_homepage:
     path:     /hello/{name}
     defaults: { _controller: SindilojasCobrancaBundle:Default:index }
+    
+_cliente:
+    resource: "@SindilojasCobrancaBundle/Controller/ClienteController.php"
+    type:     annotation

@@ -104,7 +104,7 @@ class Registro
     }
 
     /**
-     * Set idCliente
+     * Set cliente
      *
      * @param \Sindilojas\CobrancaBundle\Entity\Cliente $cliente
      * @return Registro
@@ -117,7 +117,7 @@ class Registro
     }
 
     /**
-     * Get idCliente
+     * Get cliente
      *
      * @return \Sindilojas\CobrancaBundle\Entity\Cliente 
      */

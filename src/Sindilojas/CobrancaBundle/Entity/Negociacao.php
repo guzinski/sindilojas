@@ -36,7 +36,7 @@ class Negociacao
      *   @ORM\JoinColumn(name="id_divida", referencedColumnName="id")
      * })
      */
-    private $idDivida;
+    private $divida;
 
 
 
@@ -74,25 +74,25 @@ class Negociacao
     }
 
     /**
-     * Set idDivida
+     * Set divida
      *
-     * @param \Sindilojas\CobrancaBundle\Entity\Divida $idDivida
+     * @param \Sindilojas\CobrancaBundle\Entity\Divida $divida
      * @return Negociacao
      */
-    public function setIdDivida(\Sindilojas\CobrancaBundle\Entity\Divida $idDivida = null)
+    public function setDivida(\Sindilojas\CobrancaBundle\Entity\Divida $divida = null)
     {
-        $this->idDivida = $idDivida;
+        $this->divida = $divida;
 
         return $this;
     }
 
     /**
-     * Get idDivida
+     * Get divida
      *
      * @return \Sindilojas\CobrancaBundle\Entity\Divida 
      */
     public function getIdDivida()
     {
-        return $this->idDivida;
+        return $this->divida;
     }
 }

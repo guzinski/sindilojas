@@ -15,9 +15,9 @@ class Divida
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="vecimento", type="date", nullable=false)
+     * @ORM\Column(name="vencimento", type="date", nullable=false)
      */
-    private $vecimento;
+    private $vencimento;
 
     /**
      * @var float

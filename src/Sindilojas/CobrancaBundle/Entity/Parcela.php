@@ -64,7 +64,7 @@ class Parcela
      *   @ORM\JoinColumn(name="id_negociacao", referencedColumnName="id")
      * })
      */
-    private $idNegociacao;
+    private $negociacao;
 
 
 
@@ -194,25 +194,25 @@ class Parcela
     }
 
     /**
-     * Set idNegociacao
+     * Set negociacao
      *
-     * @param \Sindilojas\CobrancaBundle\Entity\Negociacao $idNegociacao
+     * @param \Sindilojas\CobrancaBundle\Entity\Negociacao $negociacao
      * @return Parcela
      */
-    public function setIdNegociacao(\Sindilojas\CobrancaBundle\Entity\Negociacao $idNegociacao = null)
+    public function setNegociacao(\Sindilojas\CobrancaBundle\Entity\Negociacao $negociacao = null)
     {
-        $this->idNegociacao = $idNegociacao;
+        $this->negociacao = $negociacao;
 
         return $this;
     }
 
     /**
-     * Get idNegociacao
+     * Get negociacao
      *
      * @return \Sindilojas\CobrancaBundle\Entity\Negociacao 
      */
-    public function getIdNegociacao()
+    public function getNegociacao()
     {
-        return $this->idNegociacao;
+        return $this->negociacao;
     }
 }
