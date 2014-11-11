@@ -1,4 +1,4 @@
 sindilojas_cobranca:
-    resource: "@SindilojasCobrancaBundle/Resources/config/routing.yml"
+    resource: "@SindilojasCobrancaBundle/Controller/"
+    type:     annotation
     prefix:   /
-
