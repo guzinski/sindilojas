@@ -11,6 +11,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+use Sindilojas\CobrancaBundle\Form\ClienteType;
+use Sindilojas\CobrancaBundle\Entity\Cliente;
+
 /**
  * Description of ClienteController
  *
@@ -41,5 +44,24 @@ class ClienteController extends Controller
         $return['data'] = array();
         return new Response(json_encode($return));
     }
+ 
+    
+    /**
+     * @Route("/clientes/cadastro", name="_estudante_cadastro")
+     * @Template()
+     * 
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function cadastroAction(Request $request)
+    {
+        $em         = $this->getDoctrine()->getManager();
+        $cliente    = new Cliente();
+        $form       = $this->createForm(new ClienteType(), $cliente);
+        
+        
+        return array('form' => $form->createView(), 'cliente'=>$cliente);
+    }
+
     
 }
