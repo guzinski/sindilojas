@@ -1,4 +1,21 @@
 {% extends "SindilojasCobrancaBundle::layout.html.twig" %}
+{% form_theme form 'SindilojasCobrancaBundle:Form:fields.html.twig' %}
+{% block head %}
+    <script src="{{ asset('bundles/sindilojas/js/jquery.validate.min.js') }}"></script>
+    <script>
+        jQuery(document).ready(function(){
+            jQuery("#basicForm").validate({
+                highlight: function(element) {
+                    jQuery(element).closest('.form-group').removeClass('has-success').addClass('has-error');
+                },
+                success: function(element) {
+                    jQuery(element).closest('.form-group').removeClass('has-error');
+                }
+            });
+        });
+    </script>
+{% endblock %}
+
 {% block mainpanel %}
 <div class="pageheader">
     <div class="media">
@@ -31,62 +48,19 @@
                 </div><!-- panel-heading -->
                 <div class="panel-body">
                     <div class="row">
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">{{ form_label(form.nome) }} <span class="asterisk">*</span></label>
-                            <div class="col-sm-9">
-                                {{ form_widget(form.nome) }}
-                            </div>
-                        </div><!-- form-group -->
-
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">Email <span class="asterisk">*</span></label>
-                            <div class="col-sm-9">
-                                <input type="email" name="email" class="form-control" placeholder="Type your email..." required />
-                            </div>
-                        </div><!-- form-group -->
-
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">URL</label>
-                            <div class="col-sm-9">
-                                <input type="url" name="url" class="form-control" />
-                            </div>
-                        </div><!-- form-group -->
-
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">Comment <span class="asterisk">*</span></label>
-                            <div class="col-sm-9">
-                                <textarea rows="5" class="form-control" placeholder="Type your comment..." required></textarea>
-                            </div>
-                        </div><!-- form-group -->
-                    </div><!-- row -->
-                    <div class="row">
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">Name <span class="asterisk">*</span></label>
-                            <div class="col-sm-9">
-                                <input type="text" name="name" class="form-control" placeholder="Type your name..." required />
-                            </div>
-                        </div><!-- form-group -->
-
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">Email <span class="asterisk">*</span></label>
-                            <div class="col-sm-9">
-                                <input type="email" name="email" class="form-control" placeholder="Type your email..." required />
-                            </div>
-                        </div><!-- form-group -->
-
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">URL</label>
-                            <div class="col-sm-9">
-                                <input type="url" name="url" class="form-control" />
-                            </div>
-                        </div><!-- form-group -->
-
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">Comment <span class="asterisk">*</span></label>
-                            <div class="col-sm-9">
-                                <textarea rows="5" class="form-control" placeholder="Type your comment..." required></textarea>
-                            </div>
-                        </div><!-- form-group -->
+                        {{ form_row(form.nome) }}
+                        {{ form_row(form.cpf) }}
+                        {{ form_row(form.rg) }}
+                        {{ form_row(form.cep) }}
+                        {{ form_row(form.uf) }}
+                        {{ form_row(form.cidade) }}
+                        {{ form_row(form.bairro) }}
+                        {{ form_row(form.rua) }}
+                        {{ form_row(form.numero) }}
+                        {{ form_row(form.complemento) }}
+                        {{ form_row(form.email) }}
+                        {{ form_row(form.telefone) }}
+                        {{ form_row(form.nascimento) }}
                     </div><!-- row -->
 
                 </div><!-- panel-body -->

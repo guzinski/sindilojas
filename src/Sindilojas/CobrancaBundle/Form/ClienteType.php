@@ -46,7 +46,6 @@ class ClienteType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver) 
     {
         $resolver->setDefaults(array(
-                        'required' => false,
                         'data_class' => 'Sindilojas\CobrancaBundle\Entity\Cliente',
                     ));
     }

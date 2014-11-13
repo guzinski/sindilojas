@@ -1,0 +1,13 @@
+{% block form_row %}
+    <div class="form-group">
+        <label class="col-sm-3 control-label">{{ form_label(form) }}
+            {% if required %}
+                <span class="asterisk">*</span>
+            {% endif %}
+        </label>
+        <div class="col-sm-9">
+            {{ form_widget(form, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+        {{ form_errors(form) }}
+    </div>
+{% endblock form_row %}
