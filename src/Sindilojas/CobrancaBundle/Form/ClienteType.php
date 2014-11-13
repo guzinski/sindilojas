@@ -24,7 +24,7 @@ class ClienteType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-                ->add("nome", "text", array("attr"=>array("class"=>"form-control")))
+                ->add("nome", "text", array("attr"=>array("title"=>"Nome é obrigatório")))
                 ->add("cpf", "text")
                 ->add("rg", "text")
                 ->add("cep", "text")
@@ -33,7 +33,7 @@ class ClienteType extends AbstractType
                 ->add("bairro", "text")
                 ->add("rua", "text")
                 ->add("numero", "text")
-                ->add("complemento", "text")
+                ->add("complemento", "text", array("required"=>false))
                 ->add("email")
                 ->add("telefone", "text")
                 ->add("nascimento", "date", array(

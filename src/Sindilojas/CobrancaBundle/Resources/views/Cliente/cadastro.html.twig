@@ -35,17 +35,9 @@
 
 
     <div class="row">
-        <div class="col-md-6">
-            <form id="basicForm" action="form-validation.html">
+        <div class="col-md-12">
+            <form class="form-horizontal form-bordered" id="basicForm" action="form-validation.html">
             <div class="panel panel-default">
-                <div class="panel-heading">
-                    <div class="panel-btns">
-                        <a href="" class="panel-minimize tooltips" data-toggle="tooltip" title="Minimize Panel"><i class="fa fa-minus"></i></a>
-                        <a href="" class="panel-close tooltips" data-toggle="tooltip" title="Close Panel"><i class="fa fa-times"></i></a>
-                    </div><!-- panel-btns -->
-                    <h4 class="panel-title">Basic Form Validation</h4>
-                    <p>Please provide your name, email address (won't be published) and a comment.</p>
-                </div><!-- panel-heading -->
                 <div class="panel-body">
                     <div class="row">
                         {{ form_row(form.nome) }}
@@ -62,13 +54,12 @@
                         {{ form_row(form.telefone) }}
                         {{ form_row(form.nascimento) }}
                     </div><!-- row -->
-
                 </div><!-- panel-body -->
                 <div class="panel-footer">
                   <div class="row">
                     <div class="col-sm-9 col-sm-offset-3">
-                        <button class="btn btn-primary mr5">Submit</button>
-                        <button type="reset" class="btn btn-dark">Reset</button>
+                        <button class="btn btn-primary mr5">Salvar</button>
+                        <button type="reset" class="btn btn-dark">Limpar</button>
                     </div>
                   </div>
                 </div><!-- panel-footer -->  
