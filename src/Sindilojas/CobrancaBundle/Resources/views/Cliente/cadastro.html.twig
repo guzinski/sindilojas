@@ -2,9 +2,35 @@
 {% form_theme form 'SindilojasCobrancaBundle:Form:fields.html.twig' %}
 {% block head %}
     <script src="{{ asset('bundles/sindilojas/js/jquery.validate.min.js') }}"></script>
+    <script src="{{ asset('bundles/sindilojas/js/messages_ptbr.js') }}"></script>
+    <script src="{{ asset('bundles/sindilojas/js/validate/additional-methods.js') }}"></script>
+    <script src="{{ asset('bundles/sindilojas/js/jquery.maskedinput.min.js') }}"></script>
+    <script src="{{ asset('bundles/sindilojas/js/jquery-ui-1.10.3.min.js') }}"></script>
     <script>
         jQuery(document).ready(function(){
+            jQuery("#cliente_cpf").mask("999.999.999-99");
+            jQuery("#cliente_nascimento").mask("99/99/9999").datepicker();;
+            jQuery("#cliente_telefone").mask("(99) 9999-9999?9");
+            jQuery("#cliente_cep").mask("99999-999", 
+                {completed:function(){
+                    jQuery.getScript('http://cep.republicavirtual.com.br/web_cep.php?formato=javascript&cep='+this.val(), function(data){
+                        jQuery('#cliente_uf').val(unescape(resultadoCEP.uf));
+                        jQuery('#cliente_cidade').val(unescape(resultadoCEP.cidade));
+                        jQuery('#cliente_bairro').val(unescape(resultadoCEP.bairro));
+                        jQuery('#cliente_rua').val(unescape(resultadoCEP.tipo_logradouro)+' '+unescape(resultadoCEP.logradouro));
+                        if(jQuery('#cliente_uf').val()==''){
+                            alert('CEP Inválido');
+                            jQuery("#cliente_cep").val('');
+                        }
+                    })
+                }}
+            );
             jQuery("#basicForm").validate({
+                rules: {
+                    "cliente[cpf]":         {cpf: true},
+                    "cliente[email]":       {email: true},
+                    "cliente[nascimento]":  {brazilianDate: true}
+                },
                 highlight: function(element) {
                     jQuery(element).closest('.form-group').removeClass('has-success').addClass('has-error');
                 },
