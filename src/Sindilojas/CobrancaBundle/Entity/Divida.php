@@ -48,7 +48,7 @@ class Divida
     /**
      * @var \Sindilojas\CobrancaBundle\Entity\Cliente
      *
-     * @ORM\ManyToOne(targetEntity="Sindilojas\CobrancaBundle\Entity\Cliente")
+     * @ORM\ManyToOne(targetEntity="Sindilojas\CobrancaBundle\Entity\Cliente", inversedBy="dividas")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_cliente", referencedColumnName="id")
      * })
@@ -158,4 +158,10 @@ class Divida
     {
         return $this->cliente;
     }
+    
+    public function __toString()
+    {
+        return (string) $this->getValor();
+    }
+
 }

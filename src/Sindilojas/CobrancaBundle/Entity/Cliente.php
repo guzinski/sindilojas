@@ -3,12 +3,13 @@
 namespace Sindilojas\CobrancaBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Cliente
  *
  * @ORM\Table(name="cliente")
- * @ORM\Entity(repositoryClass="Sindilojas\ConbrancaBundle\Entity\Repository\EstDadosRepository")
+ * @ORM\Entity(repositoryClass="Sindilojas\CobrancaBundle\Entity\Repository\ClienteRepository")
  */
 class Cliente
 {
@@ -112,8 +113,38 @@ class Cliente
      */
     private $id;
 
+    
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\OneToMany (targetEntity="Sindilojas\CobrancaBundle\Entity\Divida", mappedBy="cliente", cascade={"persist", "remove"})
+     */
+    private $dividas;
 
+    
+    public function __construct()
+    {
+        $this->setDividas(new ArrayCollection());
+    }
 
+    /**
+     * 
+     * @return ArrayCollection
+     */
+    function getDividas()
+    {
+        return $this->dividas;
+    }
+
+    /**
+     * 
+     * @param \Doctrine\Common\Collections\Collection $dividas
+     */
+    function setDividas(\Doctrine\Common\Collections\Collection $dividas)
+    {
+        $this->dividas = $dividas;
+    }
+        
     /**
      * Set nome
      *
@@ -145,7 +176,7 @@ class Cliente
      */
     public function setCpf($cpf)
     {
-        $this->cpf = $cpf;
+        $this->cpf = preg_replace("/[^0-9]/", "", $cpf);
 
         return $this;
     }
@@ -168,7 +199,7 @@ class Cliente
      */
     public function setRg($rg)
     {
-        $this->rg = $rg;
+        $this->rg = preg_replace("/[^0-9]/", "", $rg);;
 
         return $this;
     }

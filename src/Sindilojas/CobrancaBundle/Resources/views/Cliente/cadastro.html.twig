@@ -36,7 +36,27 @@
                 },
                 success: function(element) {
                     jQuery(element).closest('.form-group').removeClass('has-error');
-                }
+                },
+                submitHandler: function(form) {
+                    jQuery('#cliente_cidade, #cliente_uf').removeAttr('disabled');
+                    form.submit();
+               }
+            });
+            var dividaCount = '{{ form.dividas|length }}';
+            jQuery('#add-divida').click(function(e) {
+                e.preventDefault();
+
+                var dividas = jQuery('#cliente_dividas');
+
+                // grab the prototype template
+                var newWidget = dividas.attr('data-prototype');
+                // replace the "__name__" used in the id and name of the prototype
+                // with a number that's unique to your emails
+                // end name attribute looks like name="contact[emails][2]"
+                newWidget = newWidget.replace(/__name__/g, dividaCount);
+                dividaCount++;
+
+                jQuery(newWidget).insertBefore(jQuery(this));
             });
         });
     </script>
@@ -62,7 +82,7 @@
 
     <div class="row">
         <div class="col-md-12">
-            <form class="form-horizontal form-bordered" id="basicForm" action="form-validation.html">
+            <form method="POST" class="form-horizontal form-bordered" id="basicForm" action="{{ path('_estudante_cadastro') }}">
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div class="row">
@@ -79,6 +99,10 @@
                         {{ form_row(form.email) }}
                         {{ form_row(form.telefone) }}
                         {{ form_row(form.nascimento) }}
+                        {{ form_widget(form.dividas) }}
+                        {{ form_row(form._token) }}
+                        <a id="add-divida" href="#cliente_dividas">Adicionar</a>
+                        {{ form_errors(form) }}
                     </div><!-- row -->
                 </div><!-- panel-body -->
                 <div class="panel-footer">

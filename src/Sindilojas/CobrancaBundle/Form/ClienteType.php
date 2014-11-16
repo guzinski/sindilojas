@@ -5,7 +5,6 @@ namespace Sindilojas\CobrancaBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Doctrine\ORM\EntityRepository;
 
 
 /**
@@ -23,13 +22,13 @@ class ClienteType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
+                $builder
                 ->add("nome", "text" )
                 ->add("cpf", "text")
                 ->add("rg", "text")
                 ->add("cep", "text")
-                ->add("uf", "text", array("disabled"=>true))
-                ->add("cidade", "text", array("disabled"=>true))
+                ->add("uf", "text", array('attr'=> array('disabled'=>'disabled')))
+                ->add("cidade", "text", array('attr'=> array('disabled'=>'disabled')))
                 ->add("bairro", "text")
                 ->add("rua", "text")
                 ->add("numero", "text")
@@ -40,7 +39,13 @@ class ClienteType extends AbstractType
                             'label'  => 'Data de Nascimento',
                             'widget' => 'single_text',
                             'format' => 'dd/MM/yyyy',
-                  ));
+                  ))
+                ->add("dividas", "collection", array(
+                        'type'          => new DividaType(),
+                        'allow_add'     => true,
+                        'allow_delete'  => true,
+                        'label'         => false,
+                ));
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver) 
