@@ -21,12 +21,12 @@ class DividaType extends AbstractType
                         'class' => 'SindilojasCobrancaBundle:Loja',
                         'empty_value' => 'Selecione'
                     ))
-                ->add("valor", 'money', array("currency"=>"BRL", "grouping"=>\NumberFormatter::DECIMAL))
+                ->add("valor", 'money', array("currency"=>"BRL", "grouping"=>true))
                 ->add("vencimento", "date", array(
-                                            'label'  => 'Data de Nascimento',
-                                            'widget' => 'single_text',
-                                            'format' => 'dd/MM/yyyy',
-                                  ));
+                        'label'  => 'Data de Nascimento',
+                        'widget' => 'single_text',
+                        'format' => 'dd/MM/yyyy',
+                    ));
     }
     
     public function setDefaultOptions(OptionsResolverInterface $resolver)
