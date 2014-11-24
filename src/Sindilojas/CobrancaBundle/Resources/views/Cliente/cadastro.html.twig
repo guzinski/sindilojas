@@ -1,10 +1,12 @@
 {% extends "SindilojasCobrancaBundle::layout.html.twig" %}
 {% form_theme form 'SindilojasCobrancaBundle:Form:fields.html.twig' %}
+{% form_theme form.dividas 'SindilojasCobrancaBundle:Form:dividas.html.twig' %}
 {% block head %}
     <script src="{{ asset('bundles/sindilojas/js/jquery.validate.min.js') }}"></script>
     <script src="{{ asset('bundles/sindilojas/js/messages_ptbr.js') }}"></script>
     <script src="{{ asset('bundles/sindilojas/js/validate/additional-methods.js') }}"></script>
     <script src="{{ asset('bundles/sindilojas/js/jquery.maskedinput.min.js') }}"></script>
+    <script src="{{ asset('bundles/sindilojas/js/jquery.maskMoney.js') }}"></script>
     <script src="{{ asset('bundles/sindilojas/js/jquery-ui-1.10.3.min.js') }}"></script>
     <script>
         jQuery(document).ready(function(){
@@ -38,15 +40,28 @@
                     jQuery(element).closest('.form-group').removeClass('has-error');
                 },
                 submitHandler: function(form) {
+                    for(var i=0; i>dividaCount; i++) {
+                        
+                        jQuery("#cliente_dividas_"+i+"_valor").maskMoney({thousands:'.', decimal:','});
+                    }
                     jQuery('#cliente_cidade, #cliente_uf').removeAttr('disabled');
                     form.submit();
                }
             });
             var dividaCount = '{{ form.dividas|length }}';
+            
+            for(var i=dividaCount; i>0;) {
+                i--;
+                jQuery("#cliente_dividas_"+i+"_vencimento").mask("99/99/9999").datepicker();
+                jQuery("#cliente_dividas_"+i+"_valor").maskMoney({thousands:'.', decimal:','});
+                jQuery("#cliente_dividas_"+i+"_valor").maskMoney("mask");
+            }
+            
+            
             jQuery('#add-divida').click(function(e) {
                 e.preventDefault();
 
-                var dividas = jQuery('#cliente_dividas');
+                var dividas = jQuery('#dividas');
 
                 // grab the prototype template
                 var newWidget = dividas.attr('data-prototype');
@@ -54,9 +69,11 @@
                 // with a number that's unique to your emails
                 // end name attribute looks like name="contact[emails][2]"
                 newWidget = newWidget.replace(/__name__/g, dividaCount);
-                dividaCount++;
-
+                
                 jQuery(newWidget).insertBefore(jQuery(this));
+                jQuery("#cliente_dividas_"+dividaCount+"_vencimento").mask("99/99/9999").datepicker();
+                jQuery("#cliente_dividas_"+dividaCount+"_valor").maskMoney({prefix:'R$ ', thousands:'.', decimal:',', affixesStay: true});
+                dividaCount++;
             });
         });
     </script>
@@ -99,9 +116,12 @@
                         {{ form_row(form.email) }}
                         {{ form_row(form.telefone) }}
                         {{ form_row(form.nascimento) }}
-                        {{ form_widget(form.dividas) }}
+                        <div id="dividas" data-prototype="{{ form_row(form.dividas.vars.prototype)|e  }}" class="dividas"></div>
+                        {% for divida in form.dividas %}
+                            {{ form_row(divida) }}
+                        {% endfor %}                        
+                        <a id="add-divida" href="#dividas">Adicionar dívida</a>
                         {{ form_row(form._token) }}
-                        <a id="add-divida" href="#cliente_dividas">Adicionar</a>
                         {{ form_errors(form) }}
                     </div><!-- row -->
                 </div><!-- panel-body -->

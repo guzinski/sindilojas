@@ -1,3 +1,11 @@
+{% block _cliente_dividas_row %}
+    <div class="row">
+        {{ form_widget(form, { 'attr': {'class': 'row'} }) }}
+        {{ form_errors(form) }}
+    </div>
+{% endblock _cliente_dividas_row %}
+
+
 {% block form_row %}
     <div class="form-group">
         <label class="col-sm-3 control-label">{{ form_label(form) }}
@@ -11,3 +19,5 @@
         {{ form_errors(form) }}
     </div>
 {% endblock form_row %}
+
+

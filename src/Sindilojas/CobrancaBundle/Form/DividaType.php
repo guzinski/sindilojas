@@ -21,7 +21,7 @@ class DividaType extends AbstractType
                         'class' => 'SindilojasCobrancaBundle:Loja',
                         'empty_value' => 'Selecione'
                     ))
-                ->add("valor", 'money', array("currency"=>"BRL", "grouping"=>true))
+                ->add("valor", 'money', array("currency"=>"", "grouping"=>false))
                 ->add("vencimento", "date", array(
                         'label'  => 'Data de Nascimento',
                         'widget' => 'single_text',

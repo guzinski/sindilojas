@@ -47,7 +47,7 @@ class ClienteController extends Controller
         $dados = array();
         foreach ($clientes as $cliente) {
             $linha = array();
-            $linha[] = $cliente->getNome();
+            $linha[] = "<a href=\"".$this->generateUrl("_estudante_cadastro", array("id"=>$cliente->getId()))."\">". $cliente->getNome()."</a>";
             $linha[] = $cliente->getTelefone();
             $linha[] = $cliente->getCidade();
             $dados[] = $linha;

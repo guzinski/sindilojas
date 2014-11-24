@@ -89,7 +89,7 @@ class Divida
     public function setValor($valor)
     {
         $this->valor = $valor;
-
+        die($this->valor);
         return $this;
     }
 
