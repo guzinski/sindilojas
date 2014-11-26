@@ -6,7 +6,7 @@
 {% endblock form_row %}
 
 {% block money_row -%}
-    <div class="col-sm-4">
+    <div class="col-sm-3">
         <div class="input-group">
             <span class="input-group-addon">R$</span>
             {{ form_widget(form, { 'attr': {'class': 'form-control'} }) }}
@@ -19,7 +19,7 @@
     </div>
 {%- endblock choice_row %}
 {% block date_row -%}
-    <div class="col-sm-4">
+    <div class="col-sm-3">
         {{ form_widget(form, { 'attr': {'class': 'form-control'} }) }}
     </div>
 {%- endblock date_row %}

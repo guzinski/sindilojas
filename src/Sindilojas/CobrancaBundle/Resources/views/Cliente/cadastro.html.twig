@@ -40,9 +40,12 @@
                     jQuery(element).closest('.form-group').removeClass('has-error');
                 },
                 submitHandler: function(form) {
-                    for(var i=0; i>dividaCount; i++) {
-                        
-                        jQuery("#cliente_dividas_"+i+"_valor").maskMoney({thousands:'.', decimal:','});
+                    var valor;
+                    for(var i=dividaCount; i>0;) {
+                        i--;
+                        valor = jQuery("#cliente_dividas_"+i+"_valor").maskMoney('unmasked')[0];
+                        jQuery("#cliente_dividas_"+i+"_valor").maskMoney('destroy');
+                        jQuery("#cliente_dividas_"+i+"_valor").val(valor);
                     }
                     jQuery('#cliente_cidade, #cliente_uf').removeAttr('disabled');
                     form.submit();
@@ -57,6 +60,26 @@
                 jQuery("#cliente_dividas_"+i+"_valor").maskMoney("mask");
             }
             
+            var collectionHolder = jQuery("#dividas");
+            
+            // add a delete link to all of the existing tag form li elements
+            collectionHolder.find('.form-group').each(function() {
+                addTagFormDeleteLink($(this));
+            });
+                        
+            function addTagFormDeleteLink($tagFormLi) {
+                
+                var $removeFormA = $('<div class="col-sm-2"><button type="button" class="btn btn-default">Excluir</button></div>');
+                $tagFormLi.children("div").append($removeFormA);
+
+                $removeFormA.on('click', function(e) {
+                    // prevent the link from creating a "#" on the URL
+                    e.preventDefault();
+
+                    // remove the li for the tag form
+                    $tagFormLi.remove();
+                });
+            }
             
             jQuery('#add-divida').click(function(e) {
                 e.preventDefault();
@@ -64,15 +87,16 @@
                 var dividas = jQuery('#dividas');
 
                 // grab the prototype template
-                var newWidget = dividas.attr('data-prototype');
+                var $newWidget = dividas.attr('data-prototype');
                 // replace the "__name__" used in the id and name of the prototype
                 // with a number that's unique to your emails
                 // end name attribute looks like name="contact[emails][2]"
-                newWidget = newWidget.replace(/__name__/g, dividaCount);
+                $newWidget = jQuery($newWidget.replace(/__name__/g, dividaCount));
                 
-                jQuery(newWidget).insertBefore(jQuery(this));
+                addTagFormDeleteLink($newWidget);
+                jQuery("#dividas").append($newWidget);
                 jQuery("#cliente_dividas_"+dividaCount+"_vencimento").mask("99/99/9999").datepicker();
-                jQuery("#cliente_dividas_"+dividaCount+"_valor").maskMoney({prefix:'R$ ', thousands:'.', decimal:',', affixesStay: true});
+                jQuery("#cliente_dividas_"+dividaCount+"_valor").maskMoney({thousands:'.', decimal:','});
                 dividaCount++;
             });
         });
@@ -116,11 +140,15 @@
                         {{ form_row(form.email) }}
                         {{ form_row(form.telefone) }}
                         {{ form_row(form.nascimento) }}
-                        <div id="dividas" data-prototype="{{ form_row(form.dividas.vars.prototype)|e  }}" class="dividas"></div>
+                        <div id="dividas" data-prototype="{{ form_row(form.dividas.vars.prototype)|e  }}" class="dividas">
                         {% for divida in form.dividas %}
                             {{ form_row(divida) }}
-                        {% endfor %}                        
-                        <a id="add-divida" href="#dividas">Adicionar dívida</a>
+                        {% endfor %} 
+                        
+                        </div>
+                        <div class="col-md-12">
+                            <button id="add-divida" type="button" class="btn btn-success">Adicionar Dívida</button>
+                        </div>
                         {{ form_row(form._token) }}
                         {{ form_errors(form) }}
                     </div><!-- row -->
