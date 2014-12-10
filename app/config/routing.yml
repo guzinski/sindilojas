@@ -2,3 +2,9 @@ sindilojas_cobranca:
     resource: "@SindilojasCobrancaBundle/Controller/"
     type:     annotation
     prefix:   /
+    
+_login_check:
+    pattern:    /login/verificacao
+_logout:
+    pattern:    /logout
+    
