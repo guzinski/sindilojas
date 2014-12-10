@@ -3,6 +3,7 @@
 namespace Sindilojas\CobrancaBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Usuario
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="usuario")
  * @ORM\Entity
  */
-class Usuario
+class Usuario implements UserInterface
 {
     /**
      * @var string
@@ -122,4 +123,46 @@ class Usuario
     {
         return $this->id;
     }
+    
+    public function eraseCredentials()
+    {
+        
+    }
+
+    /**
+     * 
+     * @return string
+     */
+    public function getPassword()
+    {
+        return $this->getSenha();
+    }
+
+    /**
+     * 
+     * @return string
+     */
+    public function getRoles()
+    {
+        return array('ROLE_ADMIN');
+    }
+
+    /**
+     * 
+     * @return string
+     */
+    public function getSalt()
+    {
+        return null;
+    }
+
+    /**
+     * 
+     * @return string
+     */
+    public function getUsername()
+    {
+        return $this->getEmail();
+    }
+
 }

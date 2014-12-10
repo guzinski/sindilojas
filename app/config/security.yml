@@ -1,9 +1,6 @@
 security:
     encoders:
-        Sindilojas\CobrancaBundle\Entity\Usuario: 
-            algorithm: sha1
-            iterations: 1
-            encode_as_base64: false
+        Sindilojas\CobrancaBundle\Entity\Usuario: plaintext
 
     providers:
         main:
@@ -26,10 +23,10 @@ security:
                 login_path: _login
                 require_previous_session: false
                 always_use_default_target_path: true
-                default_target_path: /estudante/area
+                default_target_path: /
             logout:
                 path:   _logout
-                target: _teste
+                target: _index
                 
     access_control:
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }

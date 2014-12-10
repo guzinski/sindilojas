@@ -2,8 +2,8 @@
 
     <h5 class="leftpanel-title">Menu</h5>
     <ul class="nav nav-pills nav-stacked">
-        <li class="active"><a href="index.html"><i class="fa fa-home"></i> <span>Dashboard</span></a></li>
-        <li><a href="{{ path('_clientes') }}"><i class="fa fa-suitcase"></i> <span>Clientes</span></a></li>
+        <li {% if app.request.get('_route') == '_index' %} class="active"{% endif %}><a href="{{ path('_index') }}"><i class="fa fa-home"></i> <span>Dashboard</span></a></li>
+        <li {% if app.request.get('_route') == '_clientes' %} class="active"{% endif %}><a href="{{ path('_clientes') }}"><i class="fa fa-suitcase"></i> <span>Clientes</span></a></li>
     </ul>
 
 </div><!-- leftpanel -->

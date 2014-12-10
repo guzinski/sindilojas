@@ -34,18 +34,18 @@
             <div class="panel panel-signin">
                 <div class="panel-body">
                     <h4 class="text-center mb5">Sindilojas</h4>
-                    <!--<p class="text-center">Sign in to your account</p>-->
+                    <p class="text-center">{{ error }}</p>
                     
                     <div class="mb30"></div>
                     
                     <form action="{{ path('_login_check') }}" method="post">
                         <div class="input-group mb15">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                            <input type="text" class="form-control" placeholder="Usuário">
+                            <input value="{{ last_username }}" type="text" name="_username" class="form-control" placeholder="E-mail">
                         </div><!-- input-group -->
                         <div class="input-group mb15">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                            <input type="password" class="form-control" placeholder="Senha">
+                            <input type="password" name="_password" class="form-control" placeholder="Senha">
                         </div><!-- input-group -->
                         
                         <div class="clearfix">
