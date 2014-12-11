@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Divida
  *
  * @ORM\Table(name="divida", indexes={@ORM\Index(name="FK_divida_cliente", columns={"id_cliente"}), @ORM\Index(name="FK_divida_loja", columns={"id_loja"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Sindilojas\CobrancaBundle\Entity\Repository\DividaRepository")
  */
 class Divida
 {

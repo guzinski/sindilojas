@@ -1,26 +1,22 @@
 {% extends "SindilojasCobrancaBundle::layout.html.twig" %}
-{% block title %}Lista de Clientes{% endblock %}
+{% block title %}Ficha do cliente{% endblock %}
 {% block head %}
     <link href="{{ asset('bundles/sindilojas/css/style.datatables.css') }}" rel="stylesheet">
     <script src="{{ asset('bundles/sindilojas/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('bundles/sindilojas/js/jquery-datatables.responsive.js') }}"></script>
     <script src="//cdn.datatables.net/plug-ins/725b2a2115b/integration/bootstrap/3/dataTables.bootstrap.js"></script>
     <script src="{{ asset('bundles/sindilojas/js/select2.min.js') }}"></script>
+    <script src="{{ asset('bundles/sindilojas/js/jquery.maskedinput.min.js') }}"></script>
     <script>
         jQuery(document).ready(function(){
-            var exRowTable = jQuery('#exRowTable').DataTable({
-                    responsive: true,
-                    serverSide: true,
-                    "ajax": "{{ path('_clientes_pagination') }}",
-                });
-
-                // DataTables Length to Select2
-                jQuery('div.dataTables_length select').removeClass('form-control input-sm');
-                jQuery('div.dataTables_length select').css({width: '60px'});
-                jQuery('div.dataTables_length select').select2({
-                    minimumResultsForSearch: -1
-                });
-
+            jQuery("#cpf").mask("999.999.999-99",
+            {completed:function(){
+                    jQuery.post('{{ path('_cobranca_dividas')}}', {cpf: jQuery(this).val()}, function(data) {
+                        jQuery(".dividas").remove();
+                        jQuery(".contentpanel").append(data);
+                    });
+                }}
+            );
         });
        
     </script>
@@ -34,24 +30,26 @@
             <div class="media-body">
                 <ul class="breadcrumb">
                     <li><a href="{{ path('_index') }}"><i class="glyphicon glyphicon-home"></i></a></li>
-                    <li><a href="">Clientes</a></li>
-                    <li>Lista de Clientes</li>
+                    <li><a href="{{ path('_clientes') }}">Clientes</a></li>
+                    <li>Ficha do Cliente</li>
                 </ul>
-                <h4>Clientes</h4>
+                <h4>Ficha do Cliente</h4>
             </div>
         </div><!-- media -->
     </div><!-- pageheader -->
      <div class="contentpanel">
-        <div class="panel panel-success-head">
-            <table id="exRowTable" class="table table-striped table-bordered">
-                <thead>
-                    <tr>
-                        <th>Nome</th>
-                        <th>Telefone</th>
-                        <th>Cidade</th>
-                    </tr>
-                </thead>
-            </table>
-        </div><!-- panel -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">Buscar Cliente</h4>
+            </div><!-- panel-heading -->
+            <div class="panel-body">
+                <p>Insira o Cpf do cliente abaixo.</p>
+                <label>CPF</label>
+                <div class="input-group mb15">
+                    <div ><input type="text" class="form-control" id="cpf"></div>
+                </div><!-- input-group -->
+
+            </div><!-- panel-body -->
+        </div>
      </div><!-- contentpanel -->
 {% endblock %}
