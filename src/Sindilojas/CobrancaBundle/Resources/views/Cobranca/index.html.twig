@@ -7,17 +7,32 @@
     <script src="//cdn.datatables.net/plug-ins/725b2a2115b/integration/bootstrap/3/dataTables.bootstrap.js"></script>
     <script src="{{ asset('bundles/sindilojas/js/select2.min.js') }}"></script>
     <script src="{{ asset('bundles/sindilojas/js/jquery.maskedinput.min.js') }}"></script>
+    <script src="{{ asset('bundles/sindilojas/js/jquery.maskMoney.js') }}"></script>
+    <script src="{{ asset('bundles/sindilojas/js/jquery-ui-1.10.3.min.js') }}"></script>
     <script>
         jQuery(document).ready(function(){
             jQuery("#cpf").mask("999.999.999-99",
             {completed:function(){
+                    jQuery(".locked").fadeIn();
                     jQuery.post('{{ path('_cobranca_dividas')}}', {cpf: jQuery(this).val()}, function(data) {
-                        jQuery(".dividas").remove();
+                        jQuery(".dividas, .registros").remove();
                         jQuery(".contentpanel").append(data);
+                        jQuery(".locked").fadeOut();
                     });
                 }}
             );
         });
+        
+        function detalhesDivida(id) {
+            jQuery(".locked").fadeIn();
+            jQuery(".negociacao").remove();
+            jQuery.post('{{ path('_detalhes_divida')}}', {id: id}, function(data) {
+                jQuery(".locked").fadeOut();
+                jQuery(data).insertBefore(".registros");
+                jQuery("#entrada").maskMoney({thousands:'.', decimal:','});
+                jQuery("#vencimento").mask("99/99/9999").datepicker();;
+            });
+        }
        
     </script>
 {% endblock %}

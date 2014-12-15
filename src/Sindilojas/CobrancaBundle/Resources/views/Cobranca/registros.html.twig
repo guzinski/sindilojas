@@ -1,0 +1,29 @@
+<div class="panel panel-default registros">
+    <div class="panel-heading">
+        <h4 class="panel-title">Registros</h4>
+    </div><!-- panel-heading -->
+    <div class="panel-body">
+        <textarea placeholder="Novo Registro" rows="5" class="form-control"></textarea>
+        <div class="table-responsive">
+            <table id="registros" class="table mb30">
+                <thead>
+                    <tr>
+                        <th colspan="2">Histórico de contatos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for registro in registros %}
+                    <tr>
+                        <td>{{ registro.getData.format('d/m/Y') }}</td>
+                        <td>{{ registro.getTexto() }}</td>
+                    </tr>
+                    {% else %}
+                    <tr id="NenhumRegistro">
+                        <td colspan="2">Nenhum contato com este cliente</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div><!-- panel-body -->
+</div>

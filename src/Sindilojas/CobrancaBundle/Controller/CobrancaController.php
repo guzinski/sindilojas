@@ -35,13 +35,33 @@ class CobrancaController extends Controller
      */
     public function dividasAction(Request $request)
     {
+        $dividas = $this->getDoctrine()->getRepository("Sindilojas\CobrancaBundle\Entity\Divida")->getDividasFromCpf($request->get("cpf"));
         
-        $rep = $this->getDoctrine()->getRepository("Sindilojas\CobrancaBundle\Entity\Divida");
+        $registros = $this->getDoctrine()->getRepository("Sindilojas\CobrancaBundle\Entity\Registro")->getRegistros($request->get("cpf"));
         
-        $dividas = $rep->getDividasFromCpf($request->get("cpf"));
+        $renderDividas = $this->renderView("SindilojasCobrancaBundle::Cobranca\\dividas.html.twig", array("dividas"=>$dividas));;
         
-        $render = $this->renderView("SindilojasCobrancaBundle::Cobranca\dividas.html.twig", array("dividas"=>$dividas));;
+        $renderRegistros = $this->renderView("SindilojasCobrancaBundle::Cobranca\\registros.html.twig", array("registros"=>$registros));;
+
+        return new Response($renderDividas.$renderRegistros);
+    }
+    
+    /**
+     * @Route("/cobranca/detalhes", name="_detalhes_divida")
+     * 
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     */
+    public function dividasDetalhesAction(Request $request)
+    {
+        $idDivida = $request->request->getInt("id");
+        
+        $negociacao = $this->getDoctrine()->getRepository("Sindilojas\CobrancaBundle\Entity\Negociacao")->findBy(array('divida'=>$idDivida));
+        
+        $divida = $this->getDoctrine()->getRepository("Sindilojas\CobrancaBundle\Entity\Divida")->find($idDivida);
+
+        $render = $this->renderView("SindilojasCobrancaBundle::Cobranca\\negociacao.html.twig", array('divida'=>$divida, 'negociacao'=>$negociacao));;
 
         return new Response($render);
     }
+
 }

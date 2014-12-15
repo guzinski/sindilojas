@@ -3,6 +3,7 @@
 namespace Sindilojas\CobrancaBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Negociacao
@@ -38,6 +39,19 @@ class Negociacao
      */
     private $divida;
 
+    
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\OneToMany (targetEntity="Sindilojas\CobrancaBundle\Entity\Parcela", mappedBy="cliente", cascade={"persist", "remove"})
+     */
+    private $parcelas;
+
+    
+    public function __construct()
+    {
+        $this->setParcelas(new ArrayCollection());
+    }
 
 
     /**
@@ -95,4 +109,24 @@ class Negociacao
     {
         return $this->divida;
     }
+    
+    /**
+     * 
+     * @return type
+     */
+    function getParcelas()
+    {
+        return $this->parcelas;
+    }
+
+    /**
+     * 
+     * @param \Doctrine\Common\Collections\Collection $parcelas
+     */
+    function setParcelas(\Doctrine\Common\Collections\Collection $parcelas)
+    {
+        $this->parcelas = $parcelas;
+    }
+
+
 }

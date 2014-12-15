@@ -1,0 +1,51 @@
+<div class="panel panel-default negociacao">
+    <div class="panel-heading">
+        <h4 class="panel-title">Negociação</h4>
+    </div><!-- panel-heading -->
+    <div class="panel-body">
+        {% if negociacao is empty %}
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label class="control-label">Valor Atual</label>
+                    <h4>{{ "R$ " ~ divida.getValor()|number_format(2, ',', '.') }}</h4>
+                </div><!-- form-group -->
+            </div><!-- col-sm-2 -->
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label for="entrada" class="control-label">Entrada</label>
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">R$</button>
+                        </span>
+                        <input type="text" placeholder="Entrada" name="entrada" id="entrada" class="entrada form-control">
+                    </div>
+                </div><!-- form-group -->
+            </div><!-- col-sm-2 -->
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label for="numParcelas" class="control-label">Parcelas</label>
+                    <input type="text" placeholder="Parcelas" name="numParcelas" id="numParcelas" class="form-control">
+                </div><!-- form-group -->
+            </div><!-- col-sm-2 -->
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label for="exampleInputEmail2" class="control-label">Valor Parcela</label>
+                    <h4 id="valorParcela"></h4>
+                </div><!-- form-group -->
+            </div><!-- col-sm-2 -->
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label class="control-label">Vencimento</label>
+                    <input type="date" placeholder="Vencimento" id="vencimento" name="vencimento" class="form-control">
+                </div><!-- form-group -->
+            </div><!-- col-sm-2 -->
+            <div class="col-sm-2">
+                <button class="btn btn-primary" type="button">Gerar parcelas</button>
+            </div><!-- col-sm-2 -->
+
+            
+        {% else %}
+        <p class="mb20">Nenhuma dívida fi encontrada para o CPF..</p>        
+        {% endif %}
+    </div><!-- panel-body -->
+</div>

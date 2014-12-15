@@ -3,9 +3,6 @@
 namespace Sindilojas\CobrancaBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Symfony\Component\HttpFoundation\Request;
-
-
 
 /**
  * Description of DividaRepository

@@ -31,6 +31,13 @@
         {% block head %}{% endblock %}
     </head>
     <body>
+        <div class="locked" style="display: none">
+            <div class="lockedpanel">
+                <div class="loginuser">
+                    <img src="{{ asset('bundles/sindilojas/images/loaders/loader7.gif') }}" class="" alt="" />
+                </div>
+            </div><!-- lockedpanel -->
+        </div><!-- locked -->
        
         <header>
             {% include 'SindilojasCobrancaBundle::header.html.twig'  %}

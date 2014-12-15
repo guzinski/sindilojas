@@ -21,7 +21,7 @@
                         <td>{{ divida.cliente.getNome() }}</td>
                         <td>{{ divida.getLoja().getNome() }}</td>
                         <td>{{ "R$ " ~ divida.getValor()|number_format(2, ',', '.') }}</td>
-                        <td></td>
+                        <td><a href="javascript:detalhesDivida('{{ divida.getId() }}')">Ver Detalhes</a></td>
                     </tr>
                     {% endfor %}
                 </tbody>
