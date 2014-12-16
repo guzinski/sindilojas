@@ -8,6 +8,7 @@
                 <div class="form-group">
                     <label class="control-label">Valor Atual</label>
                     <h4>{{ "R$ " ~ divida.getValor()|number_format(2, ',', '.') }}</h4>
+                    <input type="hidden" name="valorreal" id="valorreal" value="{{ divida.getValor() }}"/>
                 </div><!-- form-group -->
             </div><!-- col-sm-2 -->
             <div class="col-sm-2">
@@ -17,14 +18,14 @@
                         <span class="input-group-btn">
                             <button class="btn btn-default" type="button">R$</button>
                         </span>
-                        <input type="text" placeholder="Entrada" name="entrada" id="entrada" class="entrada form-control">
+                        <input type="text" placeholder="Entrada" name="entrada" id="entrada" class="entrada form-control"/>
                     </div>
                 </div><!-- form-group -->
             </div><!-- col-sm-2 -->
             <div class="col-sm-2">
                 <div class="form-group">
                     <label for="numParcelas" class="control-label">Parcelas</label>
-                    <input type="text" placeholder="Parcelas" name="numParcelas" id="numParcelas" class="form-control">
+                    <input type="text" placeholder="Parcelas" name="numParcelas" id="numParcelas" class="form-control"/>
                 </div><!-- form-group -->
             </div><!-- col-sm-2 -->
             <div class="col-sm-2">
@@ -36,7 +37,7 @@
             <div class="col-sm-2">
                 <div class="form-group">
                     <label class="control-label">Vencimento</label>
-                    <input type="date" placeholder="Vencimento" id="vencimento" name="vencimento" class="form-control">
+                    <input type="text" placeholder="Vencimento" id="vencimento" name="vencimento" class="form-control"/>
                 </div><!-- form-group -->
             </div><!-- col-sm-2 -->
             <div class="col-sm-2">

@@ -121,12 +121,38 @@ class Cliente
      */
     private $dividas;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\OneToMany (targetEntity="Sindilojas\CobrancaBundle\Entity\Registro", mappedBy="cliente", cascade={"persist", "remove"})
+     */
+    private $registros;
+
     
     public function __construct()
     {
         $this->setDividas(new ArrayCollection());
+        $this->setRegistros(new ArrayCollection());
     }
 
+    /**
+     * 
+     * @return ArrayCollection
+     */
+    function getRegistros()
+    {
+        return $this->registros;
+    }
+
+    /**
+     * 
+     * @param \Doctrine\Common\Collections\Collection $registros
+     */
+    function setRegistros(\Doctrine\Common\Collections\Collection $registros)
+    {
+        $this->registros = $registros;
+    }
+    
     /**
      * 
      * @return ArrayCollection
@@ -453,4 +479,6 @@ class Cliente
     {
         return $this->id;
     }
+    
+    
 }

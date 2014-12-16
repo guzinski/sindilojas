@@ -35,15 +35,18 @@ class CobrancaController extends Controller
      */
     public function dividasAction(Request $request)
     {
-        $dividas = $this->getDoctrine()->getRepository("Sindilojas\CobrancaBundle\Entity\Divida")->getDividasFromCpf($request->get("cpf"));
+        $cliente = $this->getDoctrine()->getRepository("Sindilojas\CobrancaBundle\Entity\Cliente")->findOneBy(array("cpf"=>preg_replace("/[^0-9]/", "", $request->get("cpf"))));
         
-        $registros = $this->getDoctrine()->getRepository("Sindilojas\CobrancaBundle\Entity\Registro")->getRegistros($request->get("cpf"));
-        
-        $renderDividas = $this->renderView("SindilojasCobrancaBundle::Cobranca\\dividas.html.twig", array("dividas"=>$dividas));;
-        
-        $renderRegistros = $this->renderView("SindilojasCobrancaBundle::Cobranca\\registros.html.twig", array("registros"=>$registros));;
-
-        return new Response($renderDividas.$renderRegistros);
+        if (!empty($cliente)) {
+            $dividas = $cliente->getDividas();
+            $registros = $cliente->getRegistros();
+            $renderDividas = $this->renderView("SindilojasCobrancaBundle::Cobranca\\dividas.html.twig", array("dividas"=>$dividas));
+            $renderRegistros = $this->renderView("SindilojasCobrancaBundle::Cobranca\\registros.html.twig", array("registros"=>$registros));
+            $render = $renderDividas.$renderRegistros;
+        } else {
+            $render = $this->renderView("SindilojasCobrancaBundle::Cobranca\\notFound.html.twig");
+        }       
+        return new Response($render);
     }
     
     /**

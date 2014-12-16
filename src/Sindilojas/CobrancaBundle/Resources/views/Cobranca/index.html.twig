@@ -29,9 +29,30 @@
             jQuery.post('{{ path('_detalhes_divida')}}', {id: id}, function(data) {
                 jQuery(".locked").fadeOut();
                 jQuery(data).insertBefore(".registros");
-                jQuery("#entrada").maskMoney({thousands:'.', decimal:','});
+                jQuery('#numParcelas').keyup(function(){
+                    var valor = jQuery(this).val();
+                    jQuery(this).val(valor.replace(/[^\d]/gi, ""));
+                    atualizaValorParcela();
+                }).spinner({ min:1, spin:function(){ setTimeout(atualizaValorParcela, 100) }  });
+                
+                jQuery("#entrada").keyup(atualizaValorParcela).maskMoney({thousands:'.', decimal:','});
                 jQuery("#vencimento").mask("99/99/9999").datepicker();;
             });
+        }
+        
+        function atualizaValorParcela() {
+            var total = jQuery("#valorreal").val();
+            var entrada = jQuery("#entrada").maskMoney('unmasked')[0];
+            var parcelas = jQuery("#numParcelas").val();
+             
+            if (entrada>0 && parcelas>0) {
+                total = total-entrada;
+                var valorParcela = total/parcelas;
+                jQuery("#valorParcela").text(Math.round(valorParcela * 100) / 100);
+            } else {
+                jQuery("#valorParcela").text("");
+            }
+             
         }
        
     </script>
