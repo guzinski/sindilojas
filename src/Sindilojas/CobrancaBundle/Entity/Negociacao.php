@@ -43,7 +43,7 @@ class Negociacao
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\OneToMany (targetEntity="Sindilojas\CobrancaBundle\Entity\Parcela", mappedBy="cliente", cascade={"persist", "remove"})
+     * @ORM\OneToMany (targetEntity="Sindilojas\CobrancaBundle\Entity\Parcela", mappedBy="negociacao", cascade={"persist", "remove"})
      */
     private $parcelas;
 
@@ -105,7 +105,7 @@ class Negociacao
      *
      * @return \Sindilojas\CobrancaBundle\Entity\Divida 
      */
-    public function getIdDivida()
+    public function getDivida()
     {
         return $this->divida;
     }
@@ -114,7 +114,7 @@ class Negociacao
      * 
      * @return type
      */
-    function getParcelas()
+    public function getParcelas()
     {
         return $this->parcelas;
     }
@@ -123,10 +123,11 @@ class Negociacao
      * 
      * @param \Doctrine\Common\Collections\Collection $parcelas
      */
-    function setParcelas(\Doctrine\Common\Collections\Collection $parcelas)
+    public function setParcelas(\Doctrine\Common\Collections\Collection $parcelas)
     {
         $this->parcelas = $parcelas;
     }
 
+    
 
 }

@@ -46,7 +46,12 @@ class Registro
     private $cliente;
 
 
+    public function __construct()
+    {
+        $this->setData(new \DateTime("now"));
+    }
 
+    
     /**
      * Set data
      *

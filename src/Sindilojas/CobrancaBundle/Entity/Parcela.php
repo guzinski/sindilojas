@@ -38,14 +38,14 @@ class Parcela
      *
      * @ORM\Column(name="pago", type="boolean", nullable=false)
      */
-    private $pago;
+    private $pago = 0;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="entrada", type="boolean", nullable=false)
      */
-    private $entrada;
+    private $entrada = 0;
 
     /**
      * @var integer
@@ -59,7 +59,7 @@ class Parcela
     /**
      * @var \Sindilojas\CobrancaBundle\Entity\Negociacao
      *
-     * @ORM\ManyToOne(targetEntity="Sindilojas\CobrancaBundle\Entity\Negociacao")
+     * @ORM\ManyToOne(targetEntity="Sindilojas\CobrancaBundle\Entity\Negociacao", inversedBy="parcelas")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_negociacao", referencedColumnName="id")
      * })
@@ -199,7 +199,7 @@ class Parcela
      * @param \Sindilojas\CobrancaBundle\Entity\Negociacao $negociacao
      * @return Parcela
      */
-    public function setNegociacao(\Sindilojas\CobrancaBundle\Entity\Negociacao $negociacao = null)
+    public function setNegociacao(\Sindilojas\CobrancaBundle\Entity\Negociacao $negociacao)
     {
         $this->negociacao = $negociacao;
 
@@ -215,4 +215,5 @@ class Parcela
     {
         return $this->negociacao;
     }
+    
 }

@@ -40,6 +40,9 @@
                 success: function(element) {
                     jQuery(element).closest('.form-group').removeClass('has-error');
                 },
+                errorPlacement: function(error, element) {
+                    jQuery(element).closest('.form-group').append(error);
+                },
                 submitHandler: function(form) {
                     var valor;
                     for(var i=dividaCount; i>0;) {

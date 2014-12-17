@@ -3,19 +3,21 @@
         <h4 class="panel-title">Registros</h4>
     </div><!-- panel-heading -->
     <div class="panel-body">
-        <textarea placeholder="Novo Registro" rows="5" class="form-control"></textarea>
+        <input id="idCliente" name="idCliente" type="hidden" value="{{ cliente.getId() }}"/>
+        <textarea placeholder="Novo Registro" rows="5" name="textRegistro" id="textRegistro" class="form-control"></textarea> <br/>
+        <button class="btn btn-primary" id="inserirRegistro" type="button">Inserir</button>
         <div class="table-responsive">
             <table id="registros" class="table mb30">
                 <thead>
                     <tr>
-                        <th colspan="2">Histórico de contatos</th>
+                        <th colspan="2"><h4>Histórico de contatos</h4></th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for registro in registros %}
+                    {% for registro in cliente.getRegistros() %}
                     <tr>
-                        <td>{{ registro.getData.format('d/m/Y') }}</td>
-                        <td>{{ registro.getTexto() }}</td>
+                        <td width="20%" >{{ registro.getData.format('d/m/Y') }}</td>
+                        <td width="80%" >{{ registro.getTexto() }}</td>
                     </tr>
                     {% else %}
                     <tr id="NenhumRegistro">

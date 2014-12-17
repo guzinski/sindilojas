@@ -4,49 +4,80 @@
     </div><!-- panel-heading -->
     <div class="panel-body">
         {% if negociacao is empty %}
-            <div class="col-sm-2">
-                <div class="form-group">
-                    <label class="control-label">Valor Atual</label>
-                    <h4>{{ "R$ " ~ divida.getValor()|number_format(2, ',', '.') }}</h4>
-                    <input type="hidden" name="valorreal" id="valorreal" value="{{ divida.getValor() }}"/>
-                </div><!-- form-group -->
-            </div><!-- col-sm-2 -->
-            <div class="col-sm-2">
-                <div class="form-group">
-                    <label for="entrada" class="control-label">Entrada</label>
-                    <div class="input-group">
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" type="button">R$</button>
-                        </span>
-                        <input type="text" placeholder="Entrada" name="entrada" id="entrada" class="entrada form-control"/>
-                    </div>
-                </div><!-- form-group -->
-            </div><!-- col-sm-2 -->
-            <div class="col-sm-2">
-                <div class="form-group">
-                    <label for="numParcelas" class="control-label">Parcelas</label>
-                    <input type="text" placeholder="Parcelas" name="numParcelas" id="numParcelas" class="form-control"/>
-                </div><!-- form-group -->
-            </div><!-- col-sm-2 -->
-            <div class="col-sm-2">
-                <div class="form-group">
-                    <label for="exampleInputEmail2" class="control-label">Valor Parcela</label>
-                    <h4 id="valorParcela"></h4>
-                </div><!-- form-group -->
-            </div><!-- col-sm-2 -->
-            <div class="col-sm-2">
-                <div class="form-group">
-                    <label class="control-label">Vencimento</label>
-                    <input type="text" placeholder="Vencimento" id="vencimento" name="vencimento" class="form-control"/>
-                </div><!-- form-group -->
-            </div><!-- col-sm-2 -->
-            <div class="col-sm-2">
-                <button class="btn btn-primary" type="button">Gerar parcelas</button>
-            </div><!-- col-sm-2 -->
+            <form class="form-inline" id="formNegociacao" action="{{ path('_cobranca_inseri_negociacao') }}">
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <label class="control-label">Valor Atual</label>
+                        <h4>{{ "R$ " ~ divida.getValor()|number_format(2, ',', '.') }}</h4>
+                        <input type="hidden" name="valorreal" id="valorreal" value="{{ divida.getValor() }}"/>
+                        <input type="hidden" name="idDivida" id="idDivida" value="{{ divida.getId() }}"/>
+                    </div><!-- form-group -->
+                </div><!-- col-sm-2 -->
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <label for="entrada" class="control-label">Entrada</label>
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button">R$</button>
+                            </span>
+                            <input required="required" type="text" placeholder="Entrada" name="entrada" id="entrada" class="entrada form-control"/>
+                        </div>
+                    </div><!-- form-group -->
+                </div><!-- col-sm-2 -->
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <label for="numParcelas" class="control-label">Parcelas</label>
+                        <input required="required" type="text" placeholder="Parcelas" name="numParcelas" id="numParcelas" class="form-control"/>
+                    </div><!-- form-group -->
+                </div><!-- col-sm-2 -->
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <label for="exampleInputEmail2" class="control-label">Valor Parcela</label>
+                        <h4 id="valorParcela"></h4>
+                    </div><!-- form-group -->
+                </div><!-- col-sm-2 -->
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <label class="control-label">Vencimento</label>
+                        <input required="required" type="text" placeholder="Vencimento" id="vencimento" name="vencimento" class="form-control"/>
+                    </div><!-- form-group -->
+                </div><!-- col-sm-2 -->
+                <div class="col-sm-2">
+                    <button class="btn btn-primary form-control mt20" >Gerar parcelas</button>
+                </div><!-- col-sm-2 -->
+            </form>
 
-            
         {% else %}
-        <p class="mb20">Nenhuma dívida fi encontrada para o CPF..</p>        
+            <div class="table-responsive">
+
+                <table class="table mb30">
+                    <thead>
+                        <tr>
+                            <th>Loja</th>
+                            <th>Parcela</th>
+                            <th>Vencimento</th>
+                            <th>Valor</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for parcela in negociacao.getParcelas() %}
+                        <tr>
+                            <td>{{ divida.getLoja().getNome() }}</td>
+                            <td>{{ parcela.getEntrada == 1 ? '-' : parcela.getNumero() }}</td>
+                            <td>{{ parcela.getVencimento().format('d/m/Y') }}</td>
+                            <td>{{ "R$ " ~ parcela.getValor()|number_format(2, ',', '.') }}</td>
+                            {% if parcela.getPago() %}
+                                <td><a href="javascript:alert('Não Implementado')">Imprimir recibo</a></td>
+                            {% else %}
+                                <td><a href="javascript:darBaixa({{ parcela.getId() }})">Dar baixa</a></td>
+                            {% endif %}
+                            
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         {% endif %}
     </div><!-- panel-body -->
 </div>

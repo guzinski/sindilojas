@@ -9,16 +9,16 @@
     <script src="{{ asset('bundles/sindilojas/js/jquery.maskedinput.min.js') }}"></script>
     <script src="{{ asset('bundles/sindilojas/js/jquery.maskMoney.js') }}"></script>
     <script src="{{ asset('bundles/sindilojas/js/jquery-ui-1.10.3.min.js') }}"></script>
+    <script src="{{ asset('bundles/sindilojas/js/jquery.validate.min.js') }}"></script>
+    <script src="{{ asset('bundles/sindilojas/js/messages_ptbr.js') }}"></script>
+    <script src="{{ asset('bundles/sindilojas/js/validate/additional-methods.js') }}"></script>
+
     <script>
         jQuery(document).ready(function(){
             jQuery("#cpf").mask("999.999.999-99",
             {completed:function(){
                     jQuery(".locked").fadeIn();
-                    jQuery.post('{{ path('_cobranca_dividas')}}', {cpf: jQuery(this).val()}, function(data) {
-                        jQuery(".dividas, .registros").remove();
-                        jQuery(".contentpanel").append(data);
-                        jQuery(".locked").fadeOut();
-                    });
+                    jQuery.post('{{ path('_cobranca_dividas')}}', {cpf: jQuery(this).val()}, callbackCarregaDividas);
                 }}
             );
         });
@@ -26,19 +26,80 @@
         function detalhesDivida(id) {
             jQuery(".locked").fadeIn();
             jQuery(".negociacao").remove();
-            jQuery.post('{{ path('_detalhes_divida')}}', {id: id}, function(data) {
-                jQuery(".locked").fadeOut();
-                jQuery(data).insertBefore(".registros");
-                jQuery('#numParcelas').keyup(function(){
-                    var valor = jQuery(this).val();
-                    jQuery(this).val(valor.replace(/[^\d]/gi, ""));
-                    atualizaValorParcela();
-                }).spinner({ min:1, spin:function(){ setTimeout(atualizaValorParcela, 100) }  });
-                
-                jQuery("#entrada").keyup(atualizaValorParcela).maskMoney({thousands:'.', decimal:','});
-                jQuery("#vencimento").mask("99/99/9999").datepicker();;
-            });
+            jQuery.post('{{ path('_detalhes_divida')}}', {id: id}, callbackDetalhesDividas);
         }
+        
+        function callbackCarregaDividas(data) {
+            jQuery(".dividas, .registros, .negociacao").remove();
+            jQuery(".contentpanel").append(data);
+            jQuery("#inserirRegistro").click(inseriRegistro);
+            jQuery(".locked").fadeOut();
+        }
+        
+        function callbackDetalhesDividas(data) {
+            jQuery(data).insertBefore(".registros");
+            jQuery('#numParcelas').keyup(function(){
+                var valor = jQuery(this).val();
+                jQuery(this).val(valor.replace(/[^\d]/gi, ""));
+                atualizaValorParcela();
+            }).spinner({ min:1, spin:function(){ setTimeout(atualizaValorParcela, 100) }  });
+
+            jQuery("#entrada").keyup(atualizaValorParcela).maskMoney({thousands:'.', decimal:','});
+            jQuery("#vencimento").mask("99/99/9999").datepicker();;
+            
+            jQuery("#formNegociacao").validate({
+                rules: {
+                    vencimento:  {brazilianDate: true}
+                },
+                errorPlacement: function(error, element) {
+                    jQuery(element).closest('.form-group').append(error);
+                },
+                highlight: function(element) {
+                    jQuery(element).closest('.form-group').removeClass('has-success').addClass('has-error');
+                },
+                success: function(element) {
+                    jQuery(element).closest('.form-group').removeClass('has-error');
+                },
+                submitHandler: function(form) {
+                    jQuery(".locked").fadeIn();
+                    var f = jQuery(form);
+                    var valor = jQuery("#entrada").maskMoney('unmasked')[0];
+                    jQuery("#entrada").maskMoney('destroy');
+                    jQuery("#entrada").val(valor);
+                    jQuery.post('{{ path('_cobranca_inseri_negociacao')}}', f.serialize(), callbackGeraParcelas);
+                    return false;
+               }
+            });
+            jQuery(".locked").fadeOut();
+        }
+        
+        function callbackGeraParcelas(data) {
+            jQuery(".negociacao").remove();
+            jQuery(data).insertBefore(".registros");
+            jQuery(".locked").fadeOut();
+        }
+        
+        function inseriRegistro() {
+            if (jQuery("#textRegistro").val()!="") {
+                jQuery(".locked").fadeIn();
+                jQuery.post('{{ path('_inserir_registro')}}', {id: jQuery("#idCliente").val(), texto: jQuery("#textRegistro").val()}, callbackInseriRegistro);
+            } else {
+                
+            }
+        }
+        
+        function darBaixa(idParcela) {
+            jQuery(".locked").fadeIn();
+            jQuery.post('{{ path('_dar_baixa')}}', {id: idParcela}, callbackGeraParcelas);
+        }
+        
+        function callbackInseriRegistro(data) {
+            jQuery(".registros").remove();
+            jQuery(".contentpanel").append(data);
+            jQuery("#inserirRegistro").click(inseriRegistro);
+            jQuery(".locked").fadeOut();
+        }
+        
         
         function atualizaValorParcela() {
             var total = jQuery("#valorreal").val();
