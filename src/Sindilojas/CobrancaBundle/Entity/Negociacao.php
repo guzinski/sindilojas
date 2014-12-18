@@ -21,6 +21,14 @@ class Negociacao
     private $valor;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="tipo", type="string", length=1, nullable=false)
+     */
+    private $tipo = "A";
+
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="id", type="integer")
@@ -127,6 +135,25 @@ class Negociacao
     {
         $this->parcelas = $parcelas;
     }
+
+    /**
+     * 
+     * @return string
+     */
+    function getTipo()
+    {
+        return $this->tipo;
+    }
+
+    /**
+     * 
+     * @param string $tipo
+     */
+    function setTipo($tipo)
+    {
+        $this->tipo = $tipo;
+    }
+
 
     
 

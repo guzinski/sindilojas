@@ -4,47 +4,64 @@
     </div><!-- panel-heading -->
     <div class="panel-body">
         {% if negociacao is empty %}
-            <form class="form-inline" id="formNegociacao" action="{{ path('_cobranca_inseri_negociacao') }}">
-                <div class="col-sm-2">
-                    <div class="form-group">
-                        <label class="control-label">Valor Atual</label>
-                        <h4>{{ "R$ " ~ divida.getValor()|number_format(2, ',', '.') }}</h4>
-                        <input type="hidden" name="valorreal" id="valorreal" value="{{ divida.getValor() }}"/>
-                        <input type="hidden" name="idDivida" id="idDivida" value="{{ divida.getId() }}"/>
-                    </div><!-- form-group -->
-                </div><!-- col-sm-2 -->
-                <div class="col-sm-2">
-                    <div class="form-group">
-                        <label for="entrada" class="control-label">Entrada</label>
-                        <div class="input-group">
-                            <span class="input-group-btn">
-                                <button class="btn btn-default" type="button">R$</button>
-                            </span>
-                            <input required="required" type="text" placeholder="Entrada" name="entrada" id="entrada" class="entrada form-control"/>
-                        </div>
-                    </div><!-- form-group -->
-                </div><!-- col-sm-2 -->
-                <div class="col-sm-2">
-                    <div class="form-group">
+            <form class="" id="formNegociacao" action="{{ path('_cobranca_inseri_negociacao') }}">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label">Valor Atual</label>
+                            <div class="input-group">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button">R$</button>
+                                </span>
+                                <input value="{{ divida.getValor()|number_format(2, ',', '.') }}" required="required" type="text" placeholder="Valor Atual" name="valorAtual" id="valorAtual" class="form-control"/>
+                                <input type="hidden" name="valorreal" id="valorreal" value="{{ divida.getValor() }}"/>
+                                <input type="hidden" name="idDivida" id="idDivida" value="{{ divida.getId() }}"/>
+                            </div><!-- input-group -->
+                        </div><!-- form-group -->
+                    </div><!-- col-sm-4 -->
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="entrada" class="control-label">Entrada</label>
+                            <div class="input-group">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button">R$</button>
+                                </span>
+                                <input required="required" type="text" placeholder="Entrada" name="entrada" id="entrada" class="entrada form-control"/>
+                            </div><!-- input-group -->
+                        </div><!-- form-group -->
+                    </div><!-- col-sm-4 -->
+                    <div class="col-sm-4">
+                        <div class="form-group">
                         <label for="numParcelas" class="control-label">Parcelas</label>
-                        <input required="required" type="text" placeholder="Parcelas" name="numParcelas" id="numParcelas" class="form-control"/>
-                    </div><!-- form-group -->
-                </div><!-- col-sm-2 -->
-                <div class="col-sm-2">
-                    <div class="form-group">
-                        <label for="exampleInputEmail2" class="control-label">Valor Parcela</label>
-                        <h4 id="valorParcela"></h4>
-                    </div><!-- form-group -->
-                </div><!-- col-sm-2 -->
-                <div class="col-sm-2">
-                    <div class="form-group">
-                        <label class="control-label">Vencimento</label>
-                        <input required="required" type="text" placeholder="Vencimento" id="vencimento" name="vencimento" class="form-control"/>
-                    </div><!-- form-group -->
-                </div><!-- col-sm-2 -->
-                <div class="col-sm-2">
-                    <button class="btn btn-primary form-control mt20" >Gerar parcelas</button>
-                </div><!-- col-sm-2 -->
+                        <div class="input-group">
+                            <input required="required" type="text" placeholder="Parcelas" name="numParcelas" id="numParcelas" class="form-control"/>
+                        </div>
+                        </div>
+                    </div><!-- col-sm-4 -->
+                </div><!-- row -->
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label">Valor Parcela</label>
+                            <h4 id="valorParcela"></h4>
+                        </div><!-- form-group -->
+                    </div><!-- col-sm-4 -->
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label">Vencimento</label>
+                            <input required="required" type="text" placeholder="Vencimento" id="vencimento" name="vencimento" class="form-control"/>
+                        </div><!-- form-group -->
+                    </div><!-- col-sm-4 -->
+                     <div class="col-sm-2">
+                        <div class="form-group">
+                            <div class="radio"><label><input name="tipo" type="radio" value="A" checked=""> Administrativo</label></div>
+                            <div class="radio"><label><input name="tipo" type="radio" value="J"> Judicial</label></div>
+                        </div><!-- form-group -->
+                    </div><!-- col-sm-2 -->
+                    <div class="col-sm-2">
+                        <button class="btn btn-primary form-control mt20" >Gerar parcelas</button>
+                    </div><!-- col-sm-2 -->
+                </div><!-- row -->
             </form>
 
         {% else %}

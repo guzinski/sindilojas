@@ -102,13 +102,15 @@ class CobrancaController extends Controller
         $valorEntrada   = $request->get("entrada");
         $numParcelas    = $request->get("numParcelas");
         $vencimento     = $request->get("vencimento");
-        $valorTotal     = $request->get("valorreal");
+        $valorTotal     = $request->get("valorAtual");
+        $tipo           = $request->get("tipo");
         
         $divida = $em->getRepository("Sindilojas\CobrancaBundle\Entity\Divida")->find($idDivida);        
         
         $negociacao = new Negociacao();
         $negociacao->setDivida($divida);
-
+        $negociacao->setTipo($tipo);
+        
         $dataVencimento = \DateTime::createFromFormat("d/m/Y", $vencimento);
         $valorParcela = ($valorTotal-$valorEntrada)/$numParcelas;
         

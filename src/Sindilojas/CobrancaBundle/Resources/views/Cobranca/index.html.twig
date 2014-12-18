@@ -33,6 +33,7 @@
             jQuery(".dividas, .registros, .negociacao").remove();
             jQuery(".contentpanel").append(data);
             jQuery("#inserirRegistro").click(inseriRegistro);
+            
             jQuery(".locked").fadeOut();
         }
         
@@ -44,9 +45,9 @@
                 atualizaValorParcela();
             }).spinner({ min:1, spin:function(){ setTimeout(atualizaValorParcela, 100) }  });
 
-            jQuery("#entrada").keyup(atualizaValorParcela).maskMoney({thousands:'.', decimal:','});
+            jQuery("#entrada, #valorAtual").keyup(atualizaValorParcela).maskMoney({thousands:'.', decimal:','});
             jQuery("#vencimento").mask("99/99/9999").datepicker();;
-            
+            //jQuery("span.ui-spinner ").addClass("input-group");
             jQuery("#formNegociacao").validate({
                 rules: {
                     vencimento:  {brazilianDate: true}
@@ -63,9 +64,12 @@
                 submitHandler: function(form) {
                     jQuery(".locked").fadeIn();
                     var f = jQuery(form);
-                    var valor = jQuery("#entrada").maskMoney('unmasked')[0];
+                    var valorAtual = jQuery("#valorAtual").maskMoney('unmasked')[0];
+                    var valorEntrada = jQuery("#entrada").maskMoney('unmasked')[0];
+                    jQuery("#valorAtual").maskMoney('destroy');
                     jQuery("#entrada").maskMoney('destroy');
-                    jQuery("#entrada").val(valor);
+                    jQuery("#valorAtual").val(valorAtual);
+                    jQuery("#entrada").val(valorEntrada);
                     jQuery.post('{{ path('_cobranca_inseri_negociacao')}}', f.serialize(), callbackGeraParcelas);
                     return false;
                }
@@ -102,7 +106,7 @@
         
         
         function atualizaValorParcela() {
-            var total = jQuery("#valorreal").val();
+            var total = jQuery("#valorAtual").maskMoney('unmasked')[0];
             var entrada = jQuery("#entrada").maskMoney('unmasked')[0];
             var parcelas = jQuery("#numParcelas").val();
              
