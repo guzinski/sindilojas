@@ -10,7 +10,7 @@
             var exRowTable = jQuery('#exRowTable').DataTable({
                    // responsive: true,
                    // serverSide: true,
-                   // "ajax": "{{ path('_clientes_pagination') }}",
+                   "ajax": "{{ path('_carrega_parcelas') }}",
                 });
 
                 // DataTables Length to Select2
@@ -21,7 +21,6 @@
                 });
 
         });
-       
     </script>
 {% endblock %}
 {% block mainpanel %}

@@ -160,5 +160,20 @@ class CobrancaController extends Controller
         return new Response($render);
     }
     
+    /**
+     * @Route("/cobranca/gerar/recibo", name="_gerar_recibo")
+     * 
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     */
+    public function geraReciboAction(Request $request)
+    {
+        
+        $PHPWord = new \PhpOffice\PhpWord\PhpWord();
+        $document = $PHPWord->loadTemplate('../uploads/modelos/contrato_ufrgs.docx');
+        //$document->setValue('experiência_supervisor', $contrato->getSupervisor()->getExpericnia());
+        //$document->saveAs("../uploads/contratos/{$contrato->getId()}.docx");
+        return new Response($request->request->getInt('id'));
+    }
+    
     
 }

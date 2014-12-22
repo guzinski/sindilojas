@@ -26,16 +26,15 @@
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" type="button">R$</button>
                                 </span>
-                                <input required="required" type="text" placeholder="Entrada" name="entrada" id="entrada" class="entrada form-control"/>
+                                <input style="z-index: 1" required="required" type="text" placeholder="Entrada" name="entrada" id="entrada" class="entrada form-control"/>
                             </div><!-- input-group -->
                         </div><!-- form-group -->
                     </div><!-- col-sm-4 -->
                     <div class="col-sm-4">
                         <div class="form-group">
                         <label for="numParcelas" class="control-label">Parcelas</label>
-                        <div class="input-group">
-                            <input required="required" type="text" placeholder="Parcelas" name="numParcelas" id="numParcelas" class="form-control"/>
-                        </div>
+                        <br/>
+                        <input required="required" type="text" placeholder="Parcelas" name="numParcelas" id="numParcelas" class="form-control"/>
                         </div>
                     </div><!-- col-sm-4 -->
                 </div><!-- row -->
@@ -85,7 +84,7 @@
                             <td>{{ parcela.getVencimento().format('d/m/Y') }}</td>
                             <td>{{ "R$ " ~ parcela.getValor()|number_format(2, ',', '.') }}</td>
                             {% if parcela.getPago() %}
-                                <td><a href="javascript:alert('Não Implementado')">Imprimir recibo</a></td>
+                                <td><a href="javascript:gerarRecibo({{ parcela.getId() }})">Imprimir recibo</a></td>
                             {% else %}
                                 <td><a href="javascript:darBaixa({{ parcela.getId() }})">Dar baixa</a></td>
                             {% endif %}

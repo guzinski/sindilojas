@@ -19,7 +19,31 @@ class DefaultController extends Controller
     {
         return array();
     }
-    
+
+    /**
+     * @Route("/carrega/parcelas", name="_carrega_parcelas")
+     * @Template()
+     */
+    public function paginationAction()
+    {
+        $rep = $this->getDoctrine()->getRepository("Sindilojas\CobrancaBundle\Entity\Parcela");
+        $parcelas = $rep->getParcelasVencidas();
+        $dados = array();
+        foreach ($parcelas as $parcela) {
+            $linha = array();
+            $linha[] = $parcela->getNegociacao()->getDivida()->getCliente()->getNome();
+            $linha[] = $parcela->getNegociacao()->getDivida()->getLoja()->getNome();
+            $linha[] = "R$ ".number_format($parcela->getValor(), 2, ",", ".");
+            $linha[] = $parcela->getVencimento()->format('d/m/Y');
+            $dados[] = $linha;
+        }
+        $return['recordsTotal'] = count($parcelas);
+        $return['recordsFiltered'] = count($parcelas);
+        $return['data'] = $dados;
+        return new Response(json_encode($return));
+
+    }
+
     /**
      * @Route("/login", name="_login")
      * @Template()
