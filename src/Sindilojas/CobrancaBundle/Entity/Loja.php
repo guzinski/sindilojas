@@ -18,6 +18,13 @@ class Loja
      * @ORM\Column(name="nome", type="string", length=100, nullable=false)
      */
     private $nome;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cnpj", type="string", length=14, nullable=false)
+     */
+    private $cnpj;
 
     /**
      * @var integer
@@ -67,4 +74,26 @@ class Loja
     {
         return $this->getNome();
     }
+    
+    /**
+     * 
+     * @return string
+     */
+    function getCnpj()
+    {
+        return $this->cnpj;
+    }
+
+    /**
+     * 
+     * @param string $cnpj
+     */
+    function setCnpj($cnpj)
+    {
+        $this->cnpj = $cnpj;
+        
+        return $this;
+    }
+
+
 }

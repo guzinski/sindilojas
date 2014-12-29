@@ -30,7 +30,4 @@ class DividaRepository extends EntityRepository
         return $query->getQuery()->getResult();
     }
     
-    
-    
-    
 }

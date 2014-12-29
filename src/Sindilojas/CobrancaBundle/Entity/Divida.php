@@ -118,7 +118,7 @@ class Divida
      * @param \Sindilojas\CobrancaBundle\Entity\Loja $loja
      * @return Divida
      */
-    public function setLoja(\Sindilojas\CobrancaBundle\Entity\Loja $loja = null)
+    public function setLoja(\Sindilojas\CobrancaBundle\Entity\Loja $loja)
     {
         $this->loja = $loja;
 
@@ -141,7 +141,7 @@ class Divida
      * @param \Sindilojas\CobrancaBundle\Entity\Cliente $cliente
      * @return Divida
      */
-    public function setCliente(\Sindilojas\CobrancaBundle\Entity\Cliente $cliente = null)
+    public function setCliente(\Sindilojas\CobrancaBundle\Entity\Cliente $cliente)
     {
         $this->cliente = $cliente;
 

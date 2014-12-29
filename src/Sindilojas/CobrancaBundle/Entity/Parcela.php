@@ -32,6 +32,13 @@ class Parcela
      * @ORM\Column(name="vencimento", type="date", nullable=false)
      */
     private $vencimento;
+    
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="data_pagamento", type="date", nullable=true)
+     */
+    private $dataPagamento = null;
 
     /**
      * @var boolean
@@ -215,5 +222,27 @@ class Parcela
     {
         return $this->negociacao;
     }
+    
+    /**
+     * 
+     * @return \DateTime
+     */
+    function getDataPagamento()
+    {
+        return $this->dataPagamento;
+    }
+
+    /**
+     * 
+     * @param \DateTime $dataPagamento
+     */
+    function setDataPagamento(\DateTime $dataPagamento = null)
+    {
+        $this->dataPagamento = $dataPagamento;
+        
+        return $this;
+    }
+
+
     
 }

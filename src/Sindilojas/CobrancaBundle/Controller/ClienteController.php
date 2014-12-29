@@ -41,9 +41,14 @@ class ClienteController extends Controller
      */
     public function paginationAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $repository = $em->getRepository("Sindilojas\CobrancaBundle\Entity\Cliente");
-        $clientes = $repository->findAll();
+        $firstResult = $request->request->getInt("start");
+        $maxResults = $request->request->getInt("length");
+        $busca = $request->get("search");
+        
+        $repClientes = $this->getDoctrine()
+                            ->getRepository("Sindilojas\CobrancaBundle\Entity\Cliente");
+        $clientes = $repClientes->getClientes($busca['value'], $maxResults, $firstResult);
+        
         $dados = array();
         foreach ($clientes as $cliente) {
             $linha = array();
@@ -52,10 +57,10 @@ class ClienteController extends Controller
             $linha[] = $cliente->getCidade();
             $dados[] = $linha;
         }
-        $return['draw'] = $request->get("draw");
-        $return['recordsTotal'] = count($clientes);
-        $return['recordsFiltered'] = count($clientes);
-        $return['data'] = $dados;
+        $return['draw']             = $request->get("draw");
+        $return['recordsTotal']     = $repClientes->count();
+        $return['recordsFiltered']  = $repClientes->count($busca['value']);
+        $return['data']             = $dados;
         return new Response(json_encode($return));
     }
  

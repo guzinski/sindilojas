@@ -1,6 +1,7 @@
 {% extends "SindilojasCobrancaBundle::layout.html.twig" %}
 {% block title %}Ficha do cliente{% endblock %}
 {% block head %}
+    
     <link href="{{ asset('bundles/sindilojas/css/style.datatables.css') }}" rel="stylesheet">
     <script src="{{ asset('bundles/sindilojas/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('bundles/sindilojas/js/jquery-datatables.responsive.js') }}"></script>
@@ -12,10 +13,13 @@
     <script src="{{ asset('bundles/sindilojas/js/jquery.validate.min.js') }}"></script>
     <script src="{{ asset('bundles/sindilojas/js/messages_ptbr.js') }}"></script>
     <script src="{{ asset('bundles/sindilojas/js/validate/additional-methods.js') }}"></script>
-
+    <script src="{{ asset('bundles/sindilojas/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('bundles/sindilojas/js/bootbox.min.js') }}"></script>
+    
     <script>
         jQuery(document).ready(function(){
-            jQuery("#cpf").mask("999.999.999-99",
+            
+        jQuery("#cpf").mask("999.999.999-99",
             {completed:function(){
                     jQuery(".locked").fadeIn();
                     jQuery.post('{{ path('_cobranca_dividas')}}', {cpf: jQuery(this).val()}, callbackCarregaDividas);
@@ -23,13 +27,15 @@
             );
         });
         
-        function detalhesDivida(id) {
+        function detalhesDivida(id) 
+        {
             jQuery(".locked").fadeIn();
             jQuery(".negociacao").remove();
             jQuery.post('{{ path('_detalhes_divida')}}', {id: id}, callbackDetalhesDividas);
         }
         
-        function callbackCarregaDividas(data) {
+        function callbackCarregaDividas(data) 
+        {
             jQuery(".dividas, .registros, .negociacao").remove();
             jQuery(".contentpanel").append(data);
             jQuery("#inserirRegistro").click(inseriRegistro);
@@ -37,7 +43,8 @@
             jQuery(".locked").fadeOut();
         }
         
-        function callbackDetalhesDividas(data) {
+        function callbackDetalhesDividas(data) 
+        {
             jQuery(data).insertBefore(".registros");
             jQuery('#numParcelas').keyup(function(){
                 var valor = jQuery(this).val();
@@ -46,7 +53,7 @@
             }).spinner({ min:1, spin:function(){ setTimeout(atualizaValorParcela, 100) }  });
 
             jQuery("#entrada, #valorAtual").keyup(atualizaValorParcela).maskMoney({thousands:'.', decimal:','});
-            jQuery("#vencimento").mask("99/99/9999").datepicker();;
+            jQuery("#vencimento").mask("99/99/9999").datepicker();
             //jQuery("span.ui-spinner ").addClass("input-group");
             jQuery("#formNegociacao").validate({
                 rules: {
@@ -74,16 +81,19 @@
                     return false;
                }
             });
+            jQuery('.tooltips').tooltip({ container: 'body'});
             jQuery(".locked").fadeOut();
         }
         
-        function callbackGeraParcelas(data) {
+        function callbackGeraParcelas(data) 
+        {
             jQuery(".negociacao").remove();
             jQuery(data).insertBefore(".registros");
             jQuery(".locked").fadeOut();
         }
         
-        function inseriRegistro() {
+        function inseriRegistro() 
+        {
             if (jQuery("#textRegistro").val()!="") {
                 jQuery(".locked").fadeIn();
                 jQuery.post('{{ path('_inserir_registro')}}', {id: jQuery("#idCliente").val(), texto: jQuery("#textRegistro").val()}, callbackInseriRegistro);
@@ -92,20 +102,31 @@
             }
         }
         
-        function darBaixa(idParcela) {
-            jQuery(".locked").fadeIn();
-            jQuery.post('{{ path('_dar_baixa')}}', {id: idParcela}, callbackGeraParcelas);
+        function darBaixa(idParcela) 
+        {
+            bootbox.prompt("Informe adata de pagamento", function(result) {
+                if (result !== null) {
+                    if (validaData(result)) {
+                        jQuery(".locked").fadeIn();
+                        jQuery.post('{{ path('_dar_baixa')}}', {id: idParcela, data: result}, callbackGeraParcelas);
+                    } else {
+                        bootbox.alert("Data inválida");
+                    }
+                }
+            });
+            jQuery(".modal-dialog form input").mask("99/99/9999").datepicker();
         }
         
-        function callbackInseriRegistro(data) {
+        function callbackInseriRegistro(data) 
+        {
             jQuery(".registros").remove();
             jQuery(".contentpanel").append(data);
             jQuery("#inserirRegistro").click(inseriRegistro);
             jQuery(".locked").fadeOut();
         }
         
-        
-        function atualizaValorParcela() {
+        function atualizaValorParcela() 
+        {
             var total = jQuery("#valorAtual").maskMoney('unmasked')[0];
             var entrada = jQuery("#entrada").maskMoney('unmasked')[0];
             var parcelas = jQuery("#numParcelas").val();
@@ -120,14 +141,67 @@
              
         }
         
-        function gerarRecibo(id)
+        function gerarNota(id)
         {
-            jQuery.post('{{ path('_gerar_recibo')}}', {id: id}, callbackGeraRecibo);
+            jQuery(".locked").fadeIn();
+            jQuery.post('{{ path('_gerar_nota')}}', {id: id}, callbackGerarNota);
         }
         
-        function callbackGeraRecibo(data)
+        function callbackGerarNota(data)
         {
-            alert(data);
+            jQuery(".locked").fadeOut();
+            location.href = "/sindilojas/web/"+data;
+        }
+        
+        function gerarRecibo(id)
+        {
+            jQuery(".locked").fadeIn();
+            jQuery.post('{{ path('_gerar_recibo')}}', {id: id}, callbackGerarRecibo);
+        }
+        
+        function callbackGerarRecibo(data)
+        {
+            jQuery(".locked").fadeOut();
+            location.href = "/sindilojas/web/"+data;
+        }
+
+        
+        
+        
+        function renegociar(idDivida)
+        {
+            bootbox.confirm("Tem certeza que deseja renegociar essa dívida?", function(result) {
+                if (result) {
+                    jQuery(".locked").fadeIn();
+                    jQuery.post('{{ path('_renegociar')}}', {idDivida: idDivida}, callbackRenegociar);    
+                }
+            }); 
+        }
+        
+        function callbackRenegociar(data)
+        {
+            jQuery(".locked").fadeOut();
+            detalhesDivida(data);
+        }
+        
+        function validaData(data)
+        {
+            var data = data;
+            var dia = data.substring(0,2)
+            var mes = data.substring(3,5)
+            var ano = data.substring(6,10)
+
+            //Criando um objeto Date usando os valores ano, mes e dia.
+            var novaData = new Date(ano,(mes-1),dia);
+
+            var mesmoDia = parseInt(dia,10) == parseInt(novaData.getDate());
+            var mesmoMes = parseInt(mes,10) == parseInt(novaData.getMonth())+1;
+            var mesmoAno = parseInt(ano) == parseInt(novaData.getFullYear());
+
+            if (!((mesmoDia) && (mesmoMes) && (mesmoAno))) {
+                return false;
+            } 
+            return true;
         }
        
     </script>

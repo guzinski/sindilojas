@@ -13,6 +13,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Sindilojas\CobrancaBundle\Entity\Registro;
 use Sindilojas\CobrancaBundle\Entity\Parcela;
 use Sindilojas\CobrancaBundle\Entity\Negociacao;
+use Sindilojas\CobrancaBundle\Entity\Divida;
+use PhpOffice\PhpWord\PhpWord;
 
 /**
  * Description of CobrancaController
@@ -24,6 +26,8 @@ class CobrancaController extends Controller
     /**
      * @Route("/cobranca", name="_cobranca")
      * @Template()
+     * 
+     * @return array
      */
     public function indexAction()
     {
@@ -33,7 +37,8 @@ class CobrancaController extends Controller
     /**
      * @Route("/cobranca/dividas", name="_cobranca_dividas")
      * 
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param Request $request
+     * @return Response
      */
     public function dividasAction(Request $request)
     {
@@ -53,7 +58,8 @@ class CobrancaController extends Controller
     /**
      * @Route("/cobranca/detalhes", name="_detalhes_divida")
      * 
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param Request $request
+     * @return Response
      */
     public function dividasDetalhesAction(Request $request)
     {
@@ -68,7 +74,8 @@ class CobrancaController extends Controller
     /**
      * @Route("/cobranca/inserir/registro", name="_inserir_registro")
      * 
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param Request $request
+     * @return Response
      */
     public function inseriRegistroAction(Request $request)
     {
@@ -93,7 +100,8 @@ class CobrancaController extends Controller
     /**
      * @Route("/cobranca/inserir/negociacao", name="_cobranca_inseri_negociacao")
      * 
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param Request $request
+     * @return Response
      */
     public function inseriNegocicaoAction(Request $request)
     {
@@ -142,15 +150,18 @@ class CobrancaController extends Controller
     /**
      * @Route("/cobranca/dar/baixa", name="_dar_baixa")
      * 
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param Request $request
+     * @return Response
      */
     public function darBaixaAction(Request $request) 
     {
-        $em             = $this->getDoctrine()->getManager();
-        $idParcela       = $request->request->getInt("id");
-        $parcela = $em->getRepository("Sindilojas\CobrancaBundle\Entity\Parcela")->find($idParcela);
+        $em         = $this->getDoctrine()->getManager();
+        $idParcela  = $request->request->getInt("id");
+        $data       = $request->request->get("data");
+        $parcela    = $em->getRepository("Sindilojas\CobrancaBundle\Entity\Parcela")->find($idParcela);
         
         $parcela->setPago(1);
+        $parcela->setDataPagamento(\DateTime::createFromFormat("d/m/Y", $data));
         
         $em->persist($parcela);
         $em->flush();
@@ -161,19 +172,122 @@ class CobrancaController extends Controller
     }
     
     /**
-     * @Route("/cobranca/gerar/recibo", name="_gerar_recibo")
+     * @Route("/cobranca/gerar/nota", name="_gerar_nota")
      * 
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param Request $request
+     * @return Response
      */
-    public function geraReciboAction(Request $request)
+    public function geraNotaAction(Request $request)
     {
+        $idParcela = $request->request->getInt("id");
+        $parcela = $this->getDoctrine()
+                ->getRepository("Sindilojas\CobrancaBundle\Entity\Parcela")
+                ->getParcela($idParcela);
         
-        $PHPWord = new \PhpOffice\PhpWord\PhpWord();
-        $document = $PHPWord->loadTemplate('../uploads/modelos/contrato_ufrgs.docx');
-        //$document->setValue('experiência_supervisor', $contrato->getSupervisor()->getExpericnia());
-        //$document->saveAs("../uploads/contratos/{$contrato->getId()}.docx");
-        return new Response($request->request->getInt('id'));
+        $PHPWord = new PhpWord();
+        try {
+            $document = $PHPWord->loadTemplate('documentos/nota.docx');
+        } catch (Exception $exc) {
+            echo $exc->getMessage();
+        }
+        
+        $document->setValue('data_vencimento', $parcela->getVencimento()->format('d/m/Y'));
+        $document->setValue('data', $parcela->getVencimento()->format('d/m/Y'));
+        $document->setValue('nome_cliente', $parcela->getNegociacao()->getDivida()->getCliente()->getNome());
+        $document->setValue('loja', $parcela->getNegociacao()->getDivida()->getLoja()->getNome());
+        $document->setValue('cpf_cliente', $this->mask($parcela->getNegociacao()->getDivida()->getCliente()->getCpf(), "###.###.###-##"));
+        $document->setValue('valor_parcela', number_format($parcela->getValor(), 2, ",", "."));
+        $document->setValue('cnpj', $this->mask($parcela->getNegociacao()->getDivida()->getLoja()->getCnpj(), "##.###.###/####-##"));
+        $document->setValue('endereço_cliente', $parcela->getNegociacao()->getDivida()->getCliente()->getEndereco());
+        $document->setValue('total_parcelas', $parcela->getNegociacao()->getParcelas()->count());
+        $document->setValue('num_parcela', $parcela->getNumero());
+        $document->saveAs("documentos/nota_{$idParcela}.docx");
+
+        return new Response("documentos/nota_{$idParcela}.docx");
     }
     
+    
+    
+    /**
+     * @Route("/cobranca/gerar/recibo", name="_gerar_recibo")
+     * 
+     * @param Request $request
+     * @return Response
+     */
+    public function gerarReciboAction(Request $request)
+    {
+        $idParcela = $request->request->getInt("id");
+        $parcela = $this->getDoctrine()
+                ->getRepository("Sindilojas\CobrancaBundle\Entity\Parcela")
+                ->getParcela($idParcela);
+        
+        $hoje = new \DateTime("now");
+        
+        $PHPWord = new PhpWord();
+        try {
+            $document = $PHPWord->loadTemplate('documentos/recibo.docx');
+        } catch (Exception $exc) {
+            echo $exc->getMessage();
+        }
+        
+        $document->setValue('data_pagamento', $parcela->getDataPagamento()->format('d/m/Y'));
+        $document->setValue('data', $hoje->format('d/m/Y'));
+        $document->setValue('cliente', $parcela->getNegociacao()->getDivida()->getCliente()->getNome());
+        $document->setValue('loja', $parcela->getNegociacao()->getDivida()->getLoja()->getNome());
+        $document->setValue('valor', number_format($parcela->getValor(), 2, ",", "."));
+        $document->setValue('valor_reduzido', number_format($parcela->getValor()*0.2, 2, ",", "."));
+        $document->saveAs("documentos/recibo_{$idParcela}.docx");
+
+        return new Response("documentos/recibo_{$idParcela}.docx");
+    }
+
+
+    /**
+     * @Route("/cobranca/renegociar", name="_renegociar")
+     * 
+     * @param Request $request
+     * @return Response
+     */
+    public function renegociarAction(Request $request)
+    {
+        $idDivida = $request->request->getInt("idDivida");
+        $doctrine = $this->getDoctrine();
+        
+        $valor = $doctrine
+                        ->getRepository("Sindilojas\CobrancaBundle\Entity\Parcela")
+                        ->getValorEmAberto($idDivida);
+        
+        $divida = $doctrine
+                        ->getRepository("Sindilojas\CobrancaBundle\Entity\Divida")
+                        ->find($idDivida);
+        
+        $novaDivida = new Divida();
+        
+        $novaDivida->setValor($valor)
+                    ->setCliente($divida->getCliente())
+                    ->setLoja($divida->getLoja())
+                    ->setVencimento(new \DateTime("now"));
+        
+        $doctrine->getManager()->persist($novaDivida);
+        $doctrine->getManager()->flush();
+        
+        return new Response($novaDivida->getId());
+    }
+
+    
+    private function mask($val, $mask)
+    {
+        $maskared = '';
+        $k = 0;
+        for($i = 0; $i<=strlen($mask)-1; $i++) {
+            if($mask[$i] == '#' && isset($val[$k])) {
+                    $maskared .= $val[$k++];
+            } elseif(isset($mask[$i])) {
+                    $maskared .= $mask[$i];
+            }
+        }
+        return $maskared;
+    }
+
     
 }

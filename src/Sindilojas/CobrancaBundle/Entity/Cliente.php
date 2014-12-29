@@ -480,5 +480,19 @@ class Cliente
         return $this->id;
     }
     
+    /**
+     * 
+     * @return string
+     */
+    public function getEndereco()
+    {
+        $endereco = $this->getRua().", ".$this->getNumero();
+        if ($this->getComplemento()) {
+            $endereco .= ", ".$this->getComplemento();
+        }
+        $endereco .= " - ".$this->getCidade()."/".$this->getUf();
+        return $endereco;
+    }
+    
     
 }

@@ -51,7 +51,7 @@ class Negociacao
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\OneToMany (targetEntity="Sindilojas\CobrancaBundle\Entity\Parcela", mappedBy="negociacao", cascade={"persist", "remove"})
+     * @ORM\OneToMany (targetEntity="Sindilojas\CobrancaBundle\Entity\Parcela", mappedBy="negociacao", cascade={"persist", "remove"}, fetch="EXTRA_LAZY")
      */
     private $parcelas;
 
