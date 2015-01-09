@@ -27,7 +27,7 @@
             );
         });
         
-        function detalhesDivida(id) 
+        function detalhesDivida(id)
         {
             jQuery(".locked").fadeIn();
             jQuery(".negociacao").remove();
@@ -45,6 +45,7 @@
         
         function callbackDetalhesDividas(data) 
         {
+            jQuery(".negociacao").remove();
             jQuery(data).insertBefore(".registros");
             jQuery('#numParcelas').keyup(function(){
                 var valor = jQuery(this).val();
@@ -97,24 +98,53 @@
             if (jQuery("#textRegistro").val()!="") {
                 jQuery(".locked").fadeIn();
                 jQuery.post('{{ path('_inserir_registro')}}', {id: jQuery("#idCliente").val(), texto: jQuery("#textRegistro").val()}, callbackInseriRegistro);
-            } else {
-                
             }
         }
         
         function darBaixa(idParcela) 
         {
-            bootbox.prompt("Informe adata de pagamento", function(result) {
-                if (result !== null) {
-                    if (validaData(result)) {
-                        jQuery(".locked").fadeIn();
-                        jQuery.post('{{ path('_dar_baixa')}}', {id: idParcela, data: result}, callbackGeraParcelas);
-                    } else {
-                        bootbox.alert("Data inválida");
+            bootbox.dialog({
+                            title: "Preencha os campos",
+                            message: '<div class="row"> ' +
+                                '<div class="col-md-12"> ' +
+                                '<form> ' +
+                                '<div class="form-group col-md-6"> ' +
+                                '<input id="vencimentoBaixa" name="vencimentoBaixa" type="text" placeholder="Data de Vencimento" class="form-control input-md"> ' +
+                                '</div> ' +
+                                '<div class="form-group col-md-6"> ' +
+                                '<div class="input-group"> ' +
+                                '<span class="input-group-addon">R$</span><input id="valorBaixa" name="valorBaixa" type="text" placeholder="Valor pago" class="form-control input-md"> ' +
+                                '</div> ' +
+                                '</div> ' +
+                                '</form> </div> </div>',
+                        buttons: {
+                            close: {
+                                label: "Cancelar",
+                                className: "btn-default",
+                            },
+                            success: {
+                                label: "Dar baixa",
+                                className: "btn-success",
+                                callback: function () {
+                                    var vencimento  = $('#vencimentoBaixa').val();
+                                    var valor       = $("#valorBaixa").maskMoney('unmasked')[0];
+                                    if (vencimento != "" && valor != "0") {
+                                        if (validaData(vencimento)) {
+                                            jQuery(".locked").fadeIn();
+                                            jQuery.post('{{ path('_dar_baixa')}}', {id: idParcela, data: vencimento, valor: valor}, callbackGeraParcelas);
+                                        } else {
+                                            bootbox.alert("Data inválida");
+                                        }
+                                    } else {
+                                        bootbox.alert("Preencha todos os campos");
+                                    }
+                                }
+                            },
+                        }
                     }
-                }
-            });
-            jQuery(".modal-dialog form input").mask("99/99/9999").datepicker();
+            );
+            jQuery("#vencimentoBaixa").mask("99/99/9999").datepicker();
+            jQuery("#valorBaixa").maskMoney({thousands:'.', decimal:','});
         }
         
         function callbackInseriRegistro(data) 
@@ -173,7 +203,8 @@
             bootbox.confirm("Tem certeza que deseja renegociar essa dívida?", function(result) {
                 if (result) {
                     jQuery(".locked").fadeIn();
-                    jQuery.post('{{ path('_renegociar')}}', {idDivida: idDivida}, callbackRenegociar);    
+                    jQuery.post('{{ path('_detalhes_divida')}}', {id: idDivida, renegociacao: 1}, callbackDetalhesDividas);
+                    //jQuery.post('{{ path('_renegociar')}}', {idDivida: idDivida}, callbackRenegociar);    
                 }
             }); 
         }

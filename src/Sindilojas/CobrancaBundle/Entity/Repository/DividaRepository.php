@@ -30,4 +30,17 @@ class DividaRepository extends EntityRepository
         return $query->getQuery()->getResult();
     }
     
+    public function getNegociacao($idDivida)
+    {
+        $query = $this->getEntityManager()->createQueryBuilder();
+        
+        $query->select("N")
+                ->from("Sindilojas\CobrancaBundle\Entity\Negociacao", "N")
+                ->andWhere($query->expr()->eq("N.divida", $idDivida))
+                ->addOrderBy("N.id", "DESC")
+                ->setMaxResults(1);
+        
+        return $query->getQuery()->getSingleResult();
+    }
+    
 }

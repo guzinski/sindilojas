@@ -3,7 +3,7 @@
         <h4 class="panel-title">Negociação</h4>
     </div><!-- panel-heading -->
     <div class="panel-body">
-        {% if negociacao is empty %}
+        {% if negociacao is empty or renegociacao == 1 %}
             <form class="" id="formNegociacao" action="{{ path('_cobranca_inseri_negociacao') }}">
                 <div class="row">
                     <div class="col-sm-4">
@@ -74,7 +74,6 @@
                             <th>Vencimento</th>
                             <th>Valor</th>
                             <th></th>
-                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -89,7 +88,6 @@
                             {% else %}
                                 <td><a href="javascript:darBaixa({{ parcela.getId() }})">Dar baixa</a></td>
                             {% endif %}
-                            <td><a href="javascript:gerarNota({{ parcela.getId() }})">Nota promissória</a></td>
                         </tr>
                         {% endfor %}
                     </tbody>

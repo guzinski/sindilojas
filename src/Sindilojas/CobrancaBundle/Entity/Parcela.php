@@ -25,6 +25,13 @@ class Parcela
      * @ORM\Column(name="valor", type="float", precision=10, scale=0, nullable=false)
      */
     private $valor;
+    
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="valor_pago", type="float", precision=10, scale=0, nullable=true)
+     */
+    private $valorPago;
 
     /**
      * @var \DateTime
@@ -120,6 +127,30 @@ class Parcela
     {
         return $this->valor;
     }
+    
+    /**
+     * Set valor
+     *
+     * @param float $valor
+     * @return Parcela
+     */
+    public function setValorPago($valor)
+    {
+        $this->valorPago = $valor;
+
+        return $this;
+    }
+
+    /**
+     * Get valor
+     *
+     * @return float 
+     */
+    public function getValorPago()
+    {
+        return $this->valorPago;
+    }
+
 
     /**
      * Set vencimento
