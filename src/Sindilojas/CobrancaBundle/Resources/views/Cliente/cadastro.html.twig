@@ -73,7 +73,7 @@
                         
             function addTagFormDeleteLink($tagFormLi) {
                 
-                var $removeFormA = $('<div class="col-sm-2"><button type="button" class="btn btn-default">Excluir</button></div>');
+                var $removeFormA = $('<div class="col-sm-1"><button type="button" class="btn btn-default">Excluir</button></div>');
                 $tagFormLi.children("div").append($removeFormA);
 
                 $removeFormA.on('click', function(e) {
@@ -124,7 +124,7 @@
     </div><!-- media -->
 </div><!-- pageheader -->
 
-
+<div class="contentpanel">
     <div class="row">
         <div class="col-md-12">
             <form method="POST" class="form-horizontal form-bordered" id="basicForm" action="">
@@ -168,10 +168,7 @@
             </div><!-- panel -->
             </form>
 
-        </div><!-- col-md-6 -->
-
-    </div><!--row -->
-
-
+        </div><!-- col-md-12 -->
+    </div><!-- row -->
 </div><!-- contentpanel -->
 {% endblock %}
