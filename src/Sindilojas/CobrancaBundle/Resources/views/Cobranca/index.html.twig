@@ -170,34 +170,7 @@
             }
              
         }
-        
-        function gerarNota(id)
-        {
-            jQuery(".locked").fadeIn();
-            jQuery.post('{{ path('_gerar_nota')}}', {id: id}, callbackGerarNota);
-        }
-        
-        function callbackGerarNota(data)
-        {
-            jQuery(".locked").fadeOut();
-            location.href = "/sindilojas/web/"+data;
-        }
-        
-        function gerarRecibo(id)
-        {
-            jQuery(".locked").fadeIn();
-            jQuery.post('{{ path('_gerar_recibo')}}', {id: id}, callbackGerarRecibo);
-        }
-        
-        function callbackGerarRecibo(data)
-        {
-            jQuery(".locked").fadeOut();
-            location.href = "/sindilojas/web/"+data;
-        }
-
-        
-        
-        
+                
         function renegociar(idDivida)
         {
             bootbox.confirm("Tem certeza que deseja renegociar essa dívida?", function(result) {

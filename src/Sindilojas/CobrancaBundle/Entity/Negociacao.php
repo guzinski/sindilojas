@@ -13,12 +13,6 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Negociacao
 {
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="valor", type="float", precision=10, scale=0, nullable=true)
-     */
-    private $valor;
 
     /**
      * @var string
@@ -59,30 +53,6 @@ class Negociacao
     public function __construct()
     {
         $this->setParcelas(new ArrayCollection());
-    }
-
-
-    /**
-     * Set valor
-     *
-     * @param float $valor
-     * @return Negociacao
-     */
-    public function setValor($valor)
-    {
-        $this->valor = $valor;
-
-        return $this;
-    }
-
-    /**
-     * Get valor
-     *
-     * @return float 
-     */
-    public function getValor()
-    {
-        return $this->valor;
     }
 
     /**

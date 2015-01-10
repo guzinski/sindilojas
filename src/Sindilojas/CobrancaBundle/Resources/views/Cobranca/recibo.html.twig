@@ -1,0 +1,56 @@
+<html>
+    <head>
+        <script>
+            window.onLoad = window.print()
+        </script>
+    </head>
+    <body style="margin: 0 auto; width: 980px;">
+        <table style="margin: 0 50px;">
+            <thead>
+                <tr>
+                    <th> 
+                        <strong>RECIBO DE PAGAMENTO</strong>
+                        <br/><br/>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        Recebemos de {{ clienteNome }} a quantia de R$ {{ valor|number_format(2, ',', '.') }} ({{ valorExtenso }}) correspondente a nota promissória NÚMERO NOTA PROMISSÓRIA.
+                        <br/><br/>
+                        <br/><br/>
+                    </td>
+                </tr>
+                <tr style="text-align: right">
+                    <td>
+                        Osório, {{ hoje }}.
+                        <br/><br/>
+                    </td>
+                </tr>
+                <tr style="text-align: right">
+                    <td>
+                        ___________________________
+                    </td>
+                </tr>
+                <tr style="text-align: right">
+                    <td>
+                        {{ clienteNome }}
+                    </td>
+                </tr>
+                <tr style="text-align: right">
+                    <td>
+                        {{ clienteCpf }}
+                        <br/><br/><br/><br/>
+                    </td>
+                </tr>
+                <tr >
+                    <td style="border-bottom: 2px solid #000">
+                       <br/><br/>
+                    </td>
+                </tr>
+            </tbody>
+            
+        </table>
+    </body>
+</html>

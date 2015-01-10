@@ -38,7 +38,7 @@ class Registro
     /**
      * @var \Sindilojas\CobrancaBundle\Entity\Cliente
      *
-     * @ORM\ManyToOne(targetEntity="Sindilojas\CobrancaBundle\Entity\Cliente")
+     * @ORM\ManyToOne(targetEntity="Sindilojas\CobrancaBundle\Entity\Cliente", inversedBy="registros")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_cliente", referencedColumnName="id")
      * })

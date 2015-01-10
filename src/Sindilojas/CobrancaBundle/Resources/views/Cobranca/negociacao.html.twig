@@ -84,15 +84,16 @@
                             <td>{{ parcela.getVencimento().format('d/m/Y') }}</td>
                             <td>{{ "R$ " ~ parcela.getValor()|number_format(2, ',', '.') }}</td>
                             {% if parcela.getPago() %}
-                                <td><a href="javascript:gerarRecibo({{ parcela.getId() }})">Imprimir Recibo</a></td>
+                                <td><a target="_blank" href="{{ path('_recibo', {'idParcela': parcela.getId()}) }}">Imprimir Recibo</a></td>
                             {% else %}
                                 <td><a href="javascript:darBaixa({{ parcela.getId() }})">Dar baixa</a></td>
                             {% endif %}
                         </tr>
-                        {% endfor %}
+                        {% endfor %}s
                     </tbody>
                 </table>
-                <a class="btn btn-default tooltips" data-placement="top" data-original-title="Será gerada um nova dívida, para renogeociar as parcelas em aberto" data-toggle="tooltip" title="Será gerada um nova dívida, para renogeociar as parcelas em aberto" href="javascript:renegociar({{ divida.getId() }})">Renegociar</a>
+                <a class="btn btn-default tooltips" data-placement="top" data-original-title="Renogeociar as parcelas em aberto" data-toggle="tooltip" title="Renogeociar as parcelas em aberto" href="javascript:renegociar({{ divida.getId() }})">Renegociar</a>
+                <a target="_blank" class="btn btn-default" href="{{ path('_promissoria', {'idNegociacao': negociacao.getId()}) }}">Imprimir promissórias</a>
             </div>
         {% endif %}
     </div><!-- panel-body -->

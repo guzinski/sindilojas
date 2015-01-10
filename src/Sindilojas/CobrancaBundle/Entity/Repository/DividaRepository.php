@@ -40,7 +40,13 @@ class DividaRepository extends EntityRepository
                 ->addOrderBy("N.id", "DESC")
                 ->setMaxResults(1);
         
-        return $query->getQuery()->getSingleResult();
+        $result = $query->getQuery()->getResult();
+        
+        if (empty($result)) {
+            return $result;
+        } else {
+            return $result[0];
+        }
     }
     
 }

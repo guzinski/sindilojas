@@ -14,7 +14,6 @@ use Sindilojas\CobrancaBundle\Entity\Registro;
 use Sindilojas\CobrancaBundle\Entity\Parcela;
 use Sindilojas\CobrancaBundle\Entity\Negociacao;
 use Sindilojas\CobrancaBundle\Entity\Divida;
-use PhpOffice\PhpWord\PhpWord;
 
 /**
  * Description of CobrancaController
@@ -65,8 +64,8 @@ class CobrancaController extends Controller
     {
         $idDivida       = $request->request->getInt("id");
         $renegociacao   = $request->request->getInt("renegociacao", 0);
-        $negociacao     = $this->getDoctrine()->getRepository("Sindilojas\CobrancaBundle\Entity\Divida")->getNegociacao($idDivida);        
-        $divida         = $negociacao->getDivida();
+        $negociacao     = $this->getDoctrine()->getRepository("Sindilojas\CobrancaBundle\Entity\Divida")->getNegociacao($idDivida);      
+        $divida         = $this->getDoctrine()->getRepository("Sindilojas\CobrancaBundle\Entity\Divida")->find($idDivida);
         $render         = $this->renderView("SindilojasCobrancaBundle::Cobranca\\negociacao.html.twig", array('divida'=>$divida, 'negociacao'=>$negociacao, "renegociacao"=>$renegociacao));
 
         return new Response($render);
@@ -174,73 +173,45 @@ class CobrancaController extends Controller
     }
     
     /**
-     * @Route("/cobranca/gerar/nota", name="_gerar_nota")
+     * @Route("/cobranca/promissoria/{idNegociacao}", name="_promissoria")
      * 
-     * @param Request $request
+     * @Template
+     * @param int $idNegociacao
      * @return Response
      */
-    public function geraNotaAction(Request $request)
+    public function promissoriaAction($idNegociacao)
     {
-        $idParcela = $request->request->getInt("id");
-        $parcela = $this->getDoctrine()
-                ->getRepository("Sindilojas\CobrancaBundle\Entity\Parcela")
-                ->getParcela($idParcela);
-        
-        $PHPWord = new PhpWord();
-        try {
-            $document = $PHPWord->loadTemplate('documentos/nota.docx');
-        } catch (Exception $exc) {
-            echo $exc->getMessage();
-        }
-        
-        $document->setValue('data_vencimento', $parcela->getVencimento()->format('d/m/Y'));
-        $document->setValue('data', $parcela->getVencimento()->format('d/m/Y'));
-        $document->setValue('nome_cliente', $parcela->getNegociacao()->getDivida()->getCliente()->getNome());
-        $document->setValue('loja', $parcela->getNegociacao()->getDivida()->getLoja()->getNome());
-        $document->setValue('cpf_cliente', $this->mask($parcela->getNegociacao()->getDivida()->getCliente()->getCpf(), "###.###.###-##"));
-        $document->setValue('valor_parcela', number_format($parcela->getValor(), 2, ",", "."));
-        $document->setValue('cnpj', $this->mask($parcela->getNegociacao()->getDivida()->getLoja()->getCnpj(), "##.###.###/####-##"));
-        $document->setValue('endereço_cliente', $parcela->getNegociacao()->getDivida()->getCliente()->getEndereco());
-        $document->setValue('total_parcelas', $parcela->getNegociacao()->getParcelas()->count());
-        $document->setValue('num_parcela', $parcela->getNumero());
-        $document->saveAs("documentos/nota_{$idParcela}.docx");
+        $negociacao = $this->getDoctrine()
+                        ->getRepository("Sindilojas\CobrancaBundle\Entity\Negociacao")
+                        ->find($idNegociacao);
 
-        return new Response("documentos/nota_{$idParcela}.docx");
+        return array("negociacao"=>$negociacao, "hoje"=> new \DateTime("now"));
     }
     
     
     
     /**
-     * @Route("/cobranca/gerar/recibo", name="_gerar_recibo")
+     * @Route("/cobranca/recibo/{idParcela}", name="_recibo")
      * 
-     * @param Request $request
+     * @Template
+     * @param int $idParcela
      * @return Response
      */
-    public function gerarReciboAction(Request $request)
+    public function reciboAction($idParcela)
     {
-        $idParcela = $request->request->getInt("id");
         $parcela = $this->getDoctrine()
                 ->getRepository("Sindilojas\CobrancaBundle\Entity\Parcela")
                 ->getParcela($idParcela);
         
         $hoje = new \DateTime("now");
         
-        $PHPWord = new PhpWord();
-        try {
-            $document = $PHPWord->loadTemplate('documentos/recibo.docx');
-        } catch (Exception $exc) {
-            echo $exc->getMessage();
-        }
-        
-        $document->setValue('data_pagamento', $parcela->getDataPagamento()->format('d/m/Y'));
-        $document->setValue('data', $hoje->format('d/m/Y'));
-        $document->setValue('cliente', $parcela->getNegociacao()->getDivida()->getCliente()->getNome());
-        $document->setValue('loja', $parcela->getNegociacao()->getDivida()->getLoja()->getNome());
-        $document->setValue('valor', number_format($parcela->getValor(), 2, ",", "."));
-        $document->setValue('valor_reduzido', number_format($parcela->getValor()*0.2, 2, ",", "."));
-        $document->saveAs("documentos/recibo_{$idParcela}.docx");
-
-        return new Response("documentos/recibo_{$idParcela}.docx");
+        return array(
+            "clienteNome" => $parcela->getNegociacao()->getDivida()->getCliente()->getNome(),
+            "clienteCpf" => $this->mask($parcela->getNegociacao()->getDivida()->getCliente()->getCpf(), "###.###.###/##"),
+            "hoje" => $hoje->format('d/m/Y'),
+            "valor"=>$parcela->getValorPago(),
+            "valorExtenso"=>$this->valorPorExtenso($parcela->getValorPago())
+            );
     }
 
 
@@ -291,5 +262,54 @@ class CobrancaController extends Controller
         return $maskared;
     }
 
-    
+    function valorPorExtenso($valor = 0, $complemento = true)
+    {
+        $singular = array("centavo", "real", "mil", "milhão", "bilhão", "trilhão", "quatrilhão");
+        $plural = array("centavos", "reais", "mil", "milhões", "bilhões", "trilhões", "quatrilhões");
+
+        $c = array("", "cem", "duzentos", "trezentos", "quatrocentos", "quinhentos", "seiscentos", "setecentos", "oitocentos", "novecentos");
+        $d = array("", "dez", "vinte", "trinta", "quarenta", "cinquenta", "sessenta", "setenta", "oitenta", "noventa");
+        $d10 = array("dez", "onze", "doze", "treze", "quatorze", "quinze", "dezesseis", "dezesete", "dezoito", "dezenove");
+        $u = array("", "um", "dois", "três", "quatro", "cinco", "seis", "sete", "oito", "nove");
+
+        $z = 0;
+
+        $valor = number_format($valor, 2, ".", ".");
+        $inteiro = explode(".", $valor);
+        for ($i = 0; $i < count($inteiro); $i++) {
+            for ($ii = strlen($inteiro[$i]); $ii < 3; $ii++) {
+                $inteiro[$i] = "0" . $inteiro[$i];
+            }
+        }
+
+        // $fim identifica onde que deve se dar junção de centenas por "e" ou por "," ;)
+        $fim = count($inteiro) - ($inteiro[count($inteiro) - 1] > 0 ? 1 : 2);
+        $rt = "";
+        for ($i = 0; $i < count($inteiro); $i++) {
+            $valor = $inteiro[$i];
+            $rc = (($valor > 100) && ($valor < 200)) ? "cento" : $c[$valor[0]];
+            $rd = ($valor[1] < 2) ? "" : $d[$valor[1]];
+            $ru = ($valor > 0) ? (($valor[1] == 1) ? $d10[$valor[2]] : $u[$valor[2]]) : "";
+            $r = $rc . (($rc && ($rd || $ru)) ? " e " : "") . $rd . (($rd && $ru) ? " e " : "") . $ru;
+            $t = count($inteiro) - 1 - $i;
+            if ($complemento == true) {
+                $r .= $r ? " " . ($valor > 1 ? $plural[$t] : $singular[$t]) : "";
+                if ($valor == "000") {
+                    $z++;
+                } elseif ($z > 0) {
+                    $z--;
+                }
+                
+                if (($t == 1) && ($z > 0) && ($inteiro[0] > 0)) {
+                    $r .= (($z > 1) ? " de " : "") . $plural[$t];
+                }
+            }
+            if ($r) {
+                $rt = $rt . ((($i > 0) && ($i <= $fim) && ($inteiro[0] > 0) && ($z < 1)) ? ( ($i < $fim) ? ", " : " e ") : " ") . $r;
+            }
+        }
+
+        return($rt ? trim($rt) : "zero");
+    }
+
 }
