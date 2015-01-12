@@ -61,14 +61,19 @@ class ParcelaRepository extends EntityRepository
      */
     public function getValorEmAberto($idDivida)
     {
+        $queryN = $this->getEntityManager()->createQueryBuilder();
+        $queryN->select($queryN->expr()->max("N.id"))
+                ->from("Sindilojas\CobrancaBundle\Entity\Negociacao", "N")      
+                ->andWhere($queryN->expr()->eq("N.divida", ":idDivida"));
+        $queryN->setParameter("idDivida", $idDivida);
+        $idNegociacao = $queryN->getQuery()->getSingleScalarResult();
+        
         $query = $this->createQueryBuilder("P");
 
         $query->select("SUM(P.valor)")
-                ->leftJoin("P.negociacao", "N")
-                ->leftJoin("N.divida", "D")
-                ->andWhere($query->expr()->eq("D.id", ":idDivida"))
+                ->andWhere($query->expr()->eq("P.negociacao", ":idNegociacao"))
                 ->andWhere($query->expr()->eq("P.pago", "0"));
-        $query->setParameter("idDivida", $idDivida);
+        $query->setParameter("idNegociacao", $idNegociacao);
         
         return $query->getQuery()->getSingleScalarResult();
     }

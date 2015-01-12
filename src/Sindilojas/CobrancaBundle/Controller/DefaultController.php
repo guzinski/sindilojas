@@ -31,7 +31,7 @@ class DefaultController extends Controller
         $dados = array();
         foreach ($parcelas as $parcela) {
             $linha = array();
-            $linha[] = $parcela->getNegociacao()->getDivida()->getCliente()->getNome();
+            $linha[] = "<a href=\"".$this->generateUrl("_cliente_cadastro", array("id"=>$parcela->getNegociacao()->getDivida()->getCliente()->getid()))."\">". $parcela->getNegociacao()->getDivida()->getCliente()->getNome()."</a>";
             $linha[] = $parcela->getNegociacao()->getDivida()->getLoja()->getNome();
             $linha[] = "R$ ".number_format($parcela->getValor(), 2, ",", ".");
             $linha[] = $parcela->getVencimento()->format('d/m/Y');

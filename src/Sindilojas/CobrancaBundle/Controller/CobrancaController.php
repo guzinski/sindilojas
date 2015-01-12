@@ -62,12 +62,18 @@ class CobrancaController extends Controller
      */
     public function dividasDetalhesAction(Request $request)
     {
+        $valor          = 0;
         $idDivida       = $request->request->getInt("id");
         $renegociacao   = $request->request->getInt("renegociacao", 0);
         $negociacao     = $this->getDoctrine()->getRepository("Sindilojas\CobrancaBundle\Entity\Divida")->getNegociacao($idDivida);      
         $divida         = $this->getDoctrine()->getRepository("Sindilojas\CobrancaBundle\Entity\Divida")->find($idDivida);
-        $render         = $this->renderView("SindilojasCobrancaBundle::Cobranca\\negociacao.html.twig", array('divida'=>$divida, 'negociacao'=>$negociacao, "renegociacao"=>$renegociacao));
-
+        if ($renegociacao) {
+            $valor = $this->getDoctrine()->getRepository("Sindilojas\CobrancaBundle\Entity\Parcela")->getValorEmAberto($idDivida);
+        }
+        
+        $render         = $this->renderView("SindilojasCobrancaBundle::Cobranca\\negociacao.html.twig", array('valor'=>$valor,'divida'=>$divida, 'negociacao'=>$negociacao, "renegociacao"=>$renegociacao));
+        
+        
         return new Response($render);
     }
 
@@ -206,6 +212,8 @@ class CobrancaController extends Controller
         $hoje = new \DateTime("now");
         
         return array(
+            "numeroParcela"=>$parcela->getNumero()+1,
+            "totalParcelas"=>$parcela->getNegociacao()->getParcelas()->count(),
             "clienteNome" => $parcela->getNegociacao()->getDivida()->getCliente()->getNome(),
             "clienteCpf" => $this->mask($parcela->getNegociacao()->getDivida()->getCliente()->getCpf(), "###.###.###/##"),
             "hoje" => $hoje->format('d/m/Y'),

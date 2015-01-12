@@ -13,8 +13,8 @@
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" type="button">R$</button>
                                 </span>
-                                <input value="{{ divida.getValor()|number_format(2, ',', '.') }}" required="required" type="text" placeholder="Valor Atual" name="valorAtual" id="valorAtual" class="form-control"/>
-                                <input type="hidden" name="valorreal" id="valorreal" value="{{ divida.getValor() }}"/>
+                                <input value="{{ renegociacao==1 ? valor|number_format(2, ',', '.') : divida.getValor()|number_format(2, ',', '.') }}" required="required" type="text" placeholder="Valor Atual" name="valorAtual" id="valorAtual" class="form-control"/>
+                                <input type="hidden" name="valorreal" id="valorreal" value="{{ renegociacao==1 ? valor : divida.getValor() }}"/>
                                 <input type="hidden" name="idDivida" id="idDivida" value="{{ divida.getId() }}"/>
                             </div><!-- input-group -->
                         </div><!-- form-group -->
@@ -89,7 +89,7 @@
                                 <td><a href="javascript:darBaixa({{ parcela.getId() }})">Dar baixa</a></td>
                             {% endif %}
                         </tr>
-                        {% endfor %}s
+                        {% endfor %}
                     </tbody>
                 </table>
                 <a class="btn btn-default tooltips" data-placement="top" data-original-title="Renogeociar as parcelas em aberto" data-toggle="tooltip" title="Renogeociar as parcelas em aberto" href="javascript:renegociar({{ divida.getId() }})">Renegociar</a>
