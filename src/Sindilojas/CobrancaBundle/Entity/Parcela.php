@@ -12,6 +12,15 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Parcela
 {
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tipo", type="string", length=1, nullable=true)
+     */
+    private $tipo;
+
+    
     /**
      * @var integer
      *
@@ -273,6 +282,25 @@ class Parcela
         
         return $this;
     }
+
+    /**
+     * 
+     * @return string
+     */
+    function getTipo()
+    {
+        return $this->tipo;
+    }
+
+    /**
+     * 
+     * @param string $tipo
+     */
+    function setTipo($tipo)
+    {
+        $this->tipo = $tipo;
+    }
+
 
 
     

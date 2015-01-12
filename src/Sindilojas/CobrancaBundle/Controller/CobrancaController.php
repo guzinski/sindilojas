@@ -165,11 +165,13 @@ class CobrancaController extends Controller
         $idParcela  = $request->request->getInt("id");
         $data       = $request->request->get("data");
         $valor      = $request->request->get("valor");
+        $tipo       = $request->request->get("tipo");
         $parcela    = $em->getRepository("Sindilojas\CobrancaBundle\Entity\Parcela")->find($idParcela);
         
         $parcela->setPago(1);
         $parcela->setDataPagamento(\DateTime::createFromFormat("d/m/Y", $data));
         $parcela->setValorPago((float) $valor);
+        $parcela->setTipo($tipo);
         $em->persist($parcela);
         $em->flush();
         
