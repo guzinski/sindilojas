@@ -34,9 +34,11 @@
                                         className: "btn-success",
                                         callback: function () {
                                             var loja  = jQuery('#loja').val();
-                                            if (loja != "") {
+                                            var mes  = jQuery('#mes').val();
+                                            var ano  = jQuery('#ano').val();
+                                            if (loja != "" && mes != "" && ano != "") {
                                                 var link = "{{ path("_recibo_loja") }}";
-                                                window.open(link+"/"+loja, "_blank");
+                                                window.open(link+"/"+loja+"/"+mes+"/"+ano, "_blank");
                                             } else {
                                                 bootbox.alert("Selecione a loja");
                                             }
@@ -45,7 +47,7 @@
                                 }
                         }
                 );
-                jQuery("#loja").select2({
+                jQuery("#loja, #mes, #ano").select2({
                     minimumResultsForSearch: -1
                 });
 

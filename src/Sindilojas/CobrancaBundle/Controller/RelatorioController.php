@@ -51,17 +51,27 @@ class RelatorioController extends Controller
     
     /**
      * 
-     * @Route("/relatorio/recibo/loja/{idLoja}", name="_recibo_loja")
+     * @Route("/relatorio/recibo/loja/{idLoja}/{mes}/{ano}", name="_recibo_loja")
      * @Template()
      * @param int $idLoja
+     * @param int $mes
+     * @param int $ano
      */
-    public function reciboLojaAction($idLoja = null)
+    public function reciboLojaAction($idLoja = null, $mes = null, $ano = null)
     {
-        $parcelas = $this->getDoctrine()->getRepository("Sindilojas\CobrancaBundle\Entity\Parcela")->getParcelasFromLoja($idLoja);
-        $total = $this->getDoctrine()->getRepository("Sindilojas\CobrancaBundle\Entity\Parcela")->getValorTotalParcelasFromLoja($idLoja);
+        $parcelas = $this->getDoctrine()->getRepository("Sindilojas\CobrancaBundle\Entity\Parcela")->getParcelasFromLoja($idLoja, $mes, $ano);
+        $total = $this->getDoctrine()->getRepository("Sindilojas\CobrancaBundle\Entity\Parcela")->getValorTotalParcelasFromLoja($idLoja, $mes, $ano);
         $loja = $this->getDoctrine()->getRepository("Sindilojas\CobrancaBundle\Entity\Loja")->find($idLoja);
         
-        return array("extenso"=>$this->valorPorExtenso($total),"total"=>$total,"parcelas"=>$parcelas, "loja"=>$loja, "hoje"=>new \DateTime("now"));
+        return array(
+                "extenso"=>$this->valorPorExtenso($total),
+                "total"=>$total,
+                "parcelas"=>$parcelas,
+                "loja"=>$loja,
+                "hoje"=>new \DateTime("now"),
+                "ano"=>$ano,
+                "mes"=>$mes
+            );
     }
     
     /**

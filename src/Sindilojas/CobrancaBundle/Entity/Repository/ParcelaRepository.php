@@ -38,17 +38,24 @@ class ParcelaRepository extends EntityRepository
      * @param int $idLoja
      * @return array
      */
-    public function getParcelasFromLoja($idLoja)
+    public function getParcelasFromLoja($idLoja, $mes, $ano)
     {
-        $query = $this->createQueryBuilder("P");
+        $ultimoDia  = cal_days_in_month(CAL_GREGORIAN, $mes, $ano);
+        
+        $dataInicio = new \DateTime("{$ano}-{$mes}-01");
+        $dataFim    = new \DateTime("{$ano}-{$mes}-{$ultimoDia}");
+        $query      = $this->createQueryBuilder("P");
         
         $query->select("P, N, D, C")
                 ->leftJoin("P.negociacao", "N")
                 ->leftJoin("N.divida", "D")
                 ->leftJoin("D.cliente", "C")
+                ->andWhere($query->expr()->between("P.dataPagamento", ":dataInicio", ":dataFim"))
                 ->andWhere($query->expr()->eq("P.pago", "1"))
                 ->andWhere($query->expr()->eq("D.loja", ":idLoja"));
         $query->setParameter("idLoja", $idLoja, \PDO::PARAM_INT);
+        $query->setParameter("dataInicio", $dataInicio->format("Y-m-d"));
+        $query->setParameter("dataFim", $dataFim->format("Y-m-d"));
         
         return $query->getQuery()->getResult();
     }
@@ -58,17 +65,24 @@ class ParcelaRepository extends EntityRepository
      * @param int $idLoja
      * @return array
      */
-    public function getValorTotalParcelasFromLoja($idLoja)
+    public function getValorTotalParcelasFromLoja($idLoja, $mes, $ano)
     {
-        $query = $this->createQueryBuilder("P");
+        $ultimoDia  = cal_days_in_month(CAL_GREGORIAN, $mes, $ano);
+        
+        $dataInicio = new \DateTime("{$ano}-{$mes}-01");
+        $dataFim    = new \DateTime("{$ano}-{$mes}-{$ultimoDia}");
+
+        $query      = $this->createQueryBuilder("P");
         
         $query->select("SUM(P.valorPago)")
                 ->leftJoin("P.negociacao", "N")
                 ->leftJoin("N.divida", "D")
+                ->andWhere($query->expr()->between("P.dataPagamento", ":dataInicio", ":dataFim"))
                 ->andWhere($query->expr()->eq("P.pago", "1"))
                 ->andWhere($query->expr()->eq("D.loja", ":idLoja"));
         $query->setParameter("idLoja", $idLoja, \PDO::PARAM_INT);
-        
+        $query->setParameter("dataInicio", $dataInicio->format("Y-m-d"));
+        $query->setParameter("dataFim", $dataFim->format("Y-m-d"));
         return $query->getQuery()->getSingleScalarResult();
     }
     
@@ -84,7 +98,7 @@ class ParcelaRepository extends EntityRepository
         $dataInicio = new \DateTime("{$ano}-{$mes}-01");
         $dataFim    = new \DateTime("{$ano}-{$mes}-{$ultimoDia}");
         
-        $query = $this->createQueryBuilder("P");
+        $query      = $this->createQueryBuilder("P");
         
         $query->select("SUM(P.valorPago), L.nome")
                 ->leftJoin("P.negociacao", "N")
@@ -113,7 +127,7 @@ class ParcelaRepository extends EntityRepository
         $dataInicio = new \DateTime("{$ano}-{$mes}-01");
         $dataFim    = new \DateTime("{$ano}-{$mes}-{$ultimoDia}");
         
-        $query = $this->createQueryBuilder("P");
+        $query      = $this->createQueryBuilder("P");
         
         $query->select("P")
                 ->leftJoin("P.negociacao", "N")
