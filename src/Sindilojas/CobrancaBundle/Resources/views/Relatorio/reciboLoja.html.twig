@@ -1,0 +1,214 @@
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <script>
+            window.onLoad = window.print()
+        </script>
+    </head>
+    <body style="font-family: arial; margin: 0 auto; width: 980px;">
+        <table style="padding: 1%; margin: 0 50px; width: 880px;">
+            <thead>
+                <tr>
+                    <th style="text-align: center" colspan="2"> 
+                        <strong>RECIBO</strong>
+                        <br/><br/>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="2">
+                        RECEBI DO SINDILOJAS A IMPORTÊNCIA DE: <strong>R$ {{ total|number_format(2, ",", ".") }}</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <strong>{{ extenso }}</strong>
+                        <br/><br/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        REFERENTE AO(S) RESPECTIVO(S) PAGAMENTO(S):
+                        <br/><br/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <table style="width: 100%; margin-bottom: 15px;">
+                            <thead>
+                                <tr>
+                                    <th style="text-align: left"> 
+                                        <strong>CLIENTE</strong>
+                                    </th>
+                                    <th style="text-align: left"> 
+                                        <strong>VALOR PAGO</strong>
+                                    </th>
+                                    <th style="text-align: left"> 
+                                        <strong>PROMISSÓRIA</strong>
+                                    </th>
+                                    <th style="text-align: left"> 
+                                        <strong>DATA DE PGTO</strong>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% set totalSindi = 0 %}
+                                {% for parcela in parcelas %}
+                                {% if parcela.getTipo=="S" %}
+                                <tr>
+                                    <td>
+                                        {{ parcela.getNegociacao.getDivida.getCliente.getNome }}
+                                    </td>
+                                    <td>
+                                        R$ {{ parcela.getValorPago|number_format(2, ",", ".") }}
+                                    </td>
+                                    <td>
+                                        {{ parcela.getNumero+1 }}/{{ parcela.getNegociacao.getParcelas.count }}
+                                    </td>
+                                    <td>
+                                        {{ parcela.getDataPagamento.format("d/m/Y") }}
+                                    </td>
+                                </tr>
+                                {% set totalSindi = parcela.getValorPago+totalSindi %}
+                                {% endif %}
+                                {% endfor %}
+                            </tbody>                            
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>TOTAL RECEBIDO</strong>
+                    </td>
+                    <td>
+                        <strong>R$ {{ totalSindi|number_format(2, ",", ".") }}</strong></strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>HONORÁRIO DE 20%</strong>
+                        <br/><br/><br/><br/>
+                    </td>
+                    <td>
+                        {% set honorarioSindi = totalSindi*0.20 %}
+                        <strong>R$ {{ honorarioSindi|number_format(2, ",", ".") }}</strong>
+                        <br/><br/><br/><br/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: center;">
+                        <strong>PAGAMENTO REALIZADO NA LOJA</strong>
+                        <br/><br/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <table style="width: 100%; margin-bottom: 15px;">
+                            <thead>
+                                <tr>
+                                    <th style="text-align: left"> 
+                                        <strong>CLIENTE</strong>
+                                    </th>
+                                    <th style="text-align: left"> 
+                                        <strong>VALOR PAGO</strong>
+                                    </th>
+                                    <th style="text-align: left"> 
+                                        <strong>PROMISSÓRIA</strong>
+                                    </th>
+                                    <th style="text-align: left"> 
+                                        <strong>DATA DE PGTO</strong>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% set totalLoja = 0 %}
+                                {% for parcela in parcelas %}
+                                {% if parcela.getTipo=="L" %}
+                                <tr>
+                                    <td>
+                                        {{ parcela.getNegociacao.getDivida.getCliente.getNome }}
+                                    </td>
+                                    <td>
+                                        R$ {{ parcela.getValorPago|number_format(2, ",", ".") }}
+                                    </td>
+                                    <td>
+                                        {{ parcela.getNumero+1 }}/{{ parcela.getNegociacao.getParcelas.count }}
+                                    </td>
+                                    <td>
+                                        {{ parcela.getDataPagamento.format("d/m/Y") }}
+                                    </td>
+                                </tr>
+                                {% set totalLoja = parcela.getValorPago+totalLoja %}
+                                {% endif %}
+                                {% endfor %}
+                            </tbody>                            
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>TOTAL RECEBIDO LOJA</strong>
+                    </td>
+                    <td>
+                        <strong>R$ {{ totalLoja|number_format(2, ",", ".") }}</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>HONORÁRIO DE 20% LOJA</strong>
+                        <br/><br/>
+                    </td>
+                    <td>
+                        {% set honorarioLoja = totalLoja*0.20 %}
+                        <strong>R$ {{ honorarioLoja|number_format(2, ",", ".") }}</strong>
+                        <br/><br/>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                        <strong>TOTAL LÍQUIDO PARA CREDOR</strong>
+                        <br/><br/>
+                    </td>
+                    <td>
+                        {% set totalLiquido = totalSindi-honorarioSindi-honorarioLoja %}
+                        <strong>R$ {{ totalLiquido|number_format(2, ",", ".") }}</strong>
+                        <br/><br/>
+                    </td>
+                </tr>
+            </tbody>
+            
+        </table>
+        <table style="padding: 1%; margin: 0 50px; width: 880px;">
+            <tbody>
+                <tr>
+                    <td>
+                        <br/><br/><br/>
+                    </td>
+                    <td style="text-align: center; width: 50%">
+                        <strong>{{ hoje.format("d/m/Y") }}</strong>
+                        <br/><br/><br/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        &nbsp;
+                    </td>
+                    <td style="text-align: center; width: 50%">
+                        ______________________________________
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <br/><br/>
+                    </td>
+                    <td style="text-align: center; width: 50%">
+                        {{ loja.getNome }}
+                        <br/><br/>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

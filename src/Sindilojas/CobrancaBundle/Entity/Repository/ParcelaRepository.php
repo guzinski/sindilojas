@@ -35,6 +35,100 @@ class ParcelaRepository extends EntityRepository
     
     /**
      * 
+     * @param int $idLoja
+     * @return array
+     */
+    public function getParcelasFromLoja($idLoja)
+    {
+        $query = $this->createQueryBuilder("P");
+        
+        $query->select("P, N, D, C")
+                ->leftJoin("P.negociacao", "N")
+                ->leftJoin("N.divida", "D")
+                ->leftJoin("D.cliente", "C")
+                ->andWhere($query->expr()->eq("P.pago", "1"))
+                ->andWhere($query->expr()->eq("D.loja", ":idLoja"));
+        $query->setParameter("idLoja", $idLoja, \PDO::PARAM_INT);
+        
+        return $query->getQuery()->getResult();
+    }
+    
+    /**
+     * 
+     * @param int $idLoja
+     * @return array
+     */
+    public function getValorTotalParcelasFromLoja($idLoja)
+    {
+        $query = $this->createQueryBuilder("P");
+        
+        $query->select("SUM(P.valorPago)")
+                ->leftJoin("P.negociacao", "N")
+                ->leftJoin("N.divida", "D")
+                ->andWhere($query->expr()->eq("P.pago", "1"))
+                ->andWhere($query->expr()->eq("D.loja", ":idLoja"));
+        $query->setParameter("idLoja", $idLoja, \PDO::PARAM_INT);
+        
+        return $query->getQuery()->getSingleScalarResult();
+    }
+    
+    /**
+     * 
+     * @param int $idLoja
+     * @return array
+     */
+    public function getRelatorioMensal($mes, $ano)
+    {
+        $ultimoDia  = cal_days_in_month(CAL_GREGORIAN, $mes, $ano);
+        
+        $dataInicio = new \DateTime("{$ano}-{$mes}-01");
+        $dataFim    = new \DateTime("{$ano}-{$mes}-{$ultimoDia}");
+        
+        $query = $this->createQueryBuilder("P");
+        
+        $query->select("SUM(P.valorPago), L.nome")
+                ->leftJoin("P.negociacao", "N")
+                ->leftJoin("N.divida", "D")
+                ->leftJoin("D.loja", "L")
+                ->andWhere($query->expr()->between("P.dataPagamento", ":dataInicio", ":dataFim"))
+                ->andWhere($query->expr()->eq("P.pago", "1"))
+                ->andWhere($query->expr()->eq("P.tipo", ":tipo"))
+                ->groupBy("L.id");
+        $query->setParameter("dataInicio", $dataInicio->format("Y-m-d"));
+        $query->setParameter("dataFim", $dataFim->format("Y-m-d"));
+        $query->setParameter("tipo", "S");
+        
+        return $query->getQuery()->getResult();
+    }
+    
+    /**
+     * 
+     * @param int $idLoja
+     * @return array
+     */
+    public function getParcelasMesAno($mes, $ano)
+    {
+        $ultimoDia  = cal_days_in_month(CAL_GREGORIAN, $mes, $ano);
+        
+        $dataInicio = new \DateTime("{$ano}-{$mes}-01");
+        $dataFim    = new \DateTime("{$ano}-{$mes}-{$ultimoDia}");
+        
+        $query = $this->createQueryBuilder("P");
+        
+        $query->select("P")
+                ->leftJoin("P.negociacao", "N")
+                ->andWhere($query->expr()->between("P.dataPagamento", ":dataInicio", ":dataFim"))
+                ->andWhere($query->expr()->eq("P.pago", "1"));
+        $query->setParameter("dataInicio", $dataInicio->format("Y-m-d"));
+        $query->setParameter("dataFim", $dataFim->format("Y-m-d"));
+        
+        return $query->getQuery()->getResult();
+    }
+
+    
+
+    /**
+     * 
      * @return array
      */
     public function getParcela($id)

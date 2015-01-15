@@ -1,0 +1,24 @@
+<div class="row">
+    <div class="col-md-12">
+        <form class="form-horizontal" id="basicForm">
+            <div class="form-group col-md-12">
+                <div class="col-sm-6">
+                    <select id="mes" class="width100p" data-placeholder="Selecione um mes" tabindex="-1">
+                        <option value="">Selecione um mês</option>
+                        {% for mes in ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"] %}
+                        <option value="{{ loop.index }}">{{ mes }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-sm-6">
+                    <select id="ano" class="width100p" data-placeholder="Selecione um ano" tabindex="-1">
+                        <option value="">Selecione um ano</option>
+                        {% for ano in [2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023] %}
+                        <option value="{{ ano }}">{{ ano }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

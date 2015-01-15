@@ -1,0 +1,239 @@
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <script>
+            //window.onLoad = window.print()
+        </script>
+    </head>
+    <body style="margin: 0 auto; width: 980px;">
+        <table style="padding: 1%; border: 1px solid #000000; margin: 0 50px; width: 880px;">
+            <thead>
+                <tr>
+                    <th style="text-align: center" colspan="2"> 
+                        <strong>BALANÇODEPARTAMENTO DE COBRANÇA</strong>
+                        <br/>
+                        <strong>{{ mes }}/{{ ano }}</strong>
+                        <br/><br/>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- LOJA -->
+                <tr>
+                    <td colspan="2" style="text-align: center">
+                        <strong>COBRANÇAS RECEBIDAS NA LOJA</strong>
+                        <br/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        ADMINISTRATIVA	
+                    </td>
+                    <td>
+                        {% set totalLojaAdm = 0 %}
+                        {% for parcela in parcelas %}
+                            {% if parcela.getTipo=="L" and parcela.getNegociacao.getTipo=="A" %}
+                                {% set totalLojaAdm = totalLojaAdm+parcela.getValorPago %}
+                            {% endif %}
+                        {% endfor %}
+                        R$ {{ totalLojaAdm|number_format(2, ",", ".") }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        JUDICIAL	
+                    </td>
+                    <td>
+                        {% set totalLojaJud = 0 %}
+                        {% for parcela in parcelas %}
+                            {% if parcela.getTipo=="L" and parcela.getNegociacao.getTipo=="J" %}
+                                {% set totalLojaJud = totalLojaJud+parcela.getValorPago %}
+                            {% endif %}
+                        {% endfor %}
+                        R$ {{ totalLojaJud|number_format(2, ",", ".") }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        TOTAL
+                        <br/><br/>
+                    </td>
+                    <td>
+                        R$ {{ (totalLojaJud+totalLojaJud)|number_format(2, ",", ".") }}
+                        <br/><br/>
+                    </td>
+                </tr>
+                
+                <!-- SINDILOJAS -->
+                <tr>
+                    <td colspan="2" style="text-align: center">
+                        <strong>COBRANÇAS RECEBIDAS NO SINDICATO</strong>
+                        <br/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        ADMINISTRATIVA	
+                    </td>
+                    <td>
+                        {% set totalSindiAdm = 0 %}
+                        {% for parcela in parcelas %}
+                            {% if parcela.getTipo=="S" and parcela.getNegociacao.getTipo=="A" %}
+                                {% set totalSindiAdm = totalSindiAdm+parcela.getValorPago %}
+                            {% endif %}
+                        {% endfor %}
+                        R$ {{ totalSindiAdm|number_format(2, ",", ".") }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        JUDICIAL	
+                    </td>
+                    <td>
+                        {% set totalSindiJud = 0 %}
+                        {% for parcela in parcelas %}
+                            {% if parcela.getTipo=="S" and parcela.getNegociacao.getTipo=="J" %}
+                                {% set totalSindiJud = totalSindiJud+parcela.getValorPago %}
+                            {% endif %}
+                        {% endfor %}
+                        R$ {{ totalSindiJud|number_format(2, ",", ".") }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        TOTAL
+                        <br/><br/>
+                    </td>
+                    <td>
+                        R$ {{ (totalSindiJud+totalSindiAdm)|number_format(2, ",", ".") }}
+                        <br/><br/>
+                    </td>
+                </tr>
+                
+                <!-- GERAL -->
+                <tr>
+                    <td colspan="2" style="text-align: center">
+                        <strong>COBRANÇAS REALIZADAS - GERAL										</strong>
+                        <br/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        ADMINISTRATIVA	
+                    </td>
+                    <td>
+                        R$ {{ (totalLojaAdm+totalSindiAdm)|number_format(2, ",", ".") }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        JUDICIAL	
+                    </td>
+                    <td>
+                        R$ {{ (totalLojaJud+totalSindiJud)|number_format(2, ",", ".") }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        TOTAL
+                        <br/><br/>
+                    </td>
+                    <td>
+                        R$ {{ (totalLojaJud+totalSindiJud+totalLojaAdm+totalSindiAdm)|number_format(2, ",", ".") }}
+                        <br/><br/>
+                    </td>
+                </tr>
+
+                <!-- HONORÁRIOS -->
+                <tr>
+                    <td colspan="2" style="text-align: center">
+                        <strong>HONORÁRIOS DISTRIBUIDOS</strong>
+                        <br/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        SINDICATO - JUDICIAL 5%	
+                    </td>
+                    <td>
+                        R$ {{ ((totalLojaJud+totalSindiJud)*0.05)|number_format(2, ",", ".") }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        SINDICATO - SIMPLES 10%	
+                    </td>
+                    <td>
+                        R$ {{ ((totalLojaAdm+totalSindiAdm)*0.1)|number_format(2, ",", ".") }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        TOTAL
+                        <br/><br/>
+                    </td>
+                    <td>
+                        R$ {{ (((totalLojaAdm+totalSindiAdm)*0.1)+((totalLojaJud+totalSindiJud)*0.05))|number_format(2, ",", ".") }}
+                        <br/><br/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        ADVOGADO - JUDICIAL 15%
+                    </td>
+                    <td>
+                        R$ {{ ((totalLojaJud+totalSindiJud)*0.15)|number_format(2, ",", ".") }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        ADVOGADO - SIMPLES 10%
+                    </td>
+                    <td>
+                        R$ {{ ((totalLojaAdm+totalSindiAdm)*0.1)|number_format(2, ",", ".") }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        TOTAL
+                        <br/><br/>
+                    </td>
+                    <td>
+                        R$ {{ (((totalLojaAdm+totalSindiAdm)*0.1)+((totalLojaJud+totalSindiJud)*0.15))|number_format(2, ",", ".") }}
+                        <br/><br/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center" colspan="2">
+                        <strong>REPASSE LOJAS</strong>
+                        <br/>
+                    </td>
+                </tr>
+                {% set total = 0 %}
+                {% for loja in lojas %}
+                <tr>
+                    <td>
+                        {{ loja.nome }}
+                    </td>
+                    <td>
+                        {% set total = total+(loja.1*0.8) %}
+                        R$ {{ (loja.1*0.8)|number_format(2, ",", ".") }}
+                    </td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td >
+                        <br/><br/>
+                        &nbsp;
+                    </td>
+                    <td>
+                        <br/><br/>
+                        <strong>TOTAL R$ {{ total|number_format(2, ",", ".") }}</strong>
+                    </td>
+                </tr>
+
+            </tbody>
+            
+        </table>
+    </body>
+</html>

@@ -1,0 +1,17 @@
+<div class="row">
+    <div class="col-md-12">
+        <form class="form-horizontal" id="basicForm">
+            <div class="form-group col-md-12">
+                <label class="col-sm-2 control-label">&nbsp;</label>
+                <div class="col-sm-8">
+                    <select id="loja" class="width100p" data-placeholder="Selecione uma loja" tabindex="-1">
+                        <option value="">Selecione uma loja</option>
+                        {% for loja in lojas %}
+                        <option value="{{ loja.getId }}">{{ loja.getNOme }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

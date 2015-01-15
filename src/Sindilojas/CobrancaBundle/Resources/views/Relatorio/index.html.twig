@@ -1,0 +1,117 @@
+{% extends "SindilojasCobrancaBundle::layout.html.twig" %}
+{% block title %}Relatórios{% endblock %}
+{% block head %}
+    <script src="{{ asset('bundles/sindilojas/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('bundles/sindilojas/js/bootbox.min.js') }}"></script>
+    <script src="{{ asset('bundles/sindilojas/js/select2.min.js') }}"></script>
+    <script>
+        jQuery(document).ready(function(){
+            
+            var htmlRecibo = "";
+            var htmlCobranca = "";
+            
+            jQuery.get("{{ path("_html_form_recibo") }}", function(html) {
+                htmlRecibo = html;
+            });
+            
+            jQuery.get("{{ path("_html_form_cobranca") }}", function(html) {
+                htmlCobranca = html;
+            });
+            
+            
+            
+            jQuery("#recibo").click(function(){
+                bootbox.dialog({
+                                title: "Selecione a loja",
+                                message: htmlRecibo,
+                                buttons: {
+                                    close: {
+                                        label: "Cancelar",
+                                        className: "btn-default",
+                                    },
+                                    success: {
+                                        label: "Gerar",
+                                        className: "btn-success",
+                                        callback: function () {
+                                            var loja  = jQuery('#loja').val();
+                                            if (loja != "") {
+                                                var link = "{{ path("_recibo_loja") }}";
+                                                window.open(link+"/"+loja, "_blank");
+                                            } else {
+                                                bootbox.alert("Selecione a loja");
+                                            }
+                                        }
+                                    },
+                                }
+                        }
+                );
+                jQuery("#loja").select2({
+                    minimumResultsForSearch: -1
+                });
+
+            });
+            jQuery("#cobranca").click(function(){
+               bootbox.dialog({
+                                title: "Selecione a data",
+                                message: htmlCobranca,
+                                buttons: {
+                                    close: {
+                                        label: "Cancelar",
+                                        className: "btn-default",
+                                    },
+                                    success: {
+                                        label: "Gerar",
+                                        className: "btn-success",
+                                        callback: function () {
+                                            var mes  = jQuery('#mes').val();
+                                            var ano  = jQuery('#ano').val();
+                                            if (mes != "" && ano != "") {
+                                                var link = "{{ path("_cobranca_loja") }}";
+                                                window.open(link+"/"+mes+"/"+ano, "_blank");
+                                            } else {
+                                                bootbox.alert("Selecione o mês e o ano");
+                                            }
+                                        }
+                                    },
+                                }
+                        }
+                );
+                jQuery("#mes, #ano").select2({
+                    minimumResultsForSearch: -1
+                });
+            });
+        })
+    </script>
+{% endblock %}
+{% block mainpanel %}
+    
+    
+<div class="pageheader">
+    <div class="media">
+        <div class="pageicon pull-left">
+            <i class="fa fa-bar-chart-o"></i>
+        </div>
+        <div class="media-body">
+            <ul class="breadcrumb">
+                <li><a href="{{ path("_index") }}"><i class="glyphicon glyphicon-home"></i></a></li>
+                <li>Relatórios</li>
+            </ul>
+            <h4>Relatórios</h4>
+        </div>
+    </div><!-- media -->
+</div>                    
+<div class="contentpanel">
+    <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">Selecione</h4>
+                <p>Selecione o tipo de relatório.</p>
+            </div><!-- panel-heading -->
+            <div class="panel-body">
+                <div class="btn-list">
+                    <button id="recibo" class="btn btn-primary btn-lg">Recibo Loja</button>
+                    <button id="cobranca" class="btn btn-primary btn-lg">Relatório de Cobrança</button>
+                </div>
+            </div>
+        </div>
+</div>
+{% endblock %}

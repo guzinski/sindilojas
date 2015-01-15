@@ -6,6 +6,7 @@
         <li {% if app.request.get('_route') == '_clientes' %} class="active"{% endif %}><a href="{{ path('_clientes') }}"><i class="fa fa-suitcase"></i> <span>Clientes</span></a></li>
         <li {% if app.request.get('_route') == '_cliente_cadastro' %} class="active"{% endif %}><a href="{{ path('_cliente_cadastro') }}"><i class="fa fa-suitcase"></i> <span>Cadastrar Cliente</span></a></li>
         <li {% if app.request.get('_route') == '_cobranca' %} class="active"{% endif %}><a href="{{ path('_cobranca') }}"><i class="fa fa-suitcase"></i> <span>Ficha do Cliente</span></a></li>
+        <li {% if app.request.get('_route') == '_relatorios' %} class="active"{% endif %}><a href="{{ path('_relatorios') }}"><i class="fa fa-suitcase"></i> <span>Relatórios</span></a></li>
     </ul>
 
 </div><!-- leftpanel -->
