@@ -75,7 +75,7 @@ class RelatorioController extends Controller
         $repository = $this->getDoctrine()->getRepository("Sindilojas\CobrancaBundle\Entity\Parcela");
         $lojas      = $repository->getRelatorioMensal($mes, $ano);
         $parcelas   = $repository->getParcelasMesAno($mes, $ano);
-        var_dump($lojas);
+
         return array("mes"=>$mes, "ano"=>$ano, "lojas"=>$lojas, "parcelas"=>$parcelas);
     }
     
