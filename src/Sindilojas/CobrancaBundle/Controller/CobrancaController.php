@@ -228,7 +228,6 @@ class CobrancaController extends Controller
             12=>"Dezembro",
         );
         
-        
         return array(
             "numeroParcela"=>$parcela->getNumero()+1,
             "totalParcelas"=>$parcela->getNegociacao()->getParcelas()->count(),

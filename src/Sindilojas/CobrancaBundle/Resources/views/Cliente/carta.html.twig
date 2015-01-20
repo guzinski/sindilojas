@@ -9,10 +9,10 @@
         <table style="margin: 15px 50px 0; width: 100%">
             <tr>
                 <td>
-                    <img width="132" height="67" src="image00.png" />
+                    <img width="160" src="{{ asset('bundles/sindilojas/images/image00.png') }}" />
                 </td>
                 <td style="text-align: right">
-                    Osório, DIA de MÊS de ANO.
+                    Osório, {{ dia }} de {{ mes }} de {{ ano }}.
                 </td>
             </tr>
             <tr>
@@ -22,13 +22,13 @@
             </tr>
             <tr>
                 <td colspan="2" style="text-align: center;">
-                    <strong>“NOME DO CLIENTE”</strong>
+                    <strong>{{ clienteNome }}</strong>
                     <br/><br/>
                 </td>
             </tr>
             <tr>
                 <td colspan="2" style="text-align: left;">
-                    Venho por intermédio desta, convidar vossa senhoria para comparecer em nosso escritório profissional, com endereço na Rua João Sarmento, nº 249, Bairro Centro, na Cidade de Osório/RS, até o dia “15 dias”, no horário das 08h30m às 11h, e das 13h às17h, para tratarmos de assunto de seu maior interesse. 
+                    Venho por intermédio desta, convidar vossa senhoria para comparecer em nosso escritório profissional, com endereço na Rua João Sarmento, nº 249, Bairro Centro, na Cidade de Osório/RS, em até 15 dias, no horário das 08h30m às 11h, e das 13h às17h, para tratarmos de assunto de seu maior interesse. 
                     Não podendo comparecer nesta data, favor entrar em contato pelo telefone (51) 3601-2528 (Sindilojas), com Fernanda.
                     <br/><br/>
                 </td>
@@ -53,6 +53,12 @@
                     OAB 91.236<br/>
                     Departamento de Cobrança<br/>
                     Sindilojas Osório
+                    <br/><br/><br/>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: left;">
+                    <span><img width="80" src="{{ asset('bundles/sindilojas/images/image00.png') }}" /></span>&nbsp;&nbsp;&nbsp;&nbsp;Rua João Sarmento, nº  249, Centro – Osório/RS
                 </td>
             </tr>
             

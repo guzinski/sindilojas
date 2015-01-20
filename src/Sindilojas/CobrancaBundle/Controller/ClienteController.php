@@ -104,7 +104,49 @@ class ClienteController extends Controller
         return array('form' => $form->createView(), 'cliente'=>$cliente);
     }
     
-    
+    /**
+     * @Route("/cliente/carta/{idCliente}", name="_carta_cliente")
+     * 
+     * @Template
+     * @param int $idParcela
+     * @return Response
+     */
+    public function cartaAction($idCliente = 0)
+    {
+        $cliente = $this->getDoctrine()
+                        ->getRepository("Sindilojas\CobrancaBundle\Entity\Cliente")
+                        ->find($idCliente);
+        
+        $hoje = new \DateTime("now");
+        
+        $meses = array(
+            1=>"Janeiro",
+            2=>"Fevereiro",
+            3=>"Março",
+            4=>"Abril",
+            5=>"Maio",
+            6=>"Junho",
+            7=>"julho",
+            8=>"Agosto",
+            9=>"Setembro",
+            10=>"Outubro",
+            11=>"Novembro",
+            12=>"Dezembro",
+        );
+        if ($cliente) {
+            $nome = $cliente->getNome();
+        } else {
+            $nome = "Cliente ainda não foi salvo";
+        }
+        
+        return array(
+            "dia" => $hoje->format('d'),
+            "mes" => $meses[(int) $hoje->format('m')],
+            "ano" => $hoje->format('Y'),
+            "clienteNome" => $nome,
+            );
+    }
+
 
     
 }

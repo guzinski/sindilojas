@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Recibo Cliente</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body style="margin: 0 auto; width: 800px; font-family: Arial;">
+        <table style="margin: 15px 50px 0; width: 100%">
+            <tr>
+                <td>
+                    <img width="132" height="67" src="{{ asset('bundles/sindilojas/images/image00.png') }}" />
+                </td>
+                <td style="text-align: center">
+                    Fone: (51) 3601 2528
+                    <br/>
+                    Rua João Sarmento, 249
+                    <br/>
+                    CEP: 95520-000 - Osório - RS
+                    <br/>
+                    sindilojaslitoralcentro@gmail.com
+                </td>
+                <td style="text-align: center">
+                    <strong>RECIBO</strong>
+                    <br/>
+                    CNPJ 90.90.255.373/0001-04
+                    <br/><br/>
+                    Nº {{ numeroParcela }}/{{ totalParcelas }}
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: right" colspan="3">
+                    <br/>
+                    R$ <strong>{{ valor|number_format(2, ',', '.') }}</strong>
+                </td>
+            </tr>
+            <tr>
+                <td style="" colspan="3">
+                    <br/>
+                    Recebi(emos) do Sr(a). <strong>{{ clienteNome }}</strong> a quantia de <strong>{{ valorExtenso }}</strong>.
+                </td>
+            </tr>
+            
+            
+        </table>
+        <table style="margin: 50px 50px 0; width: 100%">
+            <tr>
+                <td style="text-align: left">
+                    PARCELA: <strong>{{ numeroParcela }}/{{ totalParcelas }}</strong>
+                </td>
+                <td style="text-align: right;">
+                    TIPO: <strong>{{ tipo == "J" ? "Judicial" : "Administrativo" }}</strong>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left" colspan="2">
+                    CREDORA: <strong>{{ lojaNome }}</strong>
+                    <br/><br/>
+                    <br/><br/>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left">
+                    _________________________
+                    <br/>
+                    Assinatura
+                </td>
+                <td style="text-align: right;">
+                    Osório, {{ dia }} de {{ mes }} de {{ ano }}.
+                </td>
+            </tr>
+            <tr>
+                <td style="font-size: 12px;" colspan="2">
+                    <br/><br/>
+                    <strong>Ressaltamos que o valor pago inferior ao valor ao da Nota Promissória não dá a plena quitação da mesma</strong>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>
