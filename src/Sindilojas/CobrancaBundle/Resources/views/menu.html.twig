@@ -2,7 +2,7 @@
 
     <h5 class="leftpanel-title">Menu</h5>
     <ul class="nav nav-pills nav-stacked">
-        <li {% if app.request.get('_route') == '_index' %} class="active"{% endif %}><a href="{{ path('_index') }}"><i class="fa fa-home"></i> <span>Dashboard</span></a></li>
+        <li {% if app.request.get('_route') == '_index' %} class="active"{% endif %}><a href="{{ path('_index') }}"><i class="fa fa-home"></i> <span>Parcelas Vencidas</span></a></li>
         <li {% if app.request.get('_route') == '_clientes' %} class="active"{% endif %}><a href="{{ path('_clientes') }}"><i class="fa fa-suitcase"></i> <span>Clientes</span></a></li>
         <li {% if app.request.get('_route') == '_cliente_cadastro' %} class="active"{% endif %}><a href="{{ path('_cliente_cadastro') }}"><i class="fa fa-suitcase"></i> <span>Cadastrar Cliente</span></a></li>
         <li {% if app.request.get('_route') == '_cobranca' %} class="active"{% endif %}><a href="{{ path('_cobranca') }}"><i class="fa fa-suitcase"></i> <span>Ficha do Cliente</span></a></li>

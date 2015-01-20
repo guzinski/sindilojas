@@ -213,12 +213,31 @@ class CobrancaController extends Controller
         
         $hoje = new \DateTime("now");
         
+        $meses = array(
+            1=>"Janeiro",
+            2=>"Fevereiro",
+            3=>"Março",
+            4=>"Abril",
+            5=>"Maio",
+            6=>"Junho",
+            7=>"julho",
+            8=>"Agosto",
+            9=>"Setembro",
+            10=>"Outubro",
+            11=>"Novembro",
+            12=>"Dezembro",
+        );
+        
+        
         return array(
             "numeroParcela"=>$parcela->getNumero()+1,
             "totalParcelas"=>$parcela->getNegociacao()->getParcelas()->count(),
+            "tipo"=>$parcela->getNegociacao()->getTipo(),
             "clienteNome" => $parcela->getNegociacao()->getDivida()->getCliente()->getNome(),
-            "clienteCpf" => $this->mask($parcela->getNegociacao()->getDivida()->getCliente()->getCpf(), "###.###.###/##"),
-            "hoje" => $hoje->format('d/m/Y'),
+            "lojaNome" => $parcela->getNegociacao()->getDivida()->getLoja()->getNome(),
+            "dia" => $hoje->format('d'),
+            "mes" => $meses[(int) $hoje->format('m')],
+            "ano" => $hoje->format('Y'),
             "valor"=>$parcela->getValorPago(),
             "valorExtenso"=>$this->valorPorExtenso($parcela->getValorPago())
             );
