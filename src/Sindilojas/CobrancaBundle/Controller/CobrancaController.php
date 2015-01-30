@@ -73,7 +73,6 @@ class CobrancaController extends Controller
         
         $render         = $this->renderView("SindilojasCobrancaBundle::Cobranca\\negociacao.html.twig", array('valor'=>$valor,'divida'=>$divida, 'negociacao'=>$negociacao, "renegociacao"=>$renegociacao));
         
-        
         return new Response($render);
     }
 
@@ -109,38 +108,50 @@ class CobrancaController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function inseriNegocicaoAction(Request $request)
+    public function inseriNegociacaoAction(Request $request)
     {
         $em             = $this->getDoctrine()->getManager();
         $idDivida       = $request->request->getInt("idDivida");
-        $valorEntrada   = $request->get("entrada");
+        $valorEntrada   = (double) $request->get("entrada");
         $numParcelas    = $request->get("numParcelas");
         $vencimento     = $request->get("vencimento");
         $valorTotal     = $request->get("valorAtual");
         $tipo           = $request->get("tipo");
+        $hoje           = new \DateTime("now");
         
-        $divida = $em->getRepository("Sindilojas\CobrancaBundle\Entity\Divida")->find($idDivida);        
+        $divida             = $em->getRepository("Sindilojas\CobrancaBundle\Entity\Divida")->find($idDivida);        
+        $parcelaRepository  = $em->getRepository("Sindilojas\CobrancaBundle\Entity\Parcela");       
         
         $negociacao = new Negociacao();
         $negociacao->setDivida($divida);
         $negociacao->setTipo($tipo);
-        
+
         $dataVencimento = \DateTime::createFromFormat("d/m/Y", $vencimento);
         $valorParcela = ($valorTotal-$valorEntrada)/$numParcelas;
         
-        $entrada = new Parcela();
-        $entrada->setEntrada(1);
-        $entrada->setValor($valorEntrada);
-        $entrada->setVencimento(new \DateTime("now"));
-        $entrada->setNegociacao($negociacao);
-        $negociacao->getParcelas()->add($entrada);
+        
+        
+        if ($valorEntrada > 0) {
+            $numeroAtual = $parcelaRepository->getUltimoNumero($hoje->format('Y'));
+            $entrada = new Parcela();
+            $entrada->setEntrada(1);
+            $entrada->setValor($valorEntrada);
+            $entrada->setVencimento($hoje);
+            $entrada->setNumero($numeroAtual+1);
+            $entrada->setNegociacao($negociacao);
+            $negociacao->getParcelas()->add($entrada);
+            $entrada = 1;
+        } else {
+            $entrada = 0;
+        }
 
         for ($i=1; $i<=$numParcelas; $i++) {
             $dataVencimento->add(new \DateInterval("P1M"));
+            $numero = $parcelaRepository->getUltimoNumero($dataVencimento->format('Y'));
             $parcela = new Parcela();
             $parcela->setVencimento(clone $dataVencimento);
             $parcela->setValor($valorParcela);
-            $parcela->setNumero($i);
+            $parcela->setNumero($numero+$i+$entrada);
             $parcela->setNegociacao($negociacao);
             $negociacao->getParcelas()->add($parcela);
         }

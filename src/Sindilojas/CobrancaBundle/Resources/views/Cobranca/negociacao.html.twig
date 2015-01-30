@@ -26,7 +26,7 @@
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" type="button">R$</button>
                                 </span>
-                                <input style="z-index: 1" required="required" type="text" placeholder="Entrada" name="entrada" id="entrada" class="entrada form-control"/>
+                                <input style="z-index: 1" type="text" placeholder="Entrada" name="entrada" id="entrada" class="entrada form-control"/>
                             </div><!-- input-group -->
                         </div><!-- form-group -->
                     </div><!-- col-sm-4 -->
@@ -70,7 +70,7 @@
                     <thead>
                         <tr>
                             <th>Loja</th>
-                            <th>Parcela</th>
+                            <th>Número Promissória</th>
                             <th>Vencimento</th>
                             <th>Valor</th>
                             <th></th>
@@ -80,7 +80,7 @@
                         {% for parcela in negociacao.getParcelas() %}
                         <tr>
                             <td>{{ divida.getLoja().getNome() }}</td>
-                            <td>{{ parcela.getEntrada == 1 ? '-' : parcela.getNumero() }}</td>
+                            <td>{{ parcela.getNumero }}/{{ parcela.getVencimento.format('Y') }}</td>
                             <td>{{ parcela.getVencimento().format('d/m/Y') }}</td>
                             <td>{{ "R$ " ~ parcela.getValor()|number_format(2, ',', '.') }}</td>
                             {% if parcela.getPago() %}

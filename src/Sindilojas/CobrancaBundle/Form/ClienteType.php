@@ -22,8 +22,7 @@ class ClienteType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-                $builder
-                ->add("nome", "text" )
+        $builder->add("nome", "text" )
                 ->add("cpf", "text")
                 ->add("rg", "text")
                 ->add("cep", "text")
@@ -45,6 +44,11 @@ class ClienteType extends AbstractType
                         'allow_add'     => true,
                         'allow_delete'  => true,
                         'label'         => false,
+                ))
+                ->add('cobrancaJudicial', 'choice', array(
+                    'choices' => array('1' => 'Sim', '0' => 'Não'),
+                    'expanded' => true,
+                    'label' => "Enviado para cobrança judicial"
                 ));
     }
 

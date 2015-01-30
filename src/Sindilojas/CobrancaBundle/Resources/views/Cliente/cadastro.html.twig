@@ -144,6 +144,7 @@
                         {{ form_row(form.email) }}
                         {{ form_row(form.telefone) }}
                         {{ form_row(form.nascimento) }}
+                        {{ form_row(form.cobrancaJudicial) }}
                         <div id="dividas" data-prototype="{{ form_row(form.dividas.vars.prototype)|e  }}" class="dividas">
                         {% for divida in form.dividas %}
                             {{ form_row(divida) }}

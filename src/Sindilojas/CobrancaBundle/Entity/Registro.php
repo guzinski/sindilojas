@@ -15,7 +15,7 @@ class Registro
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="data", type="date", nullable=false)
+     * @ORM\Column(name="data", type="datetime", nullable=false)
      */
     private $data;
 

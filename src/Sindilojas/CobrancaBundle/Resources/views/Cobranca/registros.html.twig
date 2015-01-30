@@ -16,7 +16,7 @@
                 <tbody>
                     {% for registro in cliente.getRegistros() %}
                     <tr>
-                        <td width="20%" >{{ registro.getData.format('d/m/Y') }}</td>
+                        <td width="20%" >{{ registro.getData.format('d/m/Y h:i:s') }}</td>
                         <td width="80%" >{{ registro.getTexto() }}</td>
                     </tr>
                     {% else %}

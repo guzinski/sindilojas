@@ -7,8 +7,15 @@
     <body style="margin: 0 auto; width: 980px;">
         {% for parcela in negociacao.getParcelas() %}
         <table style="margin: 0 50px; width: 90%">
-            <tbody>
+            <thead>
                 <tr>
+                    <th colspan="2">
+                        <img width="160" src="{{ asset('bundles/sindilojas/images/image00.png') }}" />
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                
                     <td style="width: 50%">
                         Nº {{ parcela.getNumero+1 }}/{{ negociacao.getParcelas.count }}
                         <br/><br/>
@@ -27,7 +34,7 @@
                 <tr>
                     <td colspan="2">
                         <p>
-                            Aos {{ parcela.getVencimento().format("d/m/Y") }} pagarei por esta única via de NOTA PROMISSÓRIA à {{ negociacao.getDivida.getLoja.getNome }} CNPJ {{ negociacao.getDivida.getLoja.getCnpj }} ou a sua ordem a quantia de {{ parcela.getValor()|number_format(2, ',', '.') }} em moeda corrente nacional.
+                            Aos {{ parcela.getVencimento().format("d")|valorExtenso(false) }} dias do mês de {{ parcela.getVencimento().format("n")|getStringMes() }} de {{ parcela.getVencimento().format("Y")|valorExtenso(false) }}, pagarei por esta única via de NOTA PROMISSÓRIA à {{ negociacao.getDivida.getLoja.getNome }} CNPJ {{ negociacao.getDivida.getLoja.getCnpj|mask('##.###.###/####-##') }} ou a sua ordem a quantia de {{ parcela.getValor()|number_format(2, ',', '.') }} ({{ parcela.getValor|valorExtenso(true) }}) em moeda corrente nacional.
                         </p>
                         <br/><br/><br/>
                     </td>
@@ -52,7 +59,7 @@
                 </tr>
                 <tr>
                     <td style="width: 50%">
-                        CPF: {{ negociacao.getDivida.getCliente.getCpf }}
+                        CPF: {{ negociacao.getDivida.getCliente.getCpf|mask('###.###.###-##') }}
                         <br/>
                     </td>
                     <td style="text-align: right; width: 50%">
@@ -63,6 +70,7 @@
                     <td style="width: 70%">
                         Endereço: {{ "CEP: " ~ negociacao.getDivida.getCliente.getCep ~ " - " ~ negociacao.getDivida.getCliente.getUf ~ " - " ~ negociacao.getDivida.getCliente.getCidade ~ ", " ~ negociacao.getDivida.getCliente.getRua ~ ", " ~ negociacao.getDivida.getCliente.getNumero }}
                         <br/>
+                        {{ negociacao.getDivida.getCliente.getTelefone() }}
                     </td>
                     <td style="text-align: right; width: 30%">
                         {{ negociacao.getDivida.getCliente.getNome }}

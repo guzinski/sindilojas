@@ -6,6 +6,28 @@
 {% endblock _cliente_dividas_row %}
 
 
+{% block _cliente_cobrancaJudicial_widget %}
+{% spaceless %}
+    {% if expanded %}
+        <div>
+        {% for child in form %}
+            {{ form_widget(child) }}
+        {% endfor %}
+        </div>
+    {% endif %}
+{% endspaceless %}
+{% endblock _cliente_cobrancaJudicial_widget %}
+
+
+{% block radio_widget %}
+{% spaceless %}
+    <div class="radio">
+        <label  for="{{ id }}"><input type="radio" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />{{ label|trans }}</label>
+    </div>
+{% endspaceless %}
+{% endblock radio_widget %}
+
+
 {% block form_row %}
     <div class="form-group">
         <label class="col-sm-3 control-label">{{ form_label(form) }}

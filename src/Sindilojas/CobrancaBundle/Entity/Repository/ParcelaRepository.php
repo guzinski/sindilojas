@@ -185,4 +185,16 @@ class ParcelaRepository extends EntityRepository
         
         return $query->getQuery()->getSingleScalarResult();
     }
+    
+    /**
+     * Retonr ao ano Atual da PArcela
+     * 
+     * @param int $ano
+     * @return int
+     */
+    public function getUltimoNumero($ano)
+    {
+        $query = "SELECT MAX(numero) FROM parcela WHERE YEAR(vencimento) = $ano";
+        return (int) $this->getEntityManager()->getConnection()->fetchColumn($query);
+    }
 }

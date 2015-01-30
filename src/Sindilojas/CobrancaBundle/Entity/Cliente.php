@@ -19,6 +19,13 @@ class Cliente
      * @ORM\Column(name="nome", type="string", length=50, nullable=false)
      */
     private $nome;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cobranca_judicial", type="integer", nullable=false)
+     */
+    private $cobrancajudicial = 0;
 
     /**
      * @var string
@@ -494,5 +501,24 @@ class Cliente
         return $endereco;
     }
     
+    /**
+     * 
+     * @return string
+     */
+    function getCobrancajudicial()
+    {
+        return $this->cobrancajudicial;
+    }
+
+    /**
+     * 
+     * @param string $cobrancajudicial
+     */
+    function setCobrancajudicial($cobrancajudicial)
+    {
+        $this->cobrancajudicial = $cobrancajudicial;
+    }
+
+
     
 }

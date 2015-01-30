@@ -170,7 +170,7 @@
             var entrada = jQuery("#entrada").maskMoney('unmasked')[0];
             var parcelas = jQuery("#numParcelas").val();
              
-            if (entrada>0 && parcelas>0 && total>0) {
+            if (parcelas>0 && total>0) {
                 total = total-entrada;
                 var valorParcela = total/parcelas;
                 jQuery("#valorParcela").text(Math.round(valorParcela * 100) / 100);
