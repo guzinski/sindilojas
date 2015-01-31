@@ -1,0 +1,5 @@
+services:
+    app.twig_extension:
+        class: Sindilojas\CobrancaBundle\Twig\AppTwigFilters
+        tags:
+            - { name: twig.extension }
