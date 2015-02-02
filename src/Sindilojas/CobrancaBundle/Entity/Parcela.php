@@ -19,6 +19,13 @@ class Parcela
      * @ORM\Column(name="tipo", type="string", length=1, nullable=true)
      */
     private $tipo;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="modo", type="string", length=1, nullable=true)
+     */
+    private $modo;
 
     
     /**
@@ -295,10 +302,33 @@ class Parcela
     /**
      * 
      * @param string $tipo
+     * @return \Sindilojas\CobrancaBundle\Entity\Parcela
      */
     function setTipo($tipo)
     {
         $this->tipo = $tipo;
+        return $this;
+    }
+
+
+    /**
+     * 
+     * @return string
+     */
+    function getModo()
+    {
+        return $this->modo;
+    }
+
+    /**
+     * 
+     * @param string $modo
+     * @return \Sindilojas\CobrancaBundle\Entity\Parcela
+     */
+    function setModo($modo)
+    {
+        $this->modo = $modo;
+        return $this;
     }
 
 

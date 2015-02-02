@@ -62,16 +62,12 @@ class CobrancaController extends Controller
      */
     public function dividasDetalhesAction(Request $request)
     {
-        $valor          = 0;
         $idDivida       = $request->request->getInt("id");
         $renegociacao   = $request->request->getInt("renegociacao", 0);
         $negociacao     = $this->getDoctrine()->getRepository("Sindilojas\CobrancaBundle\Entity\Divida")->getNegociacao($idDivida);      
         $divida         = $this->getDoctrine()->getRepository("Sindilojas\CobrancaBundle\Entity\Divida")->find($idDivida);
-        if ($renegociacao) {
-            $valor = $this->getDoctrine()->getRepository("Sindilojas\CobrancaBundle\Entity\Parcela")->getValorEmAberto($idDivida);
-        }
         
-        $render         = $this->renderView("SindilojasCobrancaBundle::Cobranca\\negociacao.html.twig", array('valor'=>$valor,'divida'=>$divida, 'negociacao'=>$negociacao, "renegociacao"=>$renegociacao));
+        $render         = $this->renderView("SindilojasCobrancaBundle::Cobranca\\negociacao.html.twig", array('divida'=>$divida, 'negociacao'=>$negociacao, "renegociacao"=>$renegociacao));
         
         return new Response($render);
     }
@@ -110,7 +106,6 @@ class CobrancaController extends Controller
      */
     public function inseriNegociacaoAction(Request $request)
     {
-        $em             = $this->getDoctrine()->getManager();
         $idDivida       = $request->request->getInt("idDivida");
         $valorEntrada   = (double) $request->get("entrada");
         $numParcelas    = $request->get("numParcelas");
@@ -119,6 +114,7 @@ class CobrancaController extends Controller
         $tipo           = $request->get("tipo");
         $hoje           = new \DateTime("now");
         
+        $em                 = $this->getDoctrine()->getManager();
         $divida             = $em->getRepository("Sindilojas\CobrancaBundle\Entity\Divida")->find($idDivida);        
         $parcelaRepository  = $em->getRepository("Sindilojas\CobrancaBundle\Entity\Parcela");       
         
@@ -133,13 +129,13 @@ class CobrancaController extends Controller
         
         if ($valorEntrada > 0) {
             $numeroAtual = $parcelaRepository->getUltimoNumero($hoje->format('Y'));
-            $entrada = new Parcela();
-            $entrada->setEntrada(1);
-            $entrada->setValor($valorEntrada);
-            $entrada->setVencimento($hoje);
-            $entrada->setNumero($numeroAtual+1);
-            $entrada->setNegociacao($negociacao);
-            $negociacao->getParcelas()->add($entrada);
+            $parcelaEntrada = new Parcela();
+            $parcelaEntrada->setEntrada(1);
+            $parcelaEntrada->setValor($valorEntrada);
+            $parcelaEntrada->setVencimento($hoje);
+            $parcelaEntrada->setNumero($numeroAtual+1);
+            $parcelaEntrada->setNegociacao($negociacao);
+            $negociacao->getParcelas()->add($parcelaEntrada);
             $entrada = 1;
         } else {
             $entrada = 0;
@@ -165,6 +161,38 @@ class CobrancaController extends Controller
     }
     
     /**
+     * @Route("/cobranca/alterar/vencimento", name="_alterar_vencimento")
+     * 
+     * @param Request $request
+     * @return Response
+     */
+    public function alterarVencimentoAction(Request $request)
+    {
+        $em         = $this->getDoctrine()->getManager();
+        $parcela    = $em->getRepository("Sindilojas\CobrancaBundle\Entity\Parcela")->find($request->request->getInt("id"));
+        
+        $parcela->setVencimento(\DateTime::createFromFormat("d/m/Y", $request->get("novadata")));
+    
+        $em->persist($parcela);
+        $em->flush();
+        
+        $render = $this->renderView("SindilojasCobrancaBundle::Cobranca\\negociacao.html.twig", array('divida'=>$parcela->getNegociacao()->getDivida(), 'negociacao'=>$parcela->getNegociacao(), "renegociacao"=>0));
+        
+        return new Response($render);
+    }
+
+    /**
+     * @Route("/cobranca/html/dar/baixa", name="_html_dar_baixa")
+     * @Template()
+     * 
+     * @return array
+     */
+    public function htmlDarBaixaAction()
+    {
+        return array();
+    }
+
+    /**
      * @Route("/cobranca/dar/baixa", name="_dar_baixa")
      * 
      * @param Request $request
@@ -172,18 +200,34 @@ class CobrancaController extends Controller
      */
     public function darBaixaAction(Request $request) 
     {
-        $em         = $this->getDoctrine()->getManager();
         $idParcela  = $request->request->getInt("id");
         $data       = $request->request->get("data");
-        $valor      = $request->request->get("valor");
+        $valor      = (float) $request->request->get("valor");
         $tipo       = $request->request->get("tipo");
+        $modo       = $request->request->get("modo");
+        
+        $em         = $this->getDoctrine()->getManager();
         $parcela    = $em->getRepository("Sindilojas\CobrancaBundle\Entity\Parcela")->find($idParcela);
         
         $parcela->setPago(1);
         $parcela->setDataPagamento(\DateTime::createFromFormat("d/m/Y", $data));
-        $parcela->setValorPago((float) $valor);
+        $parcela->setValorPago($valor);
         $parcela->setTipo($tipo);
+        $parcela->setModo($modo);
         $em->persist($parcela);
+        
+        
+        if ($valor<$parcela->getValor()) {
+            $novaParcela = new Parcela();
+            $novaParcela->setValor($parcela->getValor()-$valor);
+            $novaParcela->setNegociacao($parcela->getNegociacao());
+            $novaParcela->setNumero($parcela->getNumero());
+            $novaParcela->setVencimento($parcela->getVencimento());
+            $novaParcela->getNegociacao()->getParcelas()->add($novaParcela);
+            
+            $em->persist($novaParcela);
+        }
+        
         $em->flush();
         
         $render = $this->renderView("SindilojasCobrancaBundle::Cobranca\\negociacao.html.twig", array('divida'=>$parcela->getNegociacao()->getDivida(), 'negociacao'=>$parcela->getNegociacao(), "renegociacao"=>0));

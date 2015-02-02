@@ -21,7 +21,6 @@ class Negociacao
      */
     private $tipo = "A";
 
-
     /**
      * @var integer
      *
@@ -32,15 +31,21 @@ class Negociacao
     private $id;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="data", type="date", nullable=false)
+     */
+    private $data;
+
+    /**
      * @var \Sindilojas\CobrancaBundle\Entity\Divida
      *
-     * @ORM\ManyToOne(targetEntity="Sindilojas\CobrancaBundle\Entity\Divida")
+     * @ORM\ManyToOne(targetEntity="Sindilojas\CobrancaBundle\Entity\Divida", inversedBy="negociacoes")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_divida", referencedColumnName="id")
      * })
      */
     private $divida;
-
     
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -52,6 +57,7 @@ class Negociacao
     
     public function __construct()
     {
+        $this->setData(new \DateTime("now"));
         $this->setParcelas(new ArrayCollection());
     }
 
@@ -124,7 +130,22 @@ class Negociacao
         $this->tipo = $tipo;
     }
 
+    /**
+     * 
+     * @return DateTime
+     */
+    function getData()
+    {
+        return $this->data;
+    }
 
-    
+    /**
+     * 
+     * @param \DateTime $data
+     */
+    function setData(\DateTime $data)
+    {
+        $this->data = $data;
+    }
 
 }

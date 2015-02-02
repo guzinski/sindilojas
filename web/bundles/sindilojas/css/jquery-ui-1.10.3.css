@@ -771,6 +771,7 @@ button.ui-button::-moz-focus-inner {
 	background: none;
 }
 .ui-tooltip {
+        background: #FFFFFF;
 	padding: 8px;
 	position: absolute;
 	z-index: 9999;

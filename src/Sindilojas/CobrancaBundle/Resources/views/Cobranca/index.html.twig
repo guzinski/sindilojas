@@ -16,14 +16,17 @@
     <script src="{{ asset('bundles/sindilojas/js/bootbox.min.js') }}"></script>
     
     <script>
+        var htmlDarBaixa = "";
         jQuery(document).ready(function(){
+            jQuery("#cpf").mask("999.999.999-99",
+                {completed:function(){
+                        jQuery(".locked").fadeIn();
+                        jQuery.post('{{ path('_cobranca_dividas')}}', {cpf: jQuery(this).val()}, callbackCarregaDividas);
+            }});            
             
-        jQuery("#cpf").mask("999.999.999-99",
-            {completed:function(){
-                    jQuery(".locked").fadeIn();
-                    jQuery.post('{{ path('_cobranca_dividas')}}', {cpf: jQuery(this).val()}, callbackCarregaDividas);
-                }}
-            );
+            jQuery.get("{{ path("_html_dar_baixa") }}", function(html) {
+                htmlDarBaixa = html;
+            });
         });
         
         function detalhesDivida(id)
@@ -104,27 +107,7 @@
         {
             bootbox.dialog({
                             title: "Preencha os campos",
-                            message: '<div class="row"> ' +
-                                '<div class="col-md-12"> ' +
-                                '<form> ' +
-                                '<div class="form-group col-md-6"> ' +
-                                '<input id="vencimentoBaixa" name="vencimentoBaixa" type="text" placeholder="Data de Vencimento" class="form-control input-md"> ' +
-                                '</div> ' +
-                                '<div class="form-group col-md-6"> ' +
-                                '<div class="input-group"> ' +
-                                '<span class="input-group-addon">R$</span><input id="valorBaixa" name="valorBaixa" type="text" placeholder="Valor pago" class="form-control input-md"> ' +
-                                '</div> ' +
-                                '</div> ' +
-                                '<div class="form-group col-md-8"> ' +
-                                '<div class="col-md-4"><div class="radio"> <label for="tipo_0"> ' +
-                                '<input type="radio" name="tipo" id="tipo_0" value="S" checked="checked"> ' +
-                                'Sindilojas </label> ' +
-                                '</div></div>'+
-                                '<div class="col-md-4"><div class="radio col-md-6"> <label for="tipo_1"> ' +
-                                '<input type="radio" name="tipo" id="tipo_1" value="L"> Loja </label> ' +
-                                '</div></div> ' +
-                                '</div> ' +
-                                '</form> </div> </div>',
+                            message: htmlDarBaixa,
                         buttons: {
                             close: {
                                 label: "Cancelar",
@@ -137,15 +120,18 @@
                                     var vencimento  = jQuery('#vencimentoBaixa').val();
                                     var valor       = jQuery("#valorBaixa").maskMoney('unmasked')[0];
                                     var tipo        = jQuery("input[name='tipo']:checked").val();;
+                                    var modo        = jQuery("input[name='modo']:checked").val();;
                                     if (vencimento != "" && valor != "0") {
                                         if (validaData(vencimento)) {
                                             jQuery(".locked").fadeIn();
-                                            jQuery.post('{{ path('_dar_baixa')}}', {id: idParcela, data: vencimento, valor: valor, tipo: tipo}, callbackGeraParcelas);
+                                            jQuery.post('{{ path('_dar_baixa')}}', {id: idParcela, data: vencimento, valor: valor, tipo: tipo, modo: modo}, callbackGeraParcelas);
                                         } else {
                                             bootbox.alert("Data inválida");
+                                            return false;
                                         }
                                     } else {
                                         bootbox.alert("Preencha todos os campos");
+                                        return false;
                                     }
                                 }
                             },
@@ -189,6 +175,42 @@
                     //jQuery.post('{{ path('_renegociar')}}', {idDivida: idDivida}, callbackRenegociar);    
                 }
             }); 
+        }
+        
+        function alterarVencimento(idParcela, data)
+        {
+            bootbox.dialog({
+                        title: "Alterar data de vencimento",
+                        message: '<div class="row"> ' +
+                                '<div class="col-md-12"> ' +
+                                '<form class="form-horizontal"> ' +
+                                '<div class="form-group"> ' +
+                                '<label class="col-md-4 control-label" for="name">Nova data</label> ' +
+                                '<div class="col-md-4"> ' +
+                                '<input id="novadata" name="novadata" type="text" value="'+data+'" class="form-control input-md"> ' +
+                                '</div> </div> </form> </div> </div>',
+                        buttons: {
+                            close: {
+                                label: "Cancelar",
+                                className: "btn-default",
+                            },
+                            success: {
+                                label: "Alterar",
+                                className: "btn-success",
+                                callback: function () {
+                                    var novadata = jQuery('#novadata').val();
+                                    if (novadata != "" && validaData(novadata)) {
+                                        jQuery(".locked").fadeIn();
+                                        jQuery.post('{{ path('_alterar_vencimento')}}', {id: idParcela, novadata: novadata}, callbackGeraParcelas);
+                                    } else {
+                                        bootbox.alert("Insira uma data válida");
+                                        return false;
+                                    }
+                                }
+                            },
+                        }
+                    });
+           jQuery('#novadata').mask('99/99/9999').datepicker();
         }
         
         function callbackRenegociar(data)

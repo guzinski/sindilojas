@@ -13,8 +13,8 @@
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" type="button">R$</button>
                                 </span>
-                                <input value="{{ renegociacao==1 ? valor|number_format(2, ',', '.') : divida.getValor()|number_format(2, ',', '.') }}" required="required" type="text" placeholder="Valor Atual" name="valorAtual" id="valorAtual" class="form-control"/>
-                                <input type="hidden" name="valorreal" id="valorreal" value="{{ renegociacao==1 ? valor : divida.getValor() }}"/>
+                                <input value="{{ divida.getValor()|number_format(2, ',', '.') }}" required="required" type="text" placeholder="Valor Atual" name="valorAtual" id="valorAtual" class="form-control"/>
+                                <input type="hidden" name="valorreal" id="valorreal" value="{{ divida.getValor() }}"/>
                                 <input type="hidden" name="idDivida" id="idDivida" value="{{ divida.getId() }}"/>
                             </div><!-- input-group -->
                         </div><!-- form-group -->
@@ -64,8 +64,8 @@
             </form>
 
         {% else %}
+            {% for rowNegociacao in divida.getNegociacoes()|reverse %}
             <div class="table-responsive">
-
                 <table class="table mb30">
                     <thead>
                         <tr>
@@ -77,24 +77,35 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for parcela in negociacao.getParcelas() %}
+                        {% for parcela in rowNegociacao.getParcelas() %}
                         <tr>
                             <td>{{ divida.getLoja().getNome() }}</td>
-                            <td>{{ parcela.getNumero }}/{{ parcela.getVencimento.format('Y') }}</td>
-                            <td>{{ parcela.getVencimento().format('d/m/Y') }}</td>
-                            <td>{{ "R$ " ~ parcela.getValor()|number_format(2, ',', '.') }}</td>
-                            {% if parcela.getPago() %}
-                                <td><a target="_blank" href="{{ path('_recibo', {'idParcela': parcela.getId()}) }}">Imprimir Recibo</a></td>
+                            <td>{{ parcela.getNumero }}/{{ rowNegociacao.getData.format('Y') }}</td>
+                            {% if rowNegociacao == negociacao %}
+                                <td><a class="tooltips" data-placement="top" data-original-title="Data de vencimento" data-toggle="tooltip" title="Alterar Data de vencimento" href="javascript:alterarVencimento({{ parcela.getId() }}, '{{ parcela.getVencimento().format('d/m/Y') }}')">{{ parcela.getVencimento().format('d/m/Y') }}</a></td>
+                                <td>{{ "R$ " ~ parcela.getValor()|number_format(2, ',', '.') }}</td>
+                                {% if parcela.getPago() %}
+                                    <td><a target="_blank" href="{{ path('_recibo', {'idParcela': parcela.getId()}) }}">Imprimir Recibo</a></td>
+                                {% else %}
+                                    <td><a href="javascript:darBaixa({{ parcela.getId() }})">Dar baixa</a></td>
+                                {% endif %}
                             {% else %}
-                                <td><a href="javascript:darBaixa({{ parcela.getId() }})">Dar baixa</a></td>
+                                <td>{{ parcela.getVencimento().format('d/m/Y') }}</td>
+                                <td>{{ "R$ " ~ parcela.getValor()|number_format(2, ',', '.') }}</td>
+                                {% if parcela.getPago() %}
+                                    <td><a target="_blank" href="{{ path('_recibo', {'idParcela': parcela.getId()}) }}">Imprimir Recibo</a></td>
+                                {% else %}
+                                    <td>Não pago</td>
+                                {% endif %}
                             {% endif %}
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
-                <a class="btn btn-default tooltips" data-placement="top" data-original-title="Renogeociar as parcelas em aberto" data-toggle="tooltip" title="Renogeociar as parcelas em aberto" href="javascript:renegociar({{ divida.getId() }})">Renegociar</a>
-                <a target="_blank" class="btn btn-default" href="{{ path('_promissoria', {'idNegociacao': negociacao.getId()}) }}">Imprimir promissórias</a>
+                <a target="_blank" class="btn btn-default" href="{{ path('_promissoria', {'idNegociacao': rowNegociacao.getId()}) }}">Imprimir promissórias</a><br/><br/>
             </div>
+            {% endfor %}
+            <a class="btn btn-default tooltips" data-placement="top" data-original-title="Renogeociar a Dívida" data-toggle="tooltip" title="Renogeociar as parcelas em aberto" href="javascript:renegociar({{ divida.getId() }})">Renegociar</a>
         {% endif %}
     </div><!-- panel-body -->
 </div>

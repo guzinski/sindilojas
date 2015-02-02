@@ -55,9 +55,20 @@ class Divida
      */
     private $cliente;
 
-
-
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\OneToMany (targetEntity="Sindilojas\CobrancaBundle\Entity\Negociacao", mappedBy="divida")
+     */
+    private $negociacoes;
+
+    
+    public function __construct()
+    {
+        $this->setNegociacoes(new \Doctrine\Common\Collections\ArrayCollection());
+    }
+
+        /**
      * Set vencimento
      *
      * @param \DateTime $vencimento
@@ -163,4 +174,26 @@ class Divida
         return (string) $this->getValor();
     }
 
+    /**
+     * 
+     * @return \Doctrine\Common\Collections\Collection $negociacoes
+     */
+    function getNegociacoes()
+    {
+        return $this->negociacoes;
+    }
+
+    /**
+     * 
+     * @param \Doctrine\Common\Collections\Collection $negociacoes
+     * @return \Sindilojas\CobrancaBundle\Entity\Divida
+     */
+    function setNegociacoes(\Doctrine\Common\Collections\Collection $negociacoes)
+    {
+        $this->negociacoes = $negociacoes;
+        return $this;
+    }
+
+
+    
 }

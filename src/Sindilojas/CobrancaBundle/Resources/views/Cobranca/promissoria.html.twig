@@ -10,14 +10,14 @@
             <thead>
                 <tr>
                     <th colspan="2">
-                        <img width="160" src="{{ asset('bundles/sindilojas/images/image00.png') }}" />
+                        <img width="140" src="{{ asset('bundles/sindilojas/images/image00.png') }}" />
                     </th>
                 </tr>
             </thead>
             <tbody>
                 
                     <td style="width: 50%">
-                        Nº {{ parcela.getNumero+1 }}/{{ negociacao.getParcelas.count }}
+                        Nº {{ parcela.getNumero }}/{{ negociacao.getData.format('Y') }}
                         <br/><br/>
                     </td>
                     <td style="text-align: right; width: 50%">
@@ -34,7 +34,7 @@
                 <tr>
                     <td colspan="2">
                         <p>
-                            Aos {{ parcela.getVencimento().format("d")|valorExtenso(false) }} dias do mês de {{ parcela.getVencimento().format("n")|getStringMes() }} de {{ parcela.getVencimento().format("Y")|valorExtenso(false) }}, pagarei por esta única via de NOTA PROMISSÓRIA à {{ negociacao.getDivida.getLoja.getNome }} CNPJ {{ negociacao.getDivida.getLoja.getCnpj|mask('##.###.###/####-##') }} ou a sua ordem a quantia de {{ parcela.getValor()|number_format(2, ',', '.') }} ({{ parcela.getValor|valorExtenso(true) }}) em moeda corrente nacional.
+                            Aos {{ parcela.getVencimento().format("d")|valorExtenso(false) }} dias do mês de {{ parcela.getVencimento().format("n")|getStringMes() }} de {{ parcela.getVencimento().format("Y")|valorExtenso(false) }}, pagarei por esta única via de NOTA PROMISSÓRIA à {{ negociacao.getDivida.getLoja.getNome }} CNPJ {{ negociacao.getDivida.getLoja.getCnpj|mask('##.###.###/####-##') }} ou a sua ordem a quantia de {{ parcela.getValor()|number_format(2, ',', '.') }} ({{ parcela.getValor|valorExtenso(false) }}) em moeda corrente nacional.
                         </p>
                         <br/><br/><br/>
                     </td>
@@ -78,7 +78,7 @@
                 </tr>
                 <tr >
                     <td colspan="2" style="border-bottom: 2px solid #000">
-                       <br/><br/><br/>
+                       <br/><br/>
                     </td>
                 </tr>
 
