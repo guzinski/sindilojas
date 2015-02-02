@@ -24,7 +24,7 @@ class ClienteType extends AbstractType
     {
         $builder->add("nome", "text" )
                 ->add("cpf", "text")
-                ->add("rg", "text")
+                ->add("rg", "text", array("required"=>false))
                 ->add("cep", "text")
                 ->add("uf", "text", array('attr'=> array('disabled'=>'disabled')))
                 ->add("cidade", "text", array('attr'=> array('disabled'=>'disabled')))
@@ -32,8 +32,10 @@ class ClienteType extends AbstractType
                 ->add("rua", "text")
                 ->add("numero", "text")
                 ->add("complemento", "text", array("required"=>false))
-                ->add("email")
+                ->add("email", 'email', array("required"=>false))
                 ->add("telefone", "text")
+                ->add("telefone1", "text", array("required"=>false))
+                ->add("telefone2", "text", array("required"=>false))
                 ->add("nascimento", "date", array(
                             'label'  => 'Data de Nascimento',
                             'widget' => 'single_text',

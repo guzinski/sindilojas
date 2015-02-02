@@ -37,7 +37,7 @@ class Cliente
     /**
      * @var string
      *
-     * @ORM\Column(name="rg", type="string", length=12, nullable=false)
+     * @ORM\Column(name="rg", type="string", length=12, nullable=true)
      */
     private $rg;
 
@@ -93,7 +93,7 @@ class Cliente
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="string", length=150, nullable=false)
+     * @ORM\Column(name="email", type="string", length=150, nullable=true)
      */
     private $email;
 
@@ -103,6 +103,20 @@ class Cliente
      * @ORM\Column(name="telefone", type="string", length=20, nullable=false)
      */
     private $telefone;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="telefone1", type="string", length=20, nullable=false)
+     */
+    private $telefone1;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="telefone2", type="string", length=20, nullable=false)
+     */
+    private $telefone2;
 
     /**
      * @var \DateTime
@@ -518,6 +532,48 @@ class Cliente
     {
         $this->cobrancajudicial = $cobrancajudicial;
     }
+    
+    /**
+     * 
+     * @return string
+     */
+    function getTelefone1()
+    {
+        return $this->telefone1;
+    }
+
+    /**
+     * 
+     * @return string
+     */
+    function getTelefone2()
+    {
+        return $this->telefone2;
+    }
+
+    /**
+     * 
+     * @param string $telefone1
+     * @return \Sindilojas\CobrancaBundle\Entity\Cliente
+     */
+    function setTelefone1($telefone1)
+    {
+        $this->telefone1 = $telefone1;
+        return $this;
+    }
+
+    /**
+     * 
+     * @param string $telefone2
+     * @return \Sindilojas\CobrancaBundle\Entity\Cliente
+     */
+    function setTelefone2($telefone2)
+    {
+        $this->telefone2 = $telefone2;
+        return $this;
+    }
+
+
 
 
     

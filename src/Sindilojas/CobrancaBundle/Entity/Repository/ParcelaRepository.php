@@ -28,7 +28,8 @@ class ParcelaRepository extends EntityRepository
                 ->leftJoin("D.cliente", "C")
                 ->leftJoin("D.loja", "L")
                 ->andWhere($query->expr()->lt("P.vencimento", ":data"))
-                ->andWhere($query->expr()->eq("P.pago", "0"));
+                ->andWhere($query->expr()->eq("P.pago", "0"))
+                ->andWhere($query->expr()->eq("C.cobrancajudicial", "0"));
         $query->setParameter("data", $data, \PDO::PARAM_STR);
         return $query->getQuery()->getResult();
     }
