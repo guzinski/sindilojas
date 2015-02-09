@@ -9,13 +9,18 @@
             
             var htmlRecibo = "";
             var htmlCobranca = "";
-            
+            var htmlClientes = "";
+
             jQuery.get("{{ path("_html_form_recibo") }}", function(html) {
                 htmlRecibo = html;
             });
             
             jQuery.get("{{ path("_html_form_cobranca") }}", function(html) {
                 htmlCobranca = html;
+            });
+            
+            jQuery.get("{{ path("_html_form_clientes") }}", function(html) {
+                htmlClientes = html;
             });
             
             
@@ -52,6 +57,10 @@
                 });
 
             });
+            
+
+            
+            
             jQuery("#cobranca").click(function(){
                bootbox.dialog({
                                 title: "Selecione a data",
@@ -82,6 +91,40 @@
                     minimumResultsForSearch: -1
                 });
             });
+            
+            
+            jQuery("#clientes").click(function(){
+                bootbox.dialog({
+                                title: "Relatório de clientes",
+                                message: htmlClientes,
+                                buttons: {
+                                    close: {
+                                        label: "Cancelar",
+                                        className: "btn-default",
+                                    },
+                                    success: {
+                                        label: "Gerar",
+                                        className: "btn-success",
+                                        callback: function () {
+                                            var loja  = jQuery('#loja').val();
+                                            var mes  = jQuery('#mes').val();
+                                            var ano  = jQuery('#ano').val();
+                                            if (loja != "" && mes != "" && ano != "") {
+                                                var link = "{{ path("_recibo_loja") }}";
+                                                window.open(link+"/"+loja+"/"+mes+"/"+ano, "_blank");
+                                            } else {
+                                                bootbox.alert("Selecione a loja");
+                                            }
+                                        }
+                                    },
+                                }
+                        }
+                );
+                jQuery("#loja, #mes, #ano").select2({
+                    minimumResultsForSearch: -1
+                });
+            });
+
         })
     </script>
 {% endblock %}
@@ -112,6 +155,7 @@
                 <div class="btn-list">
                     <button id="recibo" class="btn btn-primary btn-lg">Recibo Loja</button>
                     <button id="cobranca" class="btn btn-primary btn-lg">Relatório de Cobrança</button>
+                    <button id="clientes" class="btn btn-primary btn-lg">Relatório de Clientes</button>
                 </div>
             </div>
         </div>

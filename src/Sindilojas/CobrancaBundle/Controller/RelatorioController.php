@@ -45,7 +45,18 @@ class RelatorioController extends Controller
      */
     public function htmlFormCobrancaAction()
     {
-        $lojas = $this->getDoctrine()->getRepository("Sindilojas\CobrancaBundle\Entity\Loja")->findAll();
+        $lojas = $this->getDoctrine()->getRepository("Sindilojas\CobrancaBundle\Entity\Loja")->findBy(array(), array("nome"=>"ASC"));
+        return array("lojas"=>$lojas);
+    }
+    
+    /**
+     * 
+     * @Route("/html/form/clientes", name="_html_form_clientes")
+     * @Template()
+     */
+    public function htmlFormClientesAction()
+    {
+        $lojas = $this->getDoctrine()->getRepository("Sindilojas\CobrancaBundle\Entity\Loja")->findBy(array(), array("nome"=>"ASC"));
         return array("lojas"=>$lojas);
     }
     
