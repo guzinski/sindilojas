@@ -44,42 +44,42 @@ class Cliente
     /**
      * @var string
      *
-     * @ORM\Column(name="cep", type="string", length=10, nullable=false)
+     * @ORM\Column(name="cep", type="string", length=10, nullable=true)
      */
     private $cep;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="uf", type="string", length=2, nullable=false)
+     * @ORM\Column(name="uf", type="string", length=2, nullable=true)
      */
     private $uf;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="cidade", type="string", length=100, nullable=false)
+     * @ORM\Column(name="cidade", type="string", length=100, nullable=true)
      */
     private $cidade;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="bairro", type="string", length=50, nullable=false)
+     * @ORM\Column(name="bairro", type="string", length=50, nullable=true)
      */
     private $bairro;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="rua", type="string", length=150, nullable=false)
+     * @ORM\Column(name="rua", type="string", length=150, nullable=true)
      */
     private $rua;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="numero", type="string", length=30, nullable=false)
+     * @ORM\Column(name="numero", type="string", length=30, nullable=true)
      */
     private $numero;
 
@@ -100,28 +100,28 @@ class Cliente
     /**
      * @var string
      *
-     * @ORM\Column(name="telefone", type="string", length=20, nullable=false)
+     * @ORM\Column(name="telefone", type="string", length=20, nullable=true)
      */
     private $telefone;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="telefone1", type="string", length=20, nullable=false)
+     * @ORM\Column(name="telefone1", type="string", length=20, nullable=true)
      */
     private $telefone1;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="telefone2", type="string", length=20, nullable=false)
+     * @ORM\Column(name="telefone2", type="string", length=20, nullable=true)
      */
     private $telefone2;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="nascimento", type="date", nullable=false)
+     * @ORM\Column(name="nascimento", type="date", nullable=true)
      */
     private $nascimento;
 

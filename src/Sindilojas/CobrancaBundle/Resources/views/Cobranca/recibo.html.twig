@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>Recibo</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
@@ -37,7 +37,7 @@
             <tr>
                 <td style="" colspan="3">
                     <br/>
-                    Recebi(emos) do Sr(a). <strong>{{ clienteNome }}</strong> a quantia de <strong>{{ valorExtenso }}</strong>.
+                    Recebi(emos) do Sr(a). <strong>{{ clienteNome }}</strong> a quantia de <strong>{{ valor|valorExtenso() }}</strong>.
                 </td>
             </tr>
             

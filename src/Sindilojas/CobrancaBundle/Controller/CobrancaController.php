@@ -125,31 +125,33 @@ class CobrancaController extends Controller
         $dataVencimento = \DateTime::createFromFormat("d/m/Y", $vencimento);
         $valorParcela = ($valorTotal-$valorEntrada)/$numParcelas;
         
-        
+        $numero = $parcelaRepository->getUltimoNumero($dataVencimento->format('Y'));
         
         if ($valorEntrada > 0) {
             $numeroAtual = $parcelaRepository->getUltimoNumero($hoje->format('Y'));
             $parcelaEntrada = new Parcela();
             $parcelaEntrada->setEntrada(1);
             $parcelaEntrada->setValor($valorEntrada);
-            $parcelaEntrada->setVencimento($hoje);
+            $parcelaEntrada->setVencimento(clone $dataVencimento);
             $parcelaEntrada->setNumero($numeroAtual+1);
             $parcelaEntrada->setNegociacao($negociacao);
             $negociacao->getParcelas()->add($parcelaEntrada);
             $entrada = 1;
+            $dataVencimento->add(new \DateInterval("P1M"));
         } else {
             $entrada = 0;
         }
+        
 
         for ($i=1; $i<=$numParcelas; $i++) {
-            $dataVencimento->add(new \DateInterval("P1M"));
-            $numero = $parcelaRepository->getUltimoNumero($dataVencimento->format('Y'));
             $parcela = new Parcela();
             $parcela->setVencimento(clone $dataVencimento);
             $parcela->setValor($valorParcela);
             $parcela->setNumero($numero+$i+$entrada);
             $parcela->setNegociacao($negociacao);
             $negociacao->getParcelas()->add($parcela);
+            $numero = $parcelaRepository->getUltimoNumero($dataVencimento->format('Y'));
+            $dataVencimento->add(new \DateInterval("P1M"));
         }
         
         $em->persist($negociacao);
@@ -284,8 +286,8 @@ class CobrancaController extends Controller
         );
         
         return array(
-            "numeroParcela"=>$parcela->getNumero()+1,
-            "totalParcelas"=>$parcela->getNegociacao()->getParcelas()->count(),
+            "numeroParcela"=>$parcela->getNumero(),
+            "totalParcelas"=>$parcela->getNegociacao()->getData()->format('Y'),
             "tipo"=>$parcela->getNegociacao()->getTipo(),
             "clienteNome" => $parcela->getNegociacao()->getDivida()->getCliente()->getNome(),
             "lojaNome" => $parcela->getNegociacao()->getDivida()->getLoja()->getNome(),
@@ -293,8 +295,7 @@ class CobrancaController extends Controller
             "mes" => $meses[(int) $hoje->format('m')],
             "ano" => $hoje->format('Y'),
             "valor"=>$parcela->getValorPago(),
-            "valorExtenso"=>$this->valorPorExtenso($parcela->getValorPago())
-            );
+        );
     }
 
 

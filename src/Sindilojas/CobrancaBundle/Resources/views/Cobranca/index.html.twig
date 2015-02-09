@@ -123,6 +123,7 @@
                                     var modo        = jQuery("input[name='modo']:checked").val();;
                                     if (vencimento != "" && valor != "0") {
                                         if (validaData(vencimento)) {
+                                            alert("Retirada de SPC");
                                             jQuery(".locked").fadeIn();
                                             jQuery.post('{{ path('_dar_baixa')}}', {id: idParcela, data: vencimento, valor: valor, tipo: tipo, modo: modo}, callbackGeraParcelas);
                                         } else {

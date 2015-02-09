@@ -34,7 +34,7 @@ class RelatorioController extends Controller
      */
     public function htmlFormReciboAction()
     {
-        $lojas = $this->getDoctrine()->getRepository("Sindilojas\CobrancaBundle\Entity\Loja")->findAll();
+        $lojas = $this->getDoctrine()->getRepository("Sindilojas\CobrancaBundle\Entity\Loja")->findBy(array(), array("nome" => "ASC"));
         return array("lojas"=>$lojas);
     }
     
@@ -60,12 +60,9 @@ class RelatorioController extends Controller
     public function reciboLojaAction($idLoja = null, $mes = null, $ano = null)
     {
         $parcelas = $this->getDoctrine()->getRepository("Sindilojas\CobrancaBundle\Entity\Parcela")->getParcelasFromLoja($idLoja, $mes, $ano);
-        $total = $this->getDoctrine()->getRepository("Sindilojas\CobrancaBundle\Entity\Parcela")->getValorTotalParcelasFromLoja($idLoja, $mes, $ano);
         $loja = $this->getDoctrine()->getRepository("Sindilojas\CobrancaBundle\Entity\Loja")->find($idLoja);
         
         return array(
-                "extenso"=>$this->valorPorExtenso($total),
-                "total"=>$total,
                 "parcelas"=>$parcelas,
                 "loja"=>$loja,
                 "hoje"=>new \DateTime("now"),

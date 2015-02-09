@@ -18,13 +18,28 @@
             </thead>
             <tbody>
                 <tr>
+                    {% set totalSindi = 0 %}
+                    {% for parcela in parcelas %}
+                        {% if parcela.getTipo=="S" %}
+                            {% set totalSindi = parcela.getValorPago+totalSindi %}
+                        {% endif %}
+                    {% endfor %}
+                    {% set totalLoja = 0 %}
+                    {% for parcela in parcelas %}
+                        {% if parcela.getTipo=="L" %}
+                            {% set totalLoja = parcela.getValorPago+totalLoja %}
+                        {% endif %}
+                    {% endfor %}
+                    {% set honorarioSindi = totalSindi*0.20 %}
+                    {% set honorarioLoja = totalLoja*0.20 %}
+                    {% set totalLiquido = totalSindi-honorarioSindi-honorarioLoja %}
                     <td colspan="2">
-                        RECEBI DO SINDILOJAS A IMPORTÂNCIA DE: <strong>R$ {{ total|number_format(2, ",", ".") }}</strong>
+                        RECEBI DO SINDILOJAS A IMPORTÂNCIA DE: <strong>R$ {{ totalLiquido|number_format(2, ",", ".") }}</strong>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <strong>{{ extenso }}</strong>
+                        <strong>{{ totalLiquido|valorExtenso() }}</strong>
                         <br/><br/>
                     </td>
                 </tr>
@@ -54,7 +69,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% set totalSindi = 0 %}
                                 {% for parcela in parcelas %}
                                 {% if parcela.getTipo=="S" %}
                                 <tr>
@@ -65,13 +79,12 @@
                                         R$ {{ parcela.getValorPago|number_format(2, ",", ".") }}
                                     </td>
                                     <td>
-                                        {{ parcela.getNumero+1 }}/{{ parcela.getNegociacao.getParcelas.count }}
+                                        {{ parcela.getNumero }}/{{ parcela.getNegociacao.getData.format('Y') }}
                                     </td>
                                     <td>
                                         {{ parcela.getDataPagamento.format("d/m/Y") }}
                                     </td>
                                 </tr>
-                                {% set totalSindi = parcela.getValorPago+totalSindi %}
                                 {% endif %}
                                 {% endfor %}
                             </tbody>                            
@@ -92,7 +105,6 @@
                         <br/><br/><br/><br/>
                     </td>
                     <td>
-                        {% set honorarioSindi = totalSindi*0.20 %}
                         <strong>R$ {{ honorarioSindi|number_format(2, ",", ".") }}</strong>
                         <br/><br/><br/><br/>
                     </td>
@@ -123,7 +135,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% set totalLoja = 0 %}
                                 {% for parcela in parcelas %}
                                 {% if parcela.getTipo=="L" %}
                                 <tr>
@@ -134,13 +145,12 @@
                                         R$ {{ parcela.getValorPago|number_format(2, ",", ".") }}
                                     </td>
                                     <td>
-                                        {{ parcela.getNumero+1 }}/{{ parcela.getNegociacao.getParcelas.count }}
+                                        {{ parcela.getNumero }}/{{ parcela.getNegociacao.getData.format('Y') }}
                                     </td>
                                     <td>
                                         {{ parcela.getDataPagamento.format("d/m/Y") }}
                                     </td>
                                 </tr>
-                                {% set totalLoja = parcela.getValorPago+totalLoja %}
                                 {% endif %}
                                 {% endfor %}
                             </tbody>                            
@@ -161,7 +171,6 @@
                         <br/><br/>
                     </td>
                     <td>
-                        {% set honorarioLoja = totalLoja*0.20 %}
                         <strong>R$ {{ honorarioLoja|number_format(2, ",", ".") }}</strong>
                         <br/><br/>
                     </td>
@@ -173,7 +182,7 @@
                         <br/><br/>
                     </td>
                     <td>
-                        {% set totalLiquido = totalSindi-honorarioSindi-honorarioLoja %}
+                        
                         <strong>R$ {{ totalLiquido|number_format(2, ",", ".") }}</strong>
                         <br/><br/>
                     </td>
