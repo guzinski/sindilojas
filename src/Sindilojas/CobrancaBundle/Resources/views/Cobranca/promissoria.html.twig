@@ -1,15 +1,16 @@
 <html>
     <head>
+        <link href="{{ asset('bundles/sindilojas/css/style.default.css') }}" rel="stylesheet">
         <script>
             window.onLoad = window.print()
         </script>
     </head>
     <body style="margin: 0 auto; width: 980px;">
         {% for parcela in negociacao.getParcelas() %}
-        <table style="margin: 0 50px; width: 90%">
+            <table style="margin: 0 50px; width: 90%">
             <thead>
                 <tr>
-                    <th colspan="2">
+                    <th style="text-align: center" colspan="2">
                         <img width="140" src="{{ asset('bundles/sindilojas/images/image00.png') }}" />
                     </th>
                 </tr>
@@ -17,7 +18,7 @@
             <tbody>
                 
                     <td style="width: 50%">
-                        Nº {{ parcela.getNumero }}/{{ negociacao.getData.format('Y') }}
+                        Nº {{ loop.index }}/{{ negociacao.getParcelas.count }}
                         <br/><br/>
                     </td>
                     <td style="text-align: right; width: 50%">

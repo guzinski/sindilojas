@@ -2,7 +2,8 @@
     <div class="col-md-12">
         <form class="form-horizontal" id="basicForm">
             <div class="form-group">
-                 <div class="col-sm-12">
+                <label class="col-sm-3 control-label">Loja</label>
+                 <div class="col-sm-9">
                     <select id="loja" class="width100p" data-placeholder="Selecione uma loja" tabindex="-1">
                         <option value="">Todas</option>
                         {% for loja in lojas %}
@@ -12,11 +13,11 @@
                  </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-4 control-label">Native Radio</label>
-                <div class="col-sm-8">
-                    <div class="radio"><label><input name="tipo" type="radio" checked=""> Clientes em atraso</label></div>
-                    <div class="radio"><label><input name="tipo" type="radio"> Clientes com acordo em andamento</label></div>
-                    <div class="radio"><label><input name="tipo" type="radio"> Clientes enviados para cobrança judicial</label></div>
+                <label class="col-sm-3 control-label">Tipo</label>
+                <div class="col-sm-9">
+                    <div class="radio"><label><input value="atraso" name="tipo" type="radio" checked=""> Clientes em atraso</label></div>
+                    <div class="radio"><label><input value="andamento" name="tipo" type="radio"> Clientes com acordo em andamento</label></div>
+                    <div class="radio"><label><input value="judicial" name="tipo" type="radio"> Clientes enviados para cobrança judicial</label></div>
                 </div>
             </div>
         </form>

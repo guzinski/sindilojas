@@ -83,10 +83,11 @@ class RelatorioController extends Controller
     }
     
     /**
-     * 
      * @Route("/relatorio/cobranca/loja/{mes}/{ano}", name="_cobranca_loja")
      * @Template()
-     * @param int $idLoja
+     * @param int $mes
+     * @param int $ano
+     * @return array
      */
     public function cobrancaLojaAction($mes = null, $ano = null)
     {
@@ -96,6 +97,21 @@ class RelatorioController extends Controller
 
         return array("mes"=>$mes, "ano"=>$ano, "lojas"=>$lojas, "parcelas"=>$parcelas);
     }
+    
+    /**
+     * @Route("/relatorio/clientes/{tipo}/{loja}", name="_relatorio_clientes")
+     * @Template()
+     * @param int $mes
+     * @param int $ano
+     * @return array
+     */
+    public function relatorioClientesAction($tipo = null, $loja = null)
+    {
+        $repository = $this->getDoctrine()->getRepository("Sindilojas\CobrancaBundle\Entity\Cliente");
+        
+        return array("clientes"=>$repository->getRelatorioClientes($tipo, $loja));
+    }
+    
     
     function valorPorExtenso($valor = 0, $complemento = true)
     {

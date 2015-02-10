@@ -256,13 +256,13 @@ class CobrancaController extends Controller
     
     
     /**
-     * @Route("/cobranca/recibo/{idParcela}", name="_recibo")
+     * @Route("/cobranca/recibo/{idParcela}/{index}", name="_recibo")
      * 
      * @Template
      * @param int $idParcela
      * @return Response
      */
-    public function reciboAction($idParcela)
+    public function reciboAction($idParcela, $index)
     {
         $parcela = $this->getDoctrine()
                 ->getRepository("Sindilojas\CobrancaBundle\Entity\Parcela")
@@ -287,7 +287,8 @@ class CobrancaController extends Controller
         
         return array(
             "numeroParcela"=>$parcela->getNumero(),
-            "totalParcelas"=>$parcela->getNegociacao()->getData()->format('Y'),
+            "anoParcela"=>$parcela->getNegociacao()->getData()->format('Y'),
+            "totalParcelas"=>$parcela->getNegociacao()->getParcelas()->count(),
             "tipo"=>$parcela->getNegociacao()->getTipo(),
             "clienteNome" => $parcela->getNegociacao()->getDivida()->getCliente()->getNome(),
             "lojaNome" => $parcela->getNegociacao()->getDivida()->getLoja()->getNome(),
@@ -295,6 +296,7 @@ class CobrancaController extends Controller
             "mes" => $meses[(int) $hoje->format('m')],
             "ano" => $hoje->format('Y'),
             "valor"=>$parcela->getValorPago(),
+            "index"=>$index,
         );
     }
 

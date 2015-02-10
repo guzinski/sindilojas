@@ -62,6 +62,46 @@ class ClienteRepository extends EntityRepository
         return $query->getQuery()->getSingleScalarResult();
     }
     
+    /**
+     * 
+     * @param string $tipo
+     * @param int $loja
+     * @return array
+     */
+    public function getRelatorioClientes($tipo, $loja)
+    {
+        $where = "";
+        if ($tipo == "atraso") {
+            $where .= "AND p3.vencimento < CURRENT_DATE() AND p3.pago=0 ";
+        } else if ($tipo == "andamento") {
+            $where .= "AND n.id>0 ";
+        } else if ($tipo == "judicial") {
+            $where .= "AND c.cobranca_judicial=1 ";
+        }
+        if ($loja>0) {
+            $where .= "AND l.id=$loja";
+        }
+        $query = "SELECT c.nome, c.cpf, c.telefone, l.nome as loja, r.texto, p.valor_pago, p.data_pagamento
+                        FROM cliente c
+                            LEFT JOIN divida d
+                                    ON d.id_cliente=c.id
+                            LEFT JOIN (SELECT * FROM negociacao n1 ORDER BY n1.id DESC) n
+                                    ON n.id_divida=d.id
+                            LEFT JOIn loja l
+                                    ON l.id=d.id_loja
+                            LEFT JOIN (SELECT * FROM registro r1 ORDER BY r1.data DESC) as r
+                                    ON r.id_cliente=c.id
+                            LEFT JOIN (SELECT * FROM parcela p1 ORDER BY p1.id DESC) p
+                                    ON p.id_negociacao=n.id
+                                            AND p.pago=1
+                            LEFT JOIN (SELECT * FROM parcela p2 ORDER BY p2.id DESC) p3
+                                    ON p3.id_negociacao=n.id
+                        WHERE 1=1
+                            $where
+                        GROUP BY d.id, c.id";
+        return $this->getEntityManager()->getConnection()->fetchAll($query);
+    }
+
 
     
 }

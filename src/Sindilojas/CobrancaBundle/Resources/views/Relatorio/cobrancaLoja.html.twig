@@ -1,22 +1,16 @@
 <html>
     <head>
         <meta charset="UTF-8" />
+        <link href="{{ asset('bundles/sindilojas/css/style.default.css') }}" rel="stylesheet">
         <script>
            window.onLoad = window.print()
         </script>
     </head>
     <body style="margin: 0 auto; width: 980px;">
-        <table style="padding: 1%; margin: 0 50px; width: 880px;">
-            <thead>
-                <tr>
-                    <th style="text-align: center" colspan="2"> 
-                        <strong>BALANÇO DEPARTAMENTO DE COBRANÇA</strong>
-                        <br/>
-                        <strong>{{ mes }}/{{ ano }}</strong>
-                        <br/><br/>
-                    </th>
-                </tr>
-            </thead>
+        <h1><center>BALANÇO DEPARTAMENTO DE COBRANÇA</center></h1>
+        <strong><center>{{ mes }}/{{ ano }}</center></strong>
+        <br/><br/>
+        <table class="table" style="padding: 1%; margin: 0 50px; width: 880px;">
             <tbody>
                 <!-- LOJA -->
                 <tr>

@@ -1,0 +1,52 @@
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <link href="{{ asset('bundles/sindilojas/css/style.default.css') }}" rel="stylesheet">
+        <script>
+           window.onLoad = window.print()
+        </script>
+    </head>
+    <body style="margin: 0 auto; width: 980px;">
+        <h1><center>RELATÓRIO COBRANÇA</center></h1>
+        <table class="table" style="padding: 1%; margin: 0 50px; width: 880px;">
+            <thead>
+                <tr>
+                    <th style="text-align: center">
+                        <strong>Cliente</strong>
+                    </th>
+                    <th style="text-align: center">
+                        <strong>Cpf</strong>
+                    </th>
+                    <th style="text-align: center">
+                        <strong>Telefone</strong>
+                    </th>
+                    <th style="text-align: center">
+                        <strong>Loja</strong>
+                    </th>
+                    <th style="text-align: center">
+                        <strong>Histórico</strong>
+                    </th>
+                    <th style="text-align: center">
+                        <strong>Último Pagamento</strong>
+                    </th>
+                    <th style="text-align: center">
+                        <strong>Valor</strong>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cliente in clientes %}
+                <tr>
+                    <td>{{ cliente.nome }}</td>
+                    <td>{{ cliente.cpf|mask('###.###.###-##') }}</td>
+                    <td>{{ cliente.telefone }}</td>
+                    <td>{{ cliente.loja }}</td>
+                    <td>{{ cliente.texto }}</td>
+                    <td>{{ cliente.data_pagamento }}</td>
+                    <td>{{ cliente.valor_pago|number_format(2, ',', '.') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </body>
+</html>

@@ -1,21 +1,15 @@
 <html>
     <head>
         <meta charset="UTF-8" />
+        <link href="{{ asset('bundles/sindilojas/css/style.default.css') }}" rel="stylesheet">
         <script>
             window.onLoad = window.print()
         </script>
     </head>
-    <body style="font-family: arial; margin: 0 auto; width: 980px;">
-        <table style="padding: 1%; margin: 0 50px; width: 880px;">
-            <thead>
-                <tr>
-                    <th style="text-align: center" colspan="2"> 
-                        <strong>RECIBO</strong>
-                        <br/><br/>
-                        <strong>{{ mes }}/{{ ano }}</strong>
-                    </th>
-                </tr>
-            </thead>
+    <body style="margin: 0 auto; width: 980px;">
+        <h1><center>RECIBO</center></h1>
+        <strong><center>{{ mes }}/{{ ano }}</center></strong>
+        <table class="table" style="padding: 1%; margin: 0 50px; width: 880px;">
             <tbody>
                 <tr>
                     {% set totalSindi = 0 %}
@@ -35,22 +29,14 @@
                     {% set totalLiquido = totalSindi-honorarioSindi-honorarioLoja %}
                     <td colspan="2">
                         RECEBI DO SINDILOJAS A IMPORTÂNCIA DE: <strong>R$ {{ totalLiquido|number_format(2, ",", ".") }}</strong>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
+                        <br/>
                         <strong>{{ totalLiquido|valorExtenso() }}</strong>
-                        <br/><br/>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="2">
-                        REFERENTE AO(S) RESPECTIVO(S) PAGAMENTO(S):
+                        <span>REFERENTE AO(S) RESPECTIVO(S) PAGAMENTO(S):</span>
                         <br/><br/>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
                         <table style="width: 100%; margin-bottom: 15px;">
                             <thead>
                                 <tr>
@@ -110,13 +96,9 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2" style="text-align: center;">
-                        <strong>PAGAMENTO REALIZADO NA LOJA</strong>
-                        <br/><br/>
-                    </td>
-                </tr>
-                <tr>
                     <td colspan="2">
+                        <strong><center>PAGAMENTO REALIZADO NA LOJA</center></strong>
+                        <br/><br/>
                         <table style="width: 100%; margin-bottom: 15px;">
                             <thead>
                                 <tr>

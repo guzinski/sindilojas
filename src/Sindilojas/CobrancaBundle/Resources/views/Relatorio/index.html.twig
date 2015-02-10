@@ -38,7 +38,7 @@
                                         label: "Gerar",
                                         className: "btn-success",
                                         callback: function () {
-                                            var loja  = jQuery('#loja').val();
+                                            var loja = jQuery('#loja').val();
                                             var mes  = jQuery('#mes').val();
                                             var ano  = jQuery('#ano').val();
                                             if (loja != "" && mes != "" && ano != "") {
@@ -46,6 +46,7 @@
                                                 window.open(link+"/"+loja+"/"+mes+"/"+ano, "_blank");
                                             } else {
                                                 bootbox.alert("Selecione a loja");
+                                                return false;
                                             }
                                         }
                                     },
@@ -57,9 +58,6 @@
                 });
 
             });
-            
-
-            
             
             jQuery("#cobranca").click(function(){
                bootbox.dialog({
@@ -81,6 +79,7 @@
                                                 window.open(link+"/"+mes+"/"+ano, "_blank");
                                             } else {
                                                 bootbox.alert("Selecione o mês e o ano");
+                                                return false;
                                             }
                                         }
                                     },
@@ -91,7 +90,6 @@
                     minimumResultsForSearch: -1
                 });
             });
-            
             
             jQuery("#clientes").click(function(){
                 bootbox.dialog({
@@ -106,21 +104,21 @@
                                         label: "Gerar",
                                         className: "btn-success",
                                         callback: function () {
-                                            var loja  = jQuery('#loja').val();
-                                            var mes  = jQuery('#mes').val();
-                                            var ano  = jQuery('#ano').val();
-                                            if (loja != "" && mes != "" && ano != "") {
-                                                var link = "{{ path("_recibo_loja") }}";
-                                                window.open(link+"/"+loja+"/"+mes+"/"+ano, "_blank");
+                                            var loja = jQuery('#loja').val();
+                                            var tipo = jQuery("input[name='tipo']:checked").val();;
+                                            var link = "{{ path("_relatorio_clientes") }}";
+                                            if (loja != "") {
+                                                window.open(link+"/"+tipo+"/"+loja, "_blank");                                          
                                             } else {
-                                                bootbox.alert("Selecione a loja");
+                                                window.open(link+"/"+tipo, "_blank");
+                                                
                                             }
                                         }
                                     },
                                 }
                         }
                 );
-                jQuery("#loja, #mes, #ano").select2({
+                jQuery("#loja").select2({
                     minimumResultsForSearch: -1
                 });
             });
