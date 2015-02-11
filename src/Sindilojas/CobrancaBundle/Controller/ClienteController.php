@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 use Sindilojas\CobrancaBundle\Form\ClienteType;
 use Sindilojas\CobrancaBundle\Entity\Cliente;
-
+use PhpOffice\PhpWord\PhpWord;
 
 
 /**
@@ -105,46 +105,33 @@ class ClienteController extends Controller
     }
     
     /**
-     * @Route("/cliente/carta/{idCliente}", name="_carta_cliente")
+     * @Route("/cliente/carta/{nome}", name="_carta_cliente")
      * 
      * @Template
      * @param int $idParcela
      * @return Response
      */
-    public function cartaAction($idCliente = 0)
+    public function cartaAction($nome = null)
     {
-        $cliente = $this->getDoctrine()
-                        ->getRepository("Sindilojas\CobrancaBundle\Entity\Cliente")
-                        ->find($idCliente);
-        
         $hoje = new \DateTime("now");
+    
+        $PHPWord = new \PhpOffice\PhpWord\PhpWord();
+
+        $file = time();
         
-        $meses = array(
-            1=>"Janeiro",
-            2=>"Fevereiro",
-            3=>"Março",
-            4=>"Abril",
-            5=>"Maio",
-            6=>"Junho",
-            7=>"julho",
-            8=>"Agosto",
-            9=>"Setembro",
-            10=>"Outubro",
-            11=>"Novembro",
-            12=>"Dezembro",
-        );
-        if ($cliente) {
-            $nome = $cliente->getNome();
-        } else {
-            $nome = "Cliente ainda não foi salvo";
+        try {
+            $document = $PHPWord->loadTemplate('../web/bundles/sindilojas/doc/carta.docx');
+        } catch (Exception $exc) {
+            echo $exc->getMessage();
         }
         
-        return array(
-            "dia" => $hoje->format('d'),
-            "mes" => $meses[(int) $hoje->format('m')],
-            "ano" => $hoje->format('Y'),
-            "clienteNome" => $nome,
-            );
+        $document->setValue("cliente", $nome);
+        $document->setValue("data", $hoje->format("d/m/Y"));
+        
+        $document->saveAs("../web/bundles/sindilojas/doc/carta{$file}.docx");
+    
+        return new Response($this->container->get('templating.helper.assets')->getUrl("bundles/sindilojas/doc/carta{$file}.docx"));
+        
     }
 
 
