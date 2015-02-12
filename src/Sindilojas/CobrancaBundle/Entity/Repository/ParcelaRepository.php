@@ -53,7 +53,8 @@ class ParcelaRepository extends EntityRepository
                 ->leftJoin("D.cliente", "C")
                 ->andWhere($query->expr()->between("P.dataPagamento", ":dataInicio", ":dataFim"))
                 ->andWhere($query->expr()->eq("P.pago", "1"))
-                ->andWhere($query->expr()->eq("D.loja", ":idLoja"));
+                ->andWhere($query->expr()->eq("D.loja", ":idLoja"))
+                ->orderBy("P.dataPagamento");
         $query->setParameter("idLoja", $idLoja, \PDO::PARAM_INT);
         $query->setParameter("dataInicio", $dataInicio->format("Y-m-d"));
         $query->setParameter("dataFim", $dataFim->format("Y-m-d"));

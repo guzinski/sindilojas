@@ -31,9 +31,16 @@ class Parcela
     /**
      * @var integer
      *
-     * @ORM\Column(name="numero", type="integer", nullable=true)
+     * @ORM\Column(name="numero", type="integer", nullable=false)
      */
     private $numero;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="promissoria", type="integer", nullable=false)
+     */
+    private $promissoria;
 
     /**
      * @var float
@@ -329,6 +336,24 @@ class Parcela
     {
         $this->modo = $modo;
         return $this;
+    }
+
+    /**
+     * 
+     * @return int
+     */
+    function getPromissoria()
+    {
+        return $this->promissoria;
+    }
+
+    /**
+     * 
+     * @param int $promissoria
+     */
+    function setPromissoria($promissoria)
+    {
+        $this->promissoria = $promissoria;
     }
 
 

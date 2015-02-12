@@ -37,7 +37,7 @@
                     <td colspan="2">
                         <span>REFERENTE AO(S) RESPECTIVO(S) PAGAMENTO(S):</span>
                         <br/><br/>
-                        <table style="width: 100%; margin-bottom: 15px;">
+                        <table class="table" style="width: 95%; margin: 0 auto 15px;">
                             <thead>
                                 <tr>
                                     <th style="text-align: left"> 
@@ -65,7 +65,7 @@
                                         R$ {{ parcela.getValorPago|number_format(2, ",", ".") }}
                                     </td>
                                     <td>
-                                        {{ parcela.getNumero }}/{{ parcela.getNegociacao.getData.format('Y') }}
+                                        {{ parcela.getPromissoria }}/{{ parcela.getNegociacao.getNumeroParcelas() }}
                                     </td>
                                     <td>
                                         {{ parcela.getDataPagamento.format("d/m/Y") }}

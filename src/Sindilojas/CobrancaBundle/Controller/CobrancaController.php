@@ -121,6 +121,7 @@ class CobrancaController extends Controller
         $negociacao = new Negociacao();
         $negociacao->setDivida($divida);
         $negociacao->setTipo($tipo);
+        
 
         $dataVencimento = \DateTime::createFromFormat("d/m/Y", $vencimento);
         $valorParcela = ($valorTotal-$valorEntrada)/$numParcelas;
@@ -134,6 +135,7 @@ class CobrancaController extends Controller
             $parcelaEntrada->setValor($valorEntrada);
             $parcelaEntrada->setVencimento(clone $dataVencimento);
             $parcelaEntrada->setNumero($numeroAtual+1);
+            $parcelaEntrada->setPromissoria(1);
             $parcelaEntrada->setNegociacao($negociacao);
             $negociacao->getParcelas()->add($parcelaEntrada);
             $entrada = 1;
@@ -142,12 +144,14 @@ class CobrancaController extends Controller
             $entrada = 0;
         }
         
+        $negociacao->setNumeroParcelas($numParcelas+$entrada);
 
         for ($i=1; $i<=$numParcelas; $i++) {
             $parcela = new Parcela();
             $parcela->setVencimento(clone $dataVencimento);
             $parcela->setValor($valorParcela);
             $parcela->setNumero($numero+$i+$entrada);
+            $parcela->setPromissoria($i+$entrada);
             $parcela->setNegociacao($negociacao);
             $negociacao->getParcelas()->add($parcela);
             $numero = $parcelaRepository->getUltimoNumero($dataVencimento->format('Y'));
@@ -224,6 +228,7 @@ class CobrancaController extends Controller
             $novaParcela->setValor($parcela->getValor()-$valor);
             $novaParcela->setNegociacao($parcela->getNegociacao());
             $novaParcela->setNumero($parcela->getNumero());
+            $novaParcela->setPromissoria($parcela->getPromissoria());
             $novaParcela->setVencimento($parcela->getVencimento());
             $novaParcela->getNegociacao()->getParcelas()->add($novaParcela);
             
@@ -256,13 +261,13 @@ class CobrancaController extends Controller
     
     
     /**
-     * @Route("/cobranca/recibo/{idParcela}/{index}", name="_recibo")
+     * @Route("/cobranca/recibo/{idParcela}", name="_recibo")
      * 
      * @Template
      * @param int $idParcela
      * @return Response
      */
-    public function reciboAction($idParcela, $index)
+    public function reciboAction($idParcela)
     {
         $parcela = $this->getDoctrine()
                 ->getRepository("Sindilojas\CobrancaBundle\Entity\Parcela")
@@ -288,15 +293,17 @@ class CobrancaController extends Controller
         return array(
             "numeroParcela"=>$parcela->getNumero(),
             "anoParcela"=>$parcela->getNegociacao()->getData()->format('Y'),
-            "totalParcelas"=>$parcela->getNegociacao()->getParcelas()->count(),
+            "promissoria"=>$parcela->getPromissoria(),
+            "totalParcelas"=>$parcela->getNegociacao()->getNumeroParcelas(),
             "tipo"=>$parcela->getNegociacao()->getTipo(),
             "clienteNome" => $parcela->getNegociacao()->getDivida()->getCliente()->getNome(),
             "lojaNome" => $parcela->getNegociacao()->getDivida()->getLoja()->getNome(),
+            "lojaCnpj" => $parcela->getNegociacao()->getDivida()->getLoja()->getCnpj(),
             "dia" => $hoje->format('d'),
             "mes" => $meses[(int) $hoje->format('m')],
             "ano" => $hoje->format('Y'),
             "valor"=>$parcela->getValorPago(),
-            "index"=>$index,
+            
         );
     }
 

@@ -80,12 +80,12 @@
                         {% for parcela in rowNegociacao.getParcelas() %}
                         <tr>
                             <td>{{ divida.getLoja().getNome() }}</td>
-                            <td>{{ loop.index }}/{{ rowNegociacao.getParcelas.count() }}</td>
+                            <td>{{ parcela.getPromissoria }}/{{ rowNegociacao.getNumeroParcelas }}</td>
                             {% if rowNegociacao == negociacao %}
                                 <td><a class="tooltips" data-placement="top" data-original-title="Data de vencimento" data-toggle="tooltip" title="Alterar Data de vencimento" href="javascript:alterarVencimento({{ parcela.getId() }}, '{{ parcela.getVencimento().format('d/m/Y') }}')">{{ parcela.getVencimento().format('d/m/Y') }}</a></td>
                                 <td>{{ "R$ " ~ parcela.getValor()|number_format(2, ',', '.') }}</td>
                                 {% if parcela.getPago() %}
-                                    <td><a target="_blank" href="{{ path('_recibo', {'idParcela': parcela.getId(), 'index': loop.index}) }}">Imprimir Recibo</a></td>
+                                    <td><a target="_blank" href="{{ path('_recibo', {'idParcela': parcela.getId()}) }}">Imprimir Recibo</a></td>
                                 {% else %}
                                     <td><a href="javascript:darBaixa({{ parcela.getId() }})">Dar baixa</a></td>
                                 {% endif %}

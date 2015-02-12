@@ -38,6 +38,14 @@ class Negociacao
     private $data;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="numero_parcelas", type="integer", nullable=false)
+     */
+    private $numeroParcelas;
+
+
+    /**
      * @var \Sindilojas\CobrancaBundle\Entity\Divida
      *
      * @ORM\ManyToOne(targetEntity="Sindilojas\CobrancaBundle\Entity\Divida", inversedBy="negociacoes")
@@ -147,5 +155,25 @@ class Negociacao
     {
         $this->data = $data;
     }
+    
+    /**
+     * 
+     * @return int
+     */
+    function getNumeroParcelas()
+    {
+        return $this->numeroParcelas;
+    }
+
+    /**
+     * 
+     * @param int $numeroParcelas
+     */
+    function setNumeroParcelas($numeroParcelas)
+    {
+        $this->numeroParcelas = $numeroParcelas;
+    }
+
+
 
 }

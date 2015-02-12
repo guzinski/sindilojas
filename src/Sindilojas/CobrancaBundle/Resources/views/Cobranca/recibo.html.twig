@@ -24,7 +24,7 @@
                 <td style="text-align: center">
                     <strong>RECIBO</strong>
                     <br/>
-                    CNPJ 90.90.255.373/0001-04
+                    CNPJ 90.255.373/0001-04
                     <br/><br/>
                     Nº {{ numeroParcela }}/{{ anoParcela }}
                 </td>
@@ -47,7 +47,7 @@
         <table style="margin: 50px 50px 0; width: 100%">
             <tr>
                 <td style="text-align: left">
-                    PARCELA: <strong>{{ index }}/{{ totalParcelas }}</strong>
+                    PARCELA: <strong>{{ promissoria }}/{{ totalParcelas }}</strong>
                 </td>
                 <td style="text-align: right;">
                     TIPO: <strong>{{ tipo == "J" ? "Judicial" : "Administrativo" }}</strong>
@@ -56,7 +56,8 @@
             <tr>
                 <td style="text-align: left" colspan="2">
                     CREDORA: <strong>{{ lojaNome }}</strong>
-                    <br/><br/>
+                    <br/>
+                    CNPJ: <strong>{{ lojaCnpj|mask('##.###.###/####-##') }}</strong>
                     <br/><br/>
                 </td>
             </tr>

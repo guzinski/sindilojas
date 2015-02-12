@@ -28,6 +28,9 @@ class ClienteRepository extends EntityRepository
         if (!empty($busca)) {
             $query->andWhere($query->orWhere($query->expr()->like("C.nome", ":busca"))
                                     ->orWhere($query->expr()->like("C.cpf", ":busca"))
+                                    ->orWhere($query->expr()->like("C.telefone", ":busca"))
+                                    ->orWhere($query->expr()->like("C.telefone1", ":busca"))
+                                    ->orWhere($query->expr()->like("C.telefone2", ":busca"))
                                     ->orWhere($query->expr()->like("C.cidade", ":busca"))
                                     ->getDQLPart("where"));
             $query->setParameter("busca", "%{$busca}%");
