@@ -59,6 +59,12 @@ class ClienteType extends AbstractType
     {
         $resolver->setDefaults(array(
                         'data_class' => 'Sindilojas\CobrancaBundle\Entity\Cliente',
+                    ))
+                    ->setRequired(array(
+                        'em',
+                    ))
+                    ->setAllowedTypes(array(
+                        'em' => 'Doctrine\Common\Persistence\ObjectManager',
                     ));
     }
 

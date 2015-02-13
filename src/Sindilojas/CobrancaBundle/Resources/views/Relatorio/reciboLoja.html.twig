@@ -197,6 +197,8 @@
                     </td>
                     <td style="text-align: center; width: 50%">
                         {{ loja.getNome }}
+                        <br/>
+                        {{ loja.getCnpj|mask('##.###.###/####-##') }}
                         <br/><br/>
                     </td>
                 </tr>

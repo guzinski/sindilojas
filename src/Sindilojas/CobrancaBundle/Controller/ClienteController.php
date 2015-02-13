@@ -82,7 +82,7 @@ class ClienteController extends Controller
             $cliente = new Cliente();
         }
         
-        $form = $this->createForm(new ClienteType(), $cliente);
+        $form = $this->createForm(new ClienteType(), $cliente, array('em'=>$em));
         
         $form->handleRequest($request);
         

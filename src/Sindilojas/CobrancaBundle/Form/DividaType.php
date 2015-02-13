@@ -19,7 +19,11 @@ class DividaType extends AbstractType
     {
         $builder->add('loja', 'entity', array(
                         'class' => 'SindilojasCobrancaBundle:Loja',
-                        'empty_value' => 'Selecione'
+                        'empty_value' => 'Selecione',
+                        'query_builder' => function(\Doctrine\ORM\EntityRepository $er) {
+                            return $er->createQueryBuilder('l')
+                                        ->orderBy('l.nome', 'ASC');
+                        },
                     ))
                 ->add("valor", 'money', array("currency"=>"", "grouping"=>false))
                 ->add("vencimento", "date", array(
