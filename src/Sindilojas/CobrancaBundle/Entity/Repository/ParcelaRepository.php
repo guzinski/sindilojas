@@ -18,6 +18,21 @@ class ParcelaRepository extends EntityRepository
      */
     public function getParcelasVencidas()
     {
+        
+        $query = "SELECt d.id_cliente, c.nome as cliente_nome, l.nome as loja_nome, p.valor, p.vencimento FROM divida d
+                    LEFT JOIN (SELECT * FROm negociacao n1 ORDER BY id DESC LIMIT 1) n
+                            ON n.id_divida=d.id
+                    LEFt JOIN parcela p
+                            ON p.id_negociacao=n.id
+                    LEFt JOIn cliente c
+                            ON c.id=d.id_cliente
+                    LEFt JOIN loja l 
+                            ON l.id=d.id_loja
+                    WHERE p.vencimento < CURRENT_DATE()
+                            AND p.pago=0
+                            AND c.cobranca_judicial=0";
+        return $this->getEntityManager()->getConnection()->fetchAll($query);
+        /*
         $query = $this->createQueryBuilder("P");
         
         $data = date("Y-m-d");
@@ -32,6 +47,8 @@ class ParcelaRepository extends EntityRepository
                 ->andWhere($query->expr()->eq("C.cobrancajudicial", "0"));
         $query->setParameter("data", $data, \PDO::PARAM_STR);
         return $query->getQuery()->getResult();
+         *
+         */
     }
     
     /**

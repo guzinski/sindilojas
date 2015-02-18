@@ -30,11 +30,13 @@ class DefaultController extends Controller
         $parcelas = $rep->getParcelasVencidas();
         $dados = array();
         foreach ($parcelas as $parcela) {
+            $parcela = (object) $parcela;
+            $vencimento = new \DateTime($parcela->vencimento);
             $linha = array();
-            $linha[] = "<a href=\"".$this->generateUrl("_cliente_cadastro", array("id"=>$parcela->getNegociacao()->getDivida()->getCliente()->getid()))."\">". $parcela->getNegociacao()->getDivida()->getCliente()->getNome()."</a>";
-            $linha[] = $parcela->getNegociacao()->getDivida()->getLoja()->getNome();
-            $linha[] = "R$ ".number_format($parcela->getValor(), 2, ",", ".");
-            $linha[] = $parcela->getVencimento()->format('d/m/Y');
+            $linha[] = "<a href=\"".$this->generateUrl("_cliente_cadastro", array("id"=>$parcela->id_cliente))."\">". $parcela->cliente_nome."</a>";
+            $linha[] = $parcela->loja_nome;
+            $linha[] = "R$ ".number_format($parcela->valor, 2, ",", ".");
+            $linha[] = $vencimento->format("d/m/Y");
             $dados[] = $linha;
         }
         $return['recordsTotal'] = count($parcelas);
