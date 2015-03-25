@@ -41,8 +41,8 @@ class ClienteController extends Controller
      */
     public function paginationAction(Request $request)
     {
-        $firstResult = $request->request->getInt("start");
-        $maxResults = $request->request->getInt("length");
+        $firstResult = $request->query->getInt("start");
+        $maxResults = $request->query->getInt("length");
         $busca = $request->get("search");
         
         $repClientes = $this->getDoctrine()

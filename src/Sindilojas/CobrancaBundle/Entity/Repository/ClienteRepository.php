@@ -35,8 +35,8 @@ class ClienteRepository extends EntityRepository
                                     ->getDQLPart("where"));
             $query->setParameter("busca", "%{$busca}%");
         }
-        
-        if (($maxResults+$firstResult)>0) {
+
+        if (($maxResults+$maxResults)>0) {
             $query->setFirstResult($firstResult)
                     ->setMaxResults($maxResults);
         }
@@ -103,6 +103,24 @@ class ClienteRepository extends EntityRepository
                             $where
                         GROUP BY d.id, c.id";
         return $this->getEntityManager()->getConnection()->fetchAll($query);
+    }
+    
+    public function uniqueEntity($param) 
+    {
+        if (isset ($param['cpf'])) {
+            if (empty($param['cpf'])) {
+                return array();;
+            } else {
+                return $this->findBy($param);
+            }
+        } elseif (isset ($param['cnpj'])) {
+            if (empty($param['cnpj'])) {
+                return array();;
+            } else {
+                return $this->findBy($param);
+            }
+        }
+        return array();;
     }
 
 
