@@ -17,13 +17,7 @@
     
     <script>
         var htmlDarBaixa = "";
-        jQuery(document).ready(function(){
-            jQuery("#cpf").mask("999.999.999-99",
-                {completed:function(){
-                        jQuery(".locked").fadeIn();
-                        jQuery.post('{{ path('_cobranca_dividas')}}', {cpf: jQuery(this).val()}, callbackCarregaDividas);
-            }});            
-            
+        jQuery(document).ready(function(){            
             jQuery.get("{{ path("_html_dar_baixa") }}", function(html) {
                 htmlDarBaixa = html;
             });
@@ -239,6 +233,11 @@
             } 
             return true;
         }
+        function buscaCliente()
+        {
+            jQuery(".locked").fadeIn();
+            jQuery.post('{{ path('_cobranca_dividas')}}', {cpf: jQuery("#cpf").val()}, callbackCarregaDividas);
+        }
        
     </script>
 {% endblock %}
@@ -267,7 +266,10 @@
                 <p>Insira o Cpf do cliente abaixo.</p>
                 <label>CPF</label>
                 <div class="input-group mb15">
-                    <div ><input type="text" class="form-control" id="cpf"></div>
+                    <div>
+                        <input type="text" class="form-control" id="cpf">
+                        <button onclick="buscaCliente()" class="btn btn-primary mr5">Buscar</button>
+                    </div>
                 </div><!-- input-group -->
 
             </div><!-- panel-body -->

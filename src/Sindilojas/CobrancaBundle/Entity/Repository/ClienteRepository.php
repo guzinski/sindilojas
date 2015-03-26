@@ -35,7 +35,7 @@ class ClienteRepository extends EntityRepository
                                     ->getDQLPart("where"));
             $query->setParameter("busca", "%{$busca}%");
         }
-
+        $query->orderBy("C.nome");
         if (($maxResults+$maxResults)>0) {
             $query->setFirstResult($firstResult)
                     ->setMaxResults($maxResults);
@@ -105,6 +105,10 @@ class ClienteRepository extends EntityRepository
         return $this->getEntityManager()->getConnection()->fetchAll($query);
     }
     
+    /**
+     * @param string $param
+     * @return array
+     */
     public function uniqueEntity($param) 
     {
         if (isset ($param['cpf'])) {
@@ -121,6 +125,20 @@ class ClienteRepository extends EntityRepository
             }
         }
         return array();;
+    }
+    
+    /**
+     * @param string $param
+     * @return array
+     */
+    public function findClienteByCpforCnpj($param)
+    {
+        $query = $this->createQueryBuilder("C");
+        
+        $query->where($query->expr()->orX("C.cpf = :param", "C.cnpj = :param"))
+                ->setParameter("param", $param);
+        
+        return $query->getFirstResult();
     }
 
 

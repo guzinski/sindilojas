@@ -597,7 +597,7 @@ class Cliente
      */
     public function setCnpj($cnpj)
     {
-        $this->cnpj = $cnpj;
+        $this->cnpj = preg_replace("/[^0-9]/", "", $cnpj);
     }
 
 
