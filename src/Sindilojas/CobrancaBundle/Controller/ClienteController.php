@@ -44,10 +44,12 @@ class ClienteController extends Controller
         $firstResult = $request->request->getInt("start");
         $maxResults = $request->request->getInt("length");
         $busca = $request->get("search");
+        $ordem = $request->get("order");
+        
         
         $repClientes = $this->getDoctrine()
                             ->getRepository("Sindilojas\CobrancaBundle\Entity\Cliente");
-        $clientes = $repClientes->getClientes($busca['value'], $maxResults, $firstResult);
+        $clientes = $repClientes->getClientes($busca['value'], $maxResults, $firstResult, $ordem);
         
         $dados = array();
         foreach ($clientes as $cliente) {
@@ -115,7 +117,7 @@ class ClienteController extends Controller
     {
         $hoje = new \DateTime("now");
     
-        $PHPWord = new \PhpOffice\PhpWord\PhpWord();
+        $PHPWord = new PhpWord();
 
         $file = time();
         

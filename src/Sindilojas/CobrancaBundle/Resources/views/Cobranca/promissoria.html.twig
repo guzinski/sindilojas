@@ -4,6 +4,19 @@
         <script>
             window.onLoad = window.print()
         </script>
+        <style>
+            @media print{
+                .pageBreak {
+                    page-break-before: always;
+                }
+            }
+            .pageBreak {
+                    page-break-before: always;
+                    height: 1px;
+                    width: 100%;
+                    display: block;
+                }
+        </style>
     </head>
     <body style="margin: 0 auto; width: 980px;">
         {% for parcela in negociacao.getParcelas() %}
@@ -11,8 +24,9 @@
             <thead>
                 <tr>
                     <th style="text-align: center" colspan="2">
+                        <br/>
                         <img width="180" src="{{ asset('bundles/sindilojas/images/image00.png') }}" />
-                        <br/><br/><br/>
+                        <br/><br/>
                     </th>
                 </tr>
             </thead>
@@ -87,7 +101,9 @@
             </tbody>
             
         </table>
-        <br/><br/>
+        {% if loop.index is divisible by(3) and negociacao.getParcelas()|length > loop.index %}
+            <div class="pageBreak"></div>
+        {% endif %}
         {% endfor %}
     </body>
 </html>

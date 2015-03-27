@@ -19,19 +19,24 @@ class ParcelaRepository extends EntityRepository
     public function getParcelasVencidas()
     {
         
-        $query = "SELECt d.id_cliente, c.nome as cliente_nome, l.nome as loja_nome, p.valor, p.vencimento FROM divida d
-                    LEFT JOIN (SELECT * FROm negociacao n1 ORDER BY id DESC LIMIT 1) n
-                            ON n.id_divida=d.id
-                    LEFt JOIN parcela p
-                            ON p.id_negociacao=n.id
-                    LEFt JOIn cliente c
-                            ON c.id=d.id_cliente
-                    LEFt JOIN loja l 
-                            ON l.id=d.id_loja
+        $query = "SELECT n.id_cliente, c.nome as cliente_nome, l.nome as loja_nome, p.valor, p.vencimento FROM parcela p
+                        RIGHT JOIN (
+                                SELECt DISTINCT id_divida, n.id, d.id_cliente, d.id_loja FROM divida d
+                                        LEFT JOIN (SELECT * FROM negociacao n1 ORDER BY id DESC) n
+                                        ON n.id_divida=d.id
+                                        GROUP BY d.id
+                        ) n
+                            ON n.id=p.id_negociacao
+                        LEFT JOIN cliente c
+                            ON c.id=n.id_cliente
+                        LEFT JOIN loja l 
+                            ON l.id=n.id_loja
                     WHERE p.vencimento < CURRENT_DATE()
-                            AND p.pago=0
-                            AND c.cobranca_judicial=0";
+                        AND p.pago=0
+                        AND c.cobranca_judicial=0 ";
+        
         return $this->getEntityManager()->getConnection()->fetchAll($query);
+        
         /*
         $query = $this->createQueryBuilder("P");
         

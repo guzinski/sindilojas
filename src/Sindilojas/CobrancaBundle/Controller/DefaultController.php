@@ -22,7 +22,7 @@ class DefaultController extends Controller
 
     /**
      * @Route("/carrega/parcelas", name="_carrega_parcelas")
-     * @Template()
+     * @return Response
      */
     public function paginationAction()
     {
@@ -43,7 +43,6 @@ class DefaultController extends Controller
         $return['recordsFiltered'] = count($parcelas);
         $return['data'] = $dados;
         return new Response(json_encode($return));
-
     }
 
     /**

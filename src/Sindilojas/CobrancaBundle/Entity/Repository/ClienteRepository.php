@@ -20,7 +20,7 @@ class ClienteRepository extends EntityRepository
      * @param int $firstResult
      * @return type
      */
-    public function getClientes($busca, $maxResults, $firstResult)
+    public function getClientes($busca, $maxResults, $firstResult, $ordem = array())
     {
         $query = $this->createQueryBuilder("C");
         
@@ -34,6 +34,23 @@ class ClienteRepository extends EntityRepository
                                     ->orWhere($query->expr()->like("C.cidade", ":busca"))
                                     ->getDQLPart("where"));
             $query->setParameter("busca", "%{$busca}%");
+        }
+        
+        if (is_array($ordem)) {
+            if ($ordem[0]['column'] == 0) {
+                $order = "C.nome";
+            } elseif ($ordem[0]['column'] == 1) {
+                $order = "C.telefone";
+            } elseif ($ordem[0]['column'] == 2) {
+                $order = "C.cidade";
+            }
+            if ($ordem[0]['dir'] == "asc") {
+                $dir = "ASC";
+            } elseif ($ordem[0]['dir'] == "desc") {
+                $dir = "DESC";
+            }
+            
+            $query->orderBy($order, $dir);
         }
         
         if (($maxResults+$firstResult)>0) {
