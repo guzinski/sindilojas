@@ -41,7 +41,7 @@ class CobrancaController extends Controller
      */
     public function dividasAction(Request $request)
     {
-        $cliente = $this->getDoctrine()->getRepository("Sindilojas\CobrancaBundle\Entity\Cliente")->findOneBy(array("cpf"=>preg_replace("/[^0-9]/", "", $request->get("cpf"))));
+        $cliente = $this->getDoctrine()->getRepository("Sindilojas\CobrancaBundle\Entity\Cliente")->findClienteByCpforCnpj(preg_replace("/[^0-9]/", "", $request->get("cpf")));
         
         if (!empty($cliente)) {
             $dividas = $cliente->getDividas();
@@ -50,7 +50,7 @@ class CobrancaController extends Controller
             $render = $renderDividas.$renderRegistros;
         } else {
             $render = $this->renderView("SindilojasCobrancaBundle::Cobranca\\notFound.html.twig");
-        }       
+        }
         return new Response($render);
     }
     

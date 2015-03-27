@@ -11,7 +11,9 @@
     <script src="{{ asset('bundles/sindilojas/js/jquery-ui-1.10.3.min.js') }}"></script>
     <script type="text/javascript">
         jQuery(document).ready(function(){
+            jQuery('#loading').hide();
             jQuery("#cliente_cpf").mask("999.999.999-99");
+            jQuery("#cliente_cnpj").mask("99.999.999/9999-99");
             jQuery("#cliente_nascimento").mask("99/99/9999").datepicker();;
             jQuery("#cliente_telefone, #cliente_telefone1, #cliente_telefone2").mask("(99) 9999-9999?9");
             jQuery("#cliente_cep").mask("99999-999", 
@@ -30,7 +32,14 @@
             );
             jQuery("#basicForm").validate({
                 rules: {
-                    "cliente[cpf]":         {cpf: true},
+                    "cliente[cpf]":         {required: {
+                                                        depends: function() { return (jQuery('#cliente_cnpj').val() == ''); }
+                                                        },
+                                                        cpf: true},
+                    "cliente[cnpj]":         {required: {
+                                                        depends: function() { return (jQuery('#cliente_cpf').val() == ''); }
+                                                        },
+                                                        cnpj: true},
                     "cliente[email]":       {email: true},
                     "cliente[nascimento]":  {brazilianDate: true}
                 },
@@ -52,6 +61,9 @@
                         jQuery("#cliente_dividas_"+i+"_valor").val(valor);
                     }
                     jQuery('#cliente_cidade, #cliente_uf').removeAttr('disabled');
+                    
+                    jQuery('button').hide();
+                    jQuery('#loading').fadeIn(200);
                     form.submit();
                }
             });
@@ -129,9 +141,9 @@
             <ul class="breadcrumb">
                 <li><a href=""><i class="glyphicon glyphicon-home"></i></a></li>
                 <li><a href="">Clientes</a></li>
-                <li>Cadastrar Cliente</li>
+                <li>{{ cliente.getid>0 ? "Editar" : "Cadastrar" }} Cliente</li>
             </ul>
-            <h4>Cadastrar Cliente</h4>
+            <h4>{{ cliente.getid>0 ? "Editar" : "Cadastrar" }} Cliente</h4>
         </div>
     </div><!-- media -->
 </div><!-- pageheader -->
@@ -145,6 +157,7 @@
                     <div class="row">
                         {{ form_row(form.nome) }}
                         {{ form_row(form.cpf) }}
+                        {{ form_row(form.cnpj) }}
                         {{ form_row(form.rg) }}
                         {{ form_row(form.cep) }}
                         {{ form_row(form.uf) }}
@@ -176,8 +189,9 @@
                   <div class="row">
                     <div class="col-sm-9 col-sm-offset-3">
                         <a class="btn btn-success" href="javascript:getLinkCarta()">Gerar Carta</a>
+                        <img src="{{ asset('bundles/sindilojas/images/loading.gif') }}" id="loading" alt="Carregando" />
                         <button class="btn btn-primary mr5">Salvar</button>
-                        <button type="reset" class="btn btn-dark">Limpar</button>
+                        <!-- <button type="reset" class="btn btn-dark">Limpar</button> -->
                     </div>
                   </div>
                 </div><!-- panel-footer -->  

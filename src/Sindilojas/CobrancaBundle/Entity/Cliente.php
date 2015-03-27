@@ -4,11 +4,13 @@ namespace Sindilojas\CobrancaBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
-
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * Cliente
  *
  * @ORM\Table(name="cliente")
+ * @UniqueEntity(fields={"cpf"}, message="Este CPF já está cadastrado", repositoryMethod="uniqueEntity")
+ * @UniqueEntity(fields={"cnpj"}, message="Este CNPJ já está cadastrado", repositoryMethod="uniqueEntity")
  * @ORM\Entity(repositoryClass="Sindilojas\CobrancaBundle\Entity\Repository\ClienteRepository")
  */
 class Cliente
@@ -30,9 +32,16 @@ class Cliente
     /**
      * @var string
      *
-     * @ORM\Column(name="cpf", type="string", length=11, nullable=false)
+     * @ORM\Column(name="cpf", type="string", length=11, nullable=true)
      */
     private $cpf;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cnpj", type="string", length=14, nullable=true)
+     */
+    private $cnpj;
 
     /**
      * @var string
@@ -573,6 +582,23 @@ class Cliente
         return $this;
     }
 
+    /**
+     * 
+     * @return string
+     */
+    public function getCnpj()
+    {
+        return $this->cnpj;
+    }
+
+    /**
+     * 
+     * @param string $cnpj
+     */
+    public function setCnpj($cnpj)
+    {
+        $this->cnpj = preg_replace("/[^0-9]/", "", $cnpj);
+    }
 
 
 

@@ -121,6 +121,42 @@ class ClienteRepository extends EntityRepository
                         GROUP BY d.id, c.id";
         return $this->getEntityManager()->getConnection()->fetchAll($query);
     }
+    
+    /**
+     * @param string $param
+     * @return array
+     */
+    public function uniqueEntity($param) 
+    {
+        if (isset ($param['cpf'])) {
+            if (empty($param['cpf'])) {
+                return array();;
+            } else {
+                return $this->findBy($param);
+            }
+        } elseif (isset ($param['cnpj'])) {
+            if (empty($param['cnpj'])) {
+                return array();;
+            } else {
+                return $this->findBy($param);
+            }
+        }
+        return array();;
+    }
+    
+    /**
+     * @param string $param
+     * @return array
+     */
+    public function findClienteByCpforCnpj($param)
+    {
+        $query = $this->createQueryBuilder("C");
+        
+        $query->where($query->expr()->orX("C.cpf = :param", "C.cnpj = :param"))
+                ->setParameter("param", $param);
+        
+        return $query->getFirstResult();
+    }
 
 
     

@@ -201,6 +201,9 @@ jQuery.validator.addMethod("brazilianDate", function(value, element) {
 
 // CPF ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 jQuery.validator.addMethod("cpf", function(value, element) {
+    if (value == "") {
+        return true
+    }
 	var cpf = value.replace(/[^0-9]/g,'');
         
 	while(cpf.length < 11) {
@@ -241,7 +244,10 @@ jQuery.validator.addMethod("cpf", function(value, element) {
 
 
 // CNPJ ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-jQuery.validator.addMethod("CNPJ", function(value, element) {
+jQuery.validator.addMethod("cnpj", function(value, element) {
+    if (value == "") {
+        return true
+    }
         value = value.replace('_','');;
 	var cnpj = value.replace('_','');;
 	var valida = new Array(6,5,4,3,2,9,8,7,6,5,4,3,2);
