@@ -153,10 +153,16 @@ class ClienteRepository extends EntityRepository
         $query = $this->createQueryBuilder("C");
         
         $query->where($query->expr()->orX("C.cpf = :param", "C.cnpj = :param"))
-                ->setParameter("param", $param);
+                        ->setParameter("param", $param);
         
-        return $query->getFirstResult();
+        try {
+            return $query->getQuery()->getSingleResult();
+        } catch (\Exception $exc) {
+            return NULL;
+        }
     }
+    
+    
 
 
     
