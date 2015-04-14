@@ -296,7 +296,7 @@ class CobrancaController extends Controller
             "anoParcela"=>$parcela->getNegociacao()->getData()->format('Y'),
             "promissoria"=>$parcela->getPromissoria(),
             "totalParcelas"=>$parcela->getNegociacao()->getNumeroParcelas(),
-            "tipo"=>$parcela->getNegociacao()->getTipo(),
+            "tipo"=>$parcela->getModo(),
             "clienteNome" => $parcela->getNegociacao()->getDivida()->getCliente()->getNome(),
             "lojaNome" => $parcela->getNegociacao()->getDivida()->getLoja()->getNome(),
             "lojaCnpj" => $parcela->getNegociacao()->getDivida()->getLoja()->getCnpj(),
