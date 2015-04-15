@@ -127,7 +127,7 @@
                                         R$ {{ parcela.getValorPago|number_format(2, ",", ".") }}
                                     </td>
                                     <td>
-                                        {{ parcela.getNumero }}/{{ parcela.getNegociacao.getData.format('Y') }}
+                                        {{ parcela.getPromissoria }}/{{ parcela.getNegociacao.getNumeroParcelas() }}
                                     </td>
                                     <td>
                                         {{ parcela.getDataPagamento.format("d/m/Y") }}

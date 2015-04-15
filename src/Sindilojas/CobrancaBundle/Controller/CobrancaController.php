@@ -220,7 +220,7 @@ class CobrancaController extends Controller
         $parcela->setDataPagamento(\DateTime::createFromFormat("d/m/Y", $data));
         $parcela->setValorPago($valor);
         $parcela->setTipo($tipo);
-        $parcela->setModo($modo);
+        $parcela->setModo($parcela->getNegociacao()->getTipo());
         $em->persist($parcela);
         
         
@@ -296,7 +296,7 @@ class CobrancaController extends Controller
             "anoParcela"=>$parcela->getNegociacao()->getData()->format('Y'),
             "promissoria"=>$parcela->getPromissoria(),
             "totalParcelas"=>$parcela->getNegociacao()->getNumeroParcelas(),
-            "tipo"=>$parcela->getModo(),
+            "tipo"=>$parcela->getNegociacao()->getTipo(),
             "clienteNome" => $parcela->getNegociacao()->getDivida()->getCliente()->getNome(),
             "lojaNome" => $parcela->getNegociacao()->getDivida()->getLoja()->getNome(),
             "lojaCnpj" => $parcela->getNegociacao()->getDivida()->getLoja()->getCnpj(),
