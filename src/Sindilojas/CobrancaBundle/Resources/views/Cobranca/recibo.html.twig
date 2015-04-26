@@ -55,7 +55,7 @@
                 <td style="text-align: left" colspan="2">
                     CREDORA: <strong>{{ lojaNome }}</strong>
                     <br/>
-                    CNPJ: <strong>{{ lojaCnpj|mask('##.###.###/####-##') }}</strong>
+                    CNPJ: <strong>{{ lojaCnpj|length>11 ? lojaCnpj|mask('##.###.###/####-##') : lojaCnpj|mask("###.###.###-##") }}</strong>
                     <br/><br/>
                 </td>
             </tr>
@@ -125,7 +125,7 @@
                 <td style="text-align: left" colspan="2">
                     CREDORA: <strong>{{ lojaNome }}</strong>
                     <br/>
-                    CNPJ: <strong>{{ lojaCnpj|mask('##.###.###/####-##') }}</strong>
+                    CNPJ: <strong>{{ lojaCnpj|length>11 ? lojaCnpj|mask('##.###.###/####-##') : lojaCnpj|mask("###.###.###-##") }}</strong>
                     <br/><br/>
                 </td>
             </tr>

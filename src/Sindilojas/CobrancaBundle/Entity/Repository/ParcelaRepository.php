@@ -124,17 +124,27 @@ class ParcelaRepository extends EntityRepository
         
         $query      = $this->createQueryBuilder("P");
         
-        $query->select("SUM(P.valorPago), L.nome")
+        $query->select("L.nome")
+                ->addSelect("SUM(CASE 
+                                WHEN P.tipo = 's' 
+                                        THEN P.valorPago
+                                        ELSE 0
+                                END)")
+                ->addSelect("SUM(CASE 
+                                WHEN P.tipo = 'l'
+                                        THEN P.valorPago
+                                        ELSE 0
+                                END)")
                 ->leftJoin("P.negociacao", "N")
                 ->leftJoin("N.divida", "D")
                 ->leftJoin("D.loja", "L")
                 ->andWhere($query->expr()->between("P.dataPagamento", ":dataInicio", ":dataFim"))
                 ->andWhere($query->expr()->eq("P.pago", "1"))
-                ->andWhere($query->expr()->eq("P.tipo", ":tipo"))
+                //->andWhere($query->expr()->eq("P.tipo", ":tipo"))
                 ->groupBy("L.id");
         $query->setParameter("dataInicio", $dataInicio->format("Y-m-d"));
         $query->setParameter("dataFim", $dataFim->format("Y-m-d"));
-        $query->setParameter("tipo", "S");
+        //$query->setParameter("tipo", "S");
         
         return $query->getQuery()->getResult();
     }

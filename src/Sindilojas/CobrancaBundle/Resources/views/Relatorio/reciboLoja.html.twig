@@ -198,7 +198,7 @@
                     <td style="text-align: center; width: 50%">
                         {{ loja.getNome }}
                         <br/>
-                        {{ loja.getCnpj|mask('##.###.###/####-##') }}
+                        {{ loja.getCnpj|length>11 ? loja.getCnpj|mask('##.###.###/####-##') : loja.getCnpj|mask("###.###.###-##") }}
                         <br/><br/>
                     </td>
                 </tr>
