@@ -32,8 +32,7 @@ class ParcelaRepository extends EntityRepository
                         LEFT JOIN loja l 
                             ON l.id=n.id_loja
                     WHERE p.vencimento < CURRENT_DATE()
-                        AND p.pago=0
-                        AND c.cobranca_judicial=0 ";
+                        AND p.pago=0 ";
         
         return $this->getEntityManager()->getConnection()->fetchAll($query);
         
