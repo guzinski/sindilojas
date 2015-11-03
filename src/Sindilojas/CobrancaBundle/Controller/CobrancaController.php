@@ -310,8 +310,10 @@ class CobrancaController extends Controller
 
 
     /**
-     * @Route("/cobranca/renegociar", name="_renegociar")
+     * @deprecated
      * 
+     * @Route("/cobranca/renegociar", name="_renegociar")
+     *  
      * @param Request $request
      * @return Response
      */

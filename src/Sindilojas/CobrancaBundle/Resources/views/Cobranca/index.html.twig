@@ -167,7 +167,6 @@
                 if (result) {
                     jQuery(".locked").fadeIn();
                     jQuery.post('{{ path('_detalhes_divida')}}', {id: idDivida, renegociacao: 1}, callbackDetalhesDividas);
-                    //jQuery.post('{{ path('_renegociar')}}', {idDivida: idDivida}, callbackRenegociar);    
                 }
             }); 
         }
