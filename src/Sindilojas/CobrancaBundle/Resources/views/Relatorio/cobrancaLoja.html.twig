@@ -210,8 +210,8 @@
                         {{ loja.nome }}
                     </td>
                     <td>
-                        {% set total = total+((loja.1-loja.2)*0.8) %}
-                        R$ {{ ((loja.1-loja.2)*0.8)|number_format(2, ",", ".") }}
+                        {% set total = total+((loja.1*0.8)-(loja.2*0.2)) %}
+                        R$ {{ ((loja.1*0.8)-(loja.2*0.2))|number_format(2, ",", ".") }}
                     </td>
                 </tr>
                 {% endfor %}
