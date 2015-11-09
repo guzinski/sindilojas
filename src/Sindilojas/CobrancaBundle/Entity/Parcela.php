@@ -45,14 +45,14 @@ class Parcela
     /**
      * @var float
      *
-     * @ORM\Column(name="valor", type="float", precision=10, scale=0, nullable=false)
+     * @ORM\Column(name="valor", type="decimal", precision=10, scale=2, nullable=false)
      */
     private $valor;
     
     /**
      * @var float
      *
-     * @ORM\Column(name="valor_pago", type="float", precision=10, scale=0, nullable=true)
+     * @ORM\Column(name="valor_pago", type="decimal", precision=10, scale=2, nullable=true)
      */
     private $valorPago;
 
